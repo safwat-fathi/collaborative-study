@@ -51,6 +51,8 @@ function WhitBoard() {
       ref={canvas}
       onMouseDown={mouseDownHandler}
       onMouseUp={mouseUpHandler}
+      onMouseOut={mouseUpHandler}
+      onMouseMove={mouseMoveHandler}
     ></canvas>
   );
 }
