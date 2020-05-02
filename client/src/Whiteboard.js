@@ -33,13 +33,13 @@ function WhitBoard() {
 
     setDrawing(false);
 
-    draw(ctx, x, y, e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+    draw(ctx, x, y, e.nativeEvent.offsetX, e.nativeEvent.offsetY, socket, true);
   };
 
   const mouseMoveHandler = (e) => {
     if (!drawing) return;
 
-    draw(ctx, x, y, e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+    draw(ctx, x, y, e.nativeEvent.offsetX, e.nativeEvent.offsetY, socket, true);
     setX(e.nativeEvent.offsetX);
     setY(e.nativeEvent.offsetY);
   };
