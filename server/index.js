@@ -14,6 +14,7 @@ io.on("connection", (socket) => {
 
   socket.on("drawing", (data) => {
     console.log("llllllloooo", data);
+    io.sockets.emit("drawing", data);
   });
 
   socket.on("disconnect", () => {

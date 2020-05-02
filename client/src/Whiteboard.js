@@ -12,7 +12,7 @@ function WhitBoard() {
 
   useEffect(() => {
     setCtx(canvas.current.getContext("2d"));
-  });
+  }, []);
 
   const socket = socketIO(endpoint);
 
@@ -43,6 +43,11 @@ function WhitBoard() {
     setX(e.nativeEvent.offsetX);
     setY(e.nativeEvent.offsetY);
   };
+
+  socket.on("drawing", (data) => {
+    // draw(ctx, data.x0, data.y0, data.x1, data.y2, socket);
+    console.log(ctx);
+  });
 
   return (
     <canvas
