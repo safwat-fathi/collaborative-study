@@ -13,7 +13,6 @@ io.on("connection", (socket) => {
   // console.log("a user connected");
 
   socket.on("drawing", (data) => {
-    console.log("llllllloooo", data);
     io.sockets.emit("drawing", data);
   });
 

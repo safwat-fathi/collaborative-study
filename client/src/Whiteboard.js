@@ -7,10 +7,11 @@ import "./Whiteboard.css";
 
 const endpoint = "http://localhost:4000";
 
-function WhitBoard() {
+function Whiteboard() {
   const canvas = useRef();
 
   useEffect(() => {
+    // @ts-ignore
     setCtx(canvas.current.getContext("2d"));
   }, []);
 
@@ -36,7 +37,7 @@ function WhitBoard() {
     draw(ctx, x, y, e.nativeEvent.offsetX, e.nativeEvent.offsetY, socket, true);
   };
 
-  const mouseMoveHandler = (e) => {
+  const onMouseMove = (e) => {
     if (!drawing) return;
 
     draw(ctx, x, y, e.nativeEvent.offsetX, e.nativeEvent.offsetY, socket, true);
@@ -44,9 +45,26 @@ function WhitBoard() {
     setY(e.nativeEvent.offsetY);
   };
 
+  let enableCall = true;
+  console.log(enableCall);
+
+  const throttleMouseMove = (e) => {
+    if (!enableCall) return;
+
+    enableCall = false;
+
+    onMouseMove(e);
+    setTimeout(() => (enableCall = true), 1000);
+    console.log(enableCall);
+  };
+
+  // const throttle = () => {
+
+  // }
+
   socket.on("drawing", (data) => {
     // draw(ctx, data.x0, data.y0, data.x1, data.y2, socket);
-    console.log(ctx);
+    // console.log(ctx);
   });
 
   return (
@@ -57,9 +75,9 @@ function WhitBoard() {
       onMouseDown={mouseDownHandler}
       onMouseUp={mouseUpHandler}
       onMouseOut={mouseUpHandler}
-      onMouseMove={mouseMoveHandler}
+      onMouseMove={throttleMouseMove}
     ></canvas>
   );
 }
 
-export default WhitBoard;
+export default Whiteboard;
