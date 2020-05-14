@@ -40,6 +40,7 @@ class Whiteboard extends Component {
 
     client.onmessage = (e) => {
       let data = JSON.parse(JSON.parse(e.data));
+      console.log(data);
 
       // let data = JSON.parse(e.data);
       this.setState({
@@ -52,7 +53,7 @@ class Whiteboard extends Component {
         this.state.dataFromWS.y0,
         this.state.dataFromWS.x1,
         this.state.dataFromWS.y1,
-        this.state.color
+        this.state.dataFromWS.color
       );
     };
   }
