@@ -19,8 +19,9 @@ class Whiteboard extends Component {
       y: 0,
       ctx: null,
       color: "black",
+      room: "ya rab wafq :)",
       // recieved data from websocket
-      dataFromWS: null,
+      drawingDataFromWS: null,
     };
   }
 
@@ -30,24 +31,31 @@ class Whiteboard extends Component {
     });
 
     client.onopen = () => {
-      // client.send(`asdasd`);
+      client.send(
+        JSON.stringify({
+          type: "join",
+          room: this.state.room,
+          message: "new user joined",
+        })
+      );
     };
   }
 
   componentDidUpdate() {
     client.onmessage = (e) => {
       let data = JSON.parse(e.data);
+
       this.setState({
-        dataFromWS: data,
+        drawingDataFromWS: data.message,
       });
       // now we can draw with the sent coordinations by websocket :)
       draw(
         this.state.ctx,
-        this.state.dataFromWS.x0,
-        this.state.dataFromWS.y0,
-        this.state.dataFromWS.x1,
-        this.state.dataFromWS.y1,
-        this.state.dataFromWS.color
+        this.state.drawingDataFromWS.x0,
+        this.state.drawingDataFromWS.y0,
+        this.state.drawingDataFromWS.x1,
+        this.state.drawingDataFromWS.y1,
+        this.state.drawingDataFromWS.color
       );
     };
   }

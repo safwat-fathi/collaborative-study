@@ -13,11 +13,15 @@ export default function drawLine(context, x0, y0, x1, y1, color, client, send) {
 
   client.send(
     JSON.stringify({
-      x0,
-      y0,
-      x1,
-      y1,
-      color,
+      type: "drawing",
+      room: "",
+      message: {
+        x0,
+        y0,
+        x1,
+        y1,
+        color,
+      },
     })
   );
 }
