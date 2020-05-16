@@ -1,4 +1,14 @@
-export default function drawLine(context, x0, y0, x1, y1, color, client, send) {
+export default function drawLine(
+  context,
+  x0,
+  y0,
+  x1,
+  y1,
+  color,
+  room,
+  client,
+  send
+) {
   context.beginPath();
   context.moveTo(x0, y0);
   context.lineTo(x1, y1);
@@ -14,7 +24,7 @@ export default function drawLine(context, x0, y0, x1, y1, color, client, send) {
   client.send(
     JSON.stringify({
       type: "drawing",
-      room: "",
+      room,
       message: {
         x0,
         y0,

@@ -21,6 +21,7 @@ class Whiteboard extends Component {
       color: "black",
       room: "ya rab wafq :)",
       // recieved data from websocket
+      userID: null,
       drawingDataFromWS: null,
     };
   }
@@ -45,18 +46,27 @@ class Whiteboard extends Component {
     client.onmessage = (e) => {
       let data = JSON.parse(e.data);
 
-      this.setState({
-        drawingDataFromWS: data.message,
-      });
-      // now we can draw with the sent coordinations by websocket :)
-      draw(
-        this.state.ctx,
-        this.state.drawingDataFromWS.x0,
-        this.state.drawingDataFromWS.y0,
-        this.state.drawingDataFromWS.x1,
-        this.state.drawingDataFromWS.y1,
-        this.state.drawingDataFromWS.color
-      );
+      // LOOP WITH SWITCH CASE
+
+      if (data.type === "user data") {
+        this.setState({
+          userID: data.message,
+        });
+      }
+      if (data.type === "drawing") {
+        this.setState({
+          drawingDataFromWS: data.message,
+        });
+        // now we can draw with the sent coordinations by websocket :)
+        draw(
+          this.state.ctx,
+          this.state.drawingDataFromWS.x0,
+          this.state.drawingDataFromWS.y0,
+          this.state.drawingDataFromWS.x1,
+          this.state.drawingDataFromWS.y1,
+          this.state.drawingDataFromWS.color
+        );
+      }
     };
   }
 
@@ -96,6 +106,7 @@ class Whiteboard extends Component {
       offsetX,
       offsetY,
       this.state.color,
+      this.state.room,
       client,
       true
     );
@@ -118,6 +129,7 @@ class Whiteboard extends Component {
       offsetX,
       offsetY,
       this.state.color,
+      this.state.room,
       client,
       true
     );

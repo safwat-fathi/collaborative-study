@@ -14,7 +14,7 @@ const wsServer = new webSocketServer({
 
 // I'm maintaining all active connections in this object
 const clients = {};
-
+const rooms = [];
 // This code generates unique userid for everyuser.
 const getUniqueID = () => {
   const s4 = () =>
@@ -25,12 +25,18 @@ const getUniqueID = () => {
 };
 
 wsServer.on("request", function (request) {
-  var userID = getUniqueID();
-
+  const userID = getUniqueID();
   // You can rewrite this part of the code to accept only the requests from allowed origin
   const connection = request.accept(null, request.origin);
   clients[userID] = connection;
 
+  connection.send(
+    JSON.stringify({
+      type: "user data",
+      room: rooms[0],
+      message: userID,
+    })
+  );
   console.log("connected: " + userID);
 
   /* 
@@ -40,6 +46,8 @@ wsServer.on("request", function (request) {
 	*/
   connection.on("message", (message) => {
     let data = JSON.parse(message.utf8Data);
+    let room = data.room;
+    rooms.push(room);
 
     broadcast(data);
   });
@@ -52,7 +60,7 @@ wsServer.on("request", function (request) {
   function broadcast(data) {
     // Loop through all clients
     for (var i in clients) {
-      // Send a message to the client with the message
+      // Send a message to every client connected
       clients[i].send(JSON.stringify(data));
     }
   }
