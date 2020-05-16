@@ -30,16 +30,13 @@ class Whiteboard extends Component {
     });
 
     client.onopen = () => {
-      client.send(`this message from client!`);
+      // client.send(`asdasd`);
     };
   }
 
   componentDidUpdate() {
     client.onmessage = (e) => {
-      let data = JSON.parse(JSON.parse(e.data));
-      console.log(data);
-
-      // let data = JSON.parse(e.data);
+      let data = JSON.parse(e.data);
       this.setState({
         dataFromWS: data,
       });

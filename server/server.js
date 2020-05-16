@@ -2,9 +2,12 @@ const webSocketsServerPort = 8000;
 const webSocketServer = require("websocket").server;
 
 const http = require("http");
+
 // Spinning the http server and the websocket server.
 const server = http.createServer();
+
 server.listen(webSocketsServerPort);
+
 const wsServer = new webSocketServer({
   httpServer: server,
 });
@@ -36,17 +39,21 @@ wsServer.on("request", function (request) {
 	//////////////
 	*/
   connection.on("message", (message) => {
-    let msgString = JSON.stringify(message.utf8Data);
+    let data = JSON.parse(message.utf8Data);
 
-    // Loop through all clients
-    for (var i in clients) {
-      // Send a message to the client with the message
-      clients[i].sendUTF(msgString);
-    }
+    broadcast(data);
   });
 
   connection.on("close", function (reasonCode, desc) {
     delete clients[userID];
     console.log(reasonCode, desc);
   });
+
+  function broadcast(data) {
+    // Loop through all clients
+    for (var i in clients) {
+      // Send a message to the client with the message
+      clients[i].send(JSON.stringify(data));
+    }
+  }
 });
