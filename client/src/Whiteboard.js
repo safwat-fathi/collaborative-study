@@ -52,11 +52,13 @@ class Whiteboard extends Component {
         this.setState({
           userID: data.message,
         });
+        console.log(`user ID: ${this.state.userID}`);
       }
       if (data.type === "drawing") {
         this.setState({
           drawingDataFromWS: data.message,
         });
+
         // now we can draw with the sent coordinations by websocket :)
         draw(
           this.state.ctx,
