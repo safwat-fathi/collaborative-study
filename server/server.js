@@ -15,6 +15,7 @@ const wsServer = new webSocketServer({
 // I'm maintaining all active connections in this object
 const clients = {};
 const rooms = [];
+
 // This code generates unique userid for everyuser.
 const getUniqueID = () => {
   const s4 = () =>
@@ -37,7 +38,7 @@ wsServer.on("request", function (request) {
       message: userID,
     })
   );
-  console.log("connected: " + userID);
+  console.log("connected: " + userID, rooms);
 
   /* 
 	//////////////
@@ -45,11 +46,16 @@ wsServer.on("request", function (request) {
 	//////////////
 	*/
   connection.on("message", (message) => {
-    let data = JSON.parse(message.utf8Data);
-    let room = data.room;
-    rooms.push(room);
+    try {
+      let data = JSON.parse(message.utf8Data);
 
-    broadcast(data);
+      let room = rooms.includes(data.room);
+      if (!room) rooms.push(data.room);
+
+      broadcast(data);
+    } catch (err) {
+      console.log(err);
+    }
   });
 
   connection.on("close", function (reasonCode, desc) {
@@ -59,7 +65,7 @@ wsServer.on("request", function (request) {
 
   function broadcast(data) {
     // Loop through all clients
-    for (var i in clients) {
+    for (let i in clients) {
       // Send a message to every client connected
       clients[i].send(JSON.stringify(data));
     }

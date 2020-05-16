@@ -1,6 +1,6 @@
 import React, { Component, createRef } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
-import draw from "./utils/draw";
+import draw from "../../utils/draw";
 
 import "./Whiteboard.css";
 
@@ -46,28 +46,29 @@ class Whiteboard extends Component {
     client.onmessage = (e) => {
       let data = JSON.parse(e.data);
 
-      // LOOP WITH SWITCH CASE
+      switch (data.type) {
+        case "user data":
+          this.setState({
+            userID: data.message,
+          });
+          break;
+        case "drawing":
+          this.setState({
+            drawingDataFromWS: data.message,
+          });
 
-      if (data.type === "user data") {
-        this.setState({
-          userID: data.message,
-        });
-        console.log(`user ID: ${this.state.userID}`);
-      }
-      if (data.type === "drawing") {
-        this.setState({
-          drawingDataFromWS: data.message,
-        });
-
-        // now we can draw with the sent coordinations by websocket :)
-        draw(
-          this.state.ctx,
-          this.state.drawingDataFromWS.x0,
-          this.state.drawingDataFromWS.y0,
-          this.state.drawingDataFromWS.x1,
-          this.state.drawingDataFromWS.y1,
-          this.state.drawingDataFromWS.color
-        );
+          // now we can draw with the sent coordinations by websocket :)
+          draw(
+            this.state.ctx,
+            this.state.drawingDataFromWS.x0,
+            this.state.drawingDataFromWS.y0,
+            this.state.drawingDataFromWS.x1,
+            this.state.drawingDataFromWS.y1,
+            this.state.drawingDataFromWS.color
+          );
+          break;
+        default:
+          console.log(data.type);
       }
     };
   }
