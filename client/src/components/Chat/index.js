@@ -9,21 +9,7 @@ export default class Chat extends Component {
     super(props);
 
     this.state = {
-      userID: null,
-      room: "bala7 amhat!",
       message: "",
-    };
-  }
-
-  componentDidMount() {
-    client.onopen = () => {
-      client.send(
-        JSON.stringify({
-          type: "join",
-          room: this.state.room,
-          message: "new user joined",
-        })
-      );
     };
   }
 
@@ -31,17 +17,13 @@ export default class Chat extends Component {
     client.onmessage = (e) => {
       let data = JSON.parse(e.data);
 
-      switch (data.type) {
-        case "user data":
-          this.setState({
-            userID: data.message,
-          });
-          break;
-        case "chatting":
-          console.log(data.type);
-          break;
-        default:
-          console.log(data.type);
+      try {
+        if (data.type === "chatting") {
+          console.log(`${data.type} from Chat component`);
+        }
+        return;
+      } catch (err) {
+        console.log(err);
       }
     };
   }

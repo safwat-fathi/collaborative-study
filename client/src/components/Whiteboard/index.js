@@ -19,9 +19,7 @@ class Whiteboard extends Component {
       y: 0,
       ctx: null,
       color: "black",
-      room: "ya rab wafq :)",
       // recieved data from websocket
-      userID: null,
       drawingDataFromWS: null,
     };
   }
@@ -30,29 +28,13 @@ class Whiteboard extends Component {
     this.setState({
       ctx: this.canvas.current.getContext("2d"),
     });
-
-    client.onopen = () => {
-      client.send(
-        JSON.stringify({
-          type: "join",
-          room: this.state.room,
-          message: "new user joined",
-        })
-      );
-    };
   }
 
   componentDidUpdate() {
     client.onmessage = (e) => {
       let data = JSON.parse(e.data);
-
-      switch (data.type) {
-        case "user data":
-          this.setState({
-            userID: data.message,
-          });
-          break;
-        case "drawing":
+      try {
+        if (data.type === "drawing") {
           this.setState({
             drawingDataFromWS: data.message,
           });
@@ -66,9 +48,10 @@ class Whiteboard extends Component {
             this.state.drawingDataFromWS.y1,
             this.state.drawingDataFromWS.color
           );
-          break;
-        default:
-          console.log(data.type);
+        }
+        return;
+      } catch (err) {
+        console.log(err);
       }
     };
   }

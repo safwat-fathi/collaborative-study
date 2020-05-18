@@ -38,7 +38,6 @@ wsServer.on("request", function (request) {
       message: userID,
     })
   );
-  console.log("connected: " + userID, rooms);
 
   /* 
 	//////////////
@@ -47,11 +46,15 @@ wsServer.on("request", function (request) {
 	*/
   connection.on("message", (message) => {
     try {
+      // parse data sent from App component
       let data = JSON.parse(message.utf8Data);
-
+      // check if room is already existed
       let room = rooms.includes(data.room);
-      if (!room) rooms.push(data.room);
-
+      // pushing only rooms that is new & not garbage data
+      if (!room && data.room !== "undefined") rooms.push(data.room);
+      // just console.log 😁
+      console.log("connected: " + userID, rooms);
+      // BROADCAST the message to all connected clients
       broadcast(data);
     } catch (err) {
       console.log(err);
@@ -71,3 +74,11 @@ wsServer.on("request", function (request) {
     }
   }
 });
+
+/* 
+Cases should be handled:
+-----------------------
+
+- any message is sent to sender and receivers but it must be sent only to receivers.
+- rooms has undefined named room. ALWAYS!
+*/
