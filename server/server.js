@@ -69,8 +69,10 @@ wsServer.on("request", function (request) {
   function broadcast(data) {
     // Loop through all clients
     for (let i in clients) {
-      // Send a message to every client connected
-      clients[i].send(JSON.stringify(data));
+      // Send a the message to every client connected except sender
+      if (clients[i] !== clients[userID]) {
+        clients[i].send(JSON.stringify(data));
+      }
     }
   }
 });
@@ -78,7 +80,5 @@ wsServer.on("request", function (request) {
 /* 
 Cases should be handled:
 -----------------------
-
-- any message is sent to sender and receivers but it must be sent only to receivers.
 - rooms has undefined named room. ALWAYS!
 */

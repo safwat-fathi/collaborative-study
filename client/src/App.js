@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
-
+// ---------------------
 import Whiteboard from "./components/Whiteboard";
 import Chat from "./components/Chat";
-
+// ---------------------
 const client = new W3CWebSocket("ws://127.0.0.1:8000");
 
 export default class App extends Component {
@@ -30,20 +30,10 @@ export default class App extends Component {
     client.onmessage = (e) => {
       let data = JSON.parse(e.data);
 
-      switch (data.type) {
-        case "user data":
-          this.setState({
-            userID: data.message,
-          });
-          break;
-        case "chatting":
-          console.log(data.type);
-          break;
-        case "drawing":
-          console.log(data.type);
-          break;
-        default:
-          console.log(`😁 from App`);
+      if (data.type === "user data") {
+        this.setState({
+          userID: data.message,
+        });
       }
     };
   }

@@ -15,14 +15,6 @@
   display: flex;
   flex-flow: column;
 }
-.message.in {
-  color: red;
-  align-items: flex-end;
-}
-.message.out {
-  color: blueviolet;
-}
-
 /* form styles */
 form {
   display: flex;

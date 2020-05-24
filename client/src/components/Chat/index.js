@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+
+import ChatMessage from "./ChatMessage";
+
 import "./Chat.css";
 
 const client = new W3CWebSocket("ws://127.0.0.1:8000");
@@ -9,7 +12,14 @@ export default class Chat extends Component {
     super(props);
 
     this.state = {
-      message: "",
+      name: "Safwat",
+      lastMessage: {
+        name: "",
+        message: "",
+        time: null,
+        date: null,
+      },
+      messages: [],
     };
   }
 
@@ -19,9 +29,21 @@ export default class Chat extends Component {
 
       try {
         if (data.type === "chatting") {
-          console.log(`${data.type} from Chat component`);
+          let message = data.message.message;
+          let name = data.message.name;
+          let time = data.message.time;
+          let date = data.message.date;
+
+          this.setState({
+            lastMessage: {
+              name,
+              message,
+              time,
+              date,
+            },
+            messages: [...this.state.messages, data.message],
+          });
         }
-        return;
       } catch (err) {
         console.log(err);
       }
@@ -32,7 +54,13 @@ export default class Chat extends Component {
     e.preventDefault();
 
     this.setState({
-      message: e.target.value,
+      // @ts-ignore
+      lastMessage: {
+        name: this.state.name,
+        message: e.target.value,
+        time: `${new Date().getHours()}: ${new Date().getMinutes()}`,
+        date: `${new Date().getDate()}`,
+      },
     });
   };
 
@@ -43,12 +71,18 @@ export default class Chat extends Component {
       JSON.stringify({
         type: "chatting",
         room: this.state.room,
-        message: this.state.message,
+        message: this.state.lastMessage,
       })
     );
 
     this.setState({
-      message: "",
+      lastMessage: {
+        name: this.state.name,
+        message: "",
+        time: null,
+        date: null,
+      },
+      messages: [...this.state.messages, this.state.lastMessage],
     });
   };
 
@@ -57,19 +91,18 @@ export default class Chat extends Component {
       <div className="chat">
         {/* messages container */}
         <div className="messages">
-          <div className="message in">
-            <p>Lorem ipsum dolor sit amet consectetur.</p>
-            <span>
-              12:01 <b>Today</b>
-            </span>
-          </div>
-
-          <div className="message out">
-            <p>Lorem ipsum dolor sit amet consectetur.</p>
-            <span>
-              12:01 <b>Today</b>
-            </span>
-          </div>
+          {this.state.messages.map((message, index) => {
+            return (
+              <ChatMessage
+                // index is not ideal for keys in react
+                key={index}
+                name={message.name}
+                message={message.message}
+                time={message.time}
+                date={message.date}
+              />
+            );
+          })}
         </div>
 
         {/* form */}
@@ -78,7 +111,6 @@ export default class Chat extends Component {
             onChange={this.handleChange}
             type="text"
             placeholder="Write your message..."
-            value={this.state.message}
           />
           <input type="submit" value="Send" />
         </form>
