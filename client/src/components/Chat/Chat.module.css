@@ -1,0 +1,25 @@
+.chat {
+  display: flex;
+  flex-flow: column;
+}
+
+.messages {
+  display: flex;
+  background-color: #878b8a;
+  flex-flow: column;
+  height: 500px;
+  overflow-y: auto;
+}
+.message {
+  display: flex;
+  flex-flow: column;
+}
+/* form styles */
+form {
+  display: flex;
+  height: 50px;
+}
+
+input[type="text"] {
+  flex: 1;
+}

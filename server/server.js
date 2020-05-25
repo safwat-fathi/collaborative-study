@@ -81,4 +81,8 @@ wsServer.on("request", function (request) {
 Cases should be handled:
 -----------------------
 - rooms has undefined named room. ALWAYS!
+- chat messages needs adjustments.
+- figure a better model for chat messages!
+- pass the user name from App component.
+- utilty functions (broadcast & userID in utils folder).
 */

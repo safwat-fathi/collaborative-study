@@ -1,8 +1,10 @@
 import React from "react";
 
+import style from "./Chat.module.css";
+
 export default ({ name, message, time, date }) => {
   return (
-    <div className="message">
+    <div className={style.message}>
       <p>
         <strong>{name}</strong>: {message}
       </p>

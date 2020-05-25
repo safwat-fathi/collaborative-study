@@ -2,7 +2,7 @@ import React, { Component, createRef } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import draw from "../../utils/draw";
 
-import "./Whiteboard.css";
+import style from "./Whiteboard.module.css";
 
 const client = new W3CWebSocket("ws://127.0.0.1:8000");
 
@@ -135,8 +135,9 @@ class Whiteboard extends Component {
 
   render() {
     return (
-      <>
+      <div>
         <canvas
+          className={style.canvas}
           width="600"
           height="400"
           ref={this.canvas}
@@ -150,7 +151,7 @@ class Whiteboard extends Component {
           ref={this.colorPicker}
           type="color"
         />
-      </>
+      </div>
     );
   }
 }

@@ -1,0 +1,4 @@
+.Room {
+  display: flex;
+  justify-content: space-between;
+}

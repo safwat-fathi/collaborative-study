@@ -3,7 +3,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 import ChatMessage from "./ChatMessage";
 
-import "./Chat.css";
+import style from "./Chat.module.css";
 
 const client = new W3CWebSocket("ws://127.0.0.1:8000");
 
@@ -12,7 +12,7 @@ export default class Chat extends Component {
     super(props);
 
     this.state = {
-      name: "Safwat",
+      name: "",
       lastMessage: {
         name: "",
         message: "",
@@ -20,6 +20,17 @@ export default class Chat extends Component {
         date: null,
       },
       messages: [],
+    };
+  }
+
+  componentDidMount() {
+    client.onmessage = (e) => {
+      let data = JSON.parse(e.data);
+
+      if (data.type === "join") {
+        console.log(`new user joined and his data is: ${data}`);
+        return;
+      }
     };
   }
 
@@ -88,9 +99,9 @@ export default class Chat extends Component {
 
   render() {
     return (
-      <div className="chat">
+      <div className={style.chat}>
         {/* messages container */}
-        <div className="messages">
+        <div className={style.messages}>
           {this.state.messages.map((message, index) => {
             return (
               <ChatMessage
