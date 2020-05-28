@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+// import getUniqueID from "../../utils/uniqeID";
+import { v4 as uuidv4 } from "uuid";
 
 const client = new W3CWebSocket("ws://127.0.0.1:8000");
 
 const Join = () => {
-  const [name, setName] = useState("");
   const [room, setRoom] = useState("");
+  const [name, setName] = useState("");
+  const [userID, setUserID] = useState("");
+
+  useEffect(() => {
+    let uniqeID = uuidv4();
+    setUserID(uniqeID);
+  }, []);
 
   const handleSubmit = (e) => {
     console.log("submitted");
@@ -20,7 +28,10 @@ const Join = () => {
       JSON.stringify({
         type: "join",
         room: room,
-        message: `${name} joined!`,
+        payload: {
+          userName: name,
+          userID: userID,
+        },
       })
     );
   };
@@ -38,7 +49,7 @@ const Join = () => {
         placeholder="Room"
         onChange={(e) => setRoom(e.target.value)}
       />
-      <Link onClick={handleSubmit} to={`/whiteboard?name=${name}&room=${room}`}>
+      <Link onClick={handleSubmit} to={`/room=${room}`}>
         <input type="submit" value="Join" />
       </Link>
     </div>
