@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
+const express = require("express");
+
 const webSocketServer = require("websocket").server;
 const webSocketsServerPort = 8000;
 
 const User = require("./models/user.model");
+const Room = require("./models/room.model");
 
 const http = require("http");
 
@@ -15,6 +18,9 @@ const wsServer = new webSocketServer({
   httpServer: server,
 });
 
+const clients = {};
+const rooms = {};
+
 wsServer.on("request", function (request) {
   // You can rewrite this part of the code to accept only the requests from allowed origin
   const connection = request.accept(null, request.origin);
@@ -26,7 +32,7 @@ wsServer.on("request", function (request) {
 	*/
   connection.on("message", (message) => {
     try {
-      // parse data sent from App component
+      // parse data sent from client
       let data = JSON.parse(message.utf8Data);
 
       switch (data.type) {
@@ -35,19 +41,40 @@ wsServer.on("request", function (request) {
           let payload = data.payload;
           let userName = payload.userName;
           let userID = payload.userID;
+          let roomName = room.roomName;
+          let roomID = room.roomID;
 
           const newUser = new User({ name: userName, userID });
+          const newRoom = new Room({ name: roomName, roomID });
+
           newUser.save((err, doc) => {
             if (err) {
               console.error(err);
               return;
             }
 
-            console.log("document inserted successfully");
+            console.log("User document inserted successfully");
           });
+          newRoom.save((err, doc) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+
+            console.log("Room document inserted successfully");
+          });
+
+          let users = User.find({}, (err, res) => {
+            if (err) {
+              console.error(err);
+            }
+            return res;
+          });
+          console.log(users);
+
           break;
         case "chatting":
-          // console.log(data);
+          console.log(data);
           break;
         case "drawing":
           console.log("drawing!");
@@ -66,15 +93,15 @@ wsServer.on("request", function (request) {
     console.log(reasonCode, desc);
   });
 
-  // function broadcast(data) {
-  //   // Loop through all clients
-  //   for (let i in clients) {
-  //     // Send a the message to every client connected except sender
-  //     if (clients[i] !== clients[userID]) {
-  //       clients[i].send(JSON.stringify(data));
-  //     }
-  //   }
-  // }
+  function broadcast(data) {
+    // Loop through all clients
+    for (let i in clients) {
+      // Send a the message to every client connected except sender
+      if (clients[i] !== clients[userID]) {
+        clients[i].send(JSON.stringify(data));
+      }
+    }
+  }
 
   function createRoom(rooms, newRoom) {
     let isExisted = rooms.includes(newRoom);
@@ -110,4 +137,5 @@ Cases should be handled:
 - pass the user name from App component.
 - utilty functions (broadcast & userID in utils folder).
 - declare client only in one component and pass to all commponents. 
+- add express with websocket.
 */

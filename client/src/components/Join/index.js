@@ -10,10 +10,14 @@ const Join = () => {
   const [room, setRoom] = useState("");
   const [name, setName] = useState("");
   const [userID, setUserID] = useState("");
+  const [roomID, setRoomID] = useState("");
 
   useEffect(() => {
-    let uniqeID = uuidv4();
-    setUserID(uniqeID);
+    let userID = uuidv4();
+    let roomID = uuidv4();
+
+    setUserID(userID);
+    setRoomID(roomID);
   }, []);
 
   const handleSubmit = (e) => {
@@ -27,7 +31,10 @@ const Join = () => {
     client.send(
       JSON.stringify({
         type: "join",
-        room: room,
+        room: {
+          roomName: room,
+          roomID: roomID,
+        },
         payload: {
           userName: name,
           userID: userID,
