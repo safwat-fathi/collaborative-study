@@ -29,6 +29,7 @@ export default class App extends Component {
     //     })
     //   );
     // };
+    console.log(this.props);
 
     client.onmessage = (e) => {
       let data = JSON.parse(e.data);

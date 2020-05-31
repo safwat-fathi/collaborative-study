@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
@@ -7,6 +7,11 @@ const client = new W3CWebSocket("ws://127.0.0.1:8000");
 const Join = () => {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
+  // const [client, setClient] = useState('');
+
+  useEffect(() => {
+    console.log(client);
+  });
 
   const handleSubmit = (e) => {
     console.log("submitted");
@@ -20,7 +25,10 @@ const Join = () => {
       JSON.stringify({
         type: "join",
         room: room,
-        message: `${name} joined!`,
+        message: {
+          userName: name,
+          roomName: room,
+        },
       })
     );
   };
@@ -38,7 +46,15 @@ const Join = () => {
         placeholder="Room"
         onChange={(e) => setRoom(e.target.value)}
       />
-      <Link onClick={handleSubmit} to={`/whiteboard?name=${name}&room=${room}`}>
+      <Link
+        onClick={handleSubmit}
+        to={{
+          pathname: `/room?name=${name}&roomName=${room}`,
+          state: {
+            client: JSON.stringify(client),
+          },
+        }}
+      >
         <input type="submit" value="Join" />
       </Link>
     </div>

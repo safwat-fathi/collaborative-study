@@ -31,14 +31,15 @@ wsServer.on("request", function (request) {
   const connection = request.accept(null, request.origin);
   clients[userID] = connection;
 
-  connection.send(
-    JSON.stringify({
-      type: "user data",
-      room: rooms[0],
-      message: userID,
-    })
-  );
-
+  // connection.send(
+  //   JSON.stringify({
+  //     type: "user data",
+  //     room: rooms[0],
+  //     message: userID,
+  //   })
+  // );
+  // just console.log 😁
+  // console.log("connected: " + userID, rooms);
   /* 
 	//////////////
 	custom events
@@ -48,14 +49,37 @@ wsServer.on("request", function (request) {
     try {
       // parse data sent from App component
       let data = JSON.parse(message.utf8Data);
-      // check if room is already existed
-      let room = rooms.includes(data.room);
-      // pushing only rooms that is new & not garbage data
-      if (!room && data.room !== "undefined") rooms.push(data.room);
-      // just console.log 😁
-      console.log("connected: " + userID, rooms);
-      // BROADCAST the message to all connected clients
-      broadcast(data);
+
+      switch (data.type) {
+        case "join":
+          connection.send(
+            JSON.stringify({
+              type: "user data",
+              room: rooms[0],
+              message: userID,
+            })
+          );
+          // console.log(data);
+          // create new room & push it to rooms array
+          createRoom(rooms, data.room);
+          // just console.log 😁
+          // console.log(`current rooms: ${rooms}`);
+          for (let client in clients) {
+            console.log("connected: " + client);
+          }
+          break;
+        case "chatting":
+          console.log(data);
+          // BROADCAST the message to all connected clients
+          broadcast(data);
+          break;
+        case "drawing":
+          // BROADCAST the message to all connected clients
+          broadcast(data);
+          break;
+        default:
+          break;
+      }
     } catch (err) {
       console.log(err);
     }
@@ -66,6 +90,7 @@ wsServer.on("request", function (request) {
     console.log(reasonCode, desc);
   });
 
+  // broadcasting function
   function broadcast(data) {
     // Loop through all clients
     for (let i in clients) {
@@ -74,6 +99,17 @@ wsServer.on("request", function (request) {
         clients[i].send(JSON.stringify(data));
       }
     }
+  }
+
+  // pushing new room
+  function createRoom(rooms, roomFromData) {
+    let isExisted = rooms.includes(roomFromData);
+    if (!isExisted && roomFromData !== undefined) {
+      rooms.push(roomFromData);
+      return;
+    }
+    // console.log(isExisted);
+    return;
   }
 });
 
@@ -85,4 +121,5 @@ Cases should be handled:
 - figure a better model for chat messages!
 - pass the user name from App component.
 - utilty functions (broadcast & userID in utils folder).
+- the client should be handled by one component as ir creates 4 connections on single request. 
 */
