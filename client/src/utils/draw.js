@@ -25,7 +25,7 @@ export default function drawLine(
     JSON.stringify({
       type: "drawing",
       room,
-      message: {
+      payload: {
         x0,
         y0,
         x1,

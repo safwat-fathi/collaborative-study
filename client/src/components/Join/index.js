@@ -7,11 +7,6 @@ const client = new W3CWebSocket("ws://127.0.0.1:8000");
 const Join = () => {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
-  // const [client, setClient] = useState('');
-
-  useEffect(() => {
-    console.log(client);
-  });
 
   const handleSubmit = (e) => {
     console.log("submitted");
@@ -48,12 +43,7 @@ const Join = () => {
       />
       <Link
         onClick={handleSubmit}
-        to={{
-          pathname: `/room?name=${name}&roomName=${room}`,
-          state: {
-            client: JSON.stringify(client),
-          },
-        }}
+        to={`/?room=${room}`}
       >
         <input type="submit" value="Join" />
       </Link>

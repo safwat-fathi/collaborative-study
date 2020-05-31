@@ -10,7 +10,7 @@ export default class App extends Component {
     return (
       <Router>
         <Route path="/" exact component={Join}></Route>
-        <Route path="/room?:name&:roomName" component={Room}></Route>
+        <Route path="/:room" component={Room}></Route>
       </Router>
     );
   }

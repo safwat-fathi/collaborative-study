@@ -82,7 +82,7 @@ export default class Chat extends Component {
       JSON.stringify({
         type: "chatting",
         room: this.state.room,
-        message: this.state.lastMessage,
+        payload: this.state.lastMessage,
       })
     );
 

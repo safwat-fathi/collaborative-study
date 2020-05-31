@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.15.2",
+    "express-ws": "^4.0.0",
+    "mongoose": "^5.9.16",
     "nodemon": "^2.0.4",
     "websocket": "^1.0.31"
   }

@@ -1,5 +1,11 @@
-const webSocketsServerPort = 8000;
+const mongoose = require("mongoose");
+const express = require("express");
+
 const webSocketServer = require("websocket").server;
+const webSocketsServerPort = 8000;
+
+const User = require("./models/user.model");
+const Room = require("./models/room.model");
 
 const http = require("http");
 
@@ -12,34 +18,12 @@ const wsServer = new webSocketServer({
   httpServer: server,
 });
 
-// I'm maintaining all active connections in this object
 const clients = {};
-const rooms = [];
-
-// This code generates unique userid for everyuser.
-const getUniqueID = () => {
-  const s4 = () =>
-    Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  return s4() + s4() + "-" + s4();
-};
+const rooms = {};
 
 wsServer.on("request", function (request) {
-  const userID = getUniqueID();
   // You can rewrite this part of the code to accept only the requests from allowed origin
   const connection = request.accept(null, request.origin);
-  clients[userID] = connection;
-
-  // connection.send(
-  //   JSON.stringify({
-  //     type: "user data",
-  //     room: rooms[0],
-  //     message: userID,
-  //   })
-  // );
-  // just console.log 😁
-  // console.log("connected: " + userID, rooms);
   /* 
 	//////////////
 	custom events
@@ -47,46 +31,64 @@ wsServer.on("request", function (request) {
 	*/
   connection.on("message", (message) => {
     try {
-      // parse data sent from App component
+      // parse data sent from client
       let data = JSON.parse(message.utf8Data);
 
       switch (data.type) {
         case "join":
-          connection.send(
-            JSON.stringify({
-              type: "user data",
-              room: rooms[0],
-              message: userID,
-            })
-          );
-          // console.log(data);
-          // create new room & push it to rooms array
-          createRoom(rooms, data.room);
-          // just console.log 😁
-          // console.log(`current rooms: ${rooms}`);
-          for (let client in clients) {
-            console.log("connected: " + client);
-          }
+          let room = data.room;
+          let payload = data.payload;
+          let userName = payload.userName;
+          let userID = payload.userID;
+          let roomName = room.roomName;
+          let roomID = room.roomID;
+
+          const newUser = new User({ name: userName, userID });
+          const newRoom = new Room({ name: roomName, roomID });
+
+          newUser.save((err, doc) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+
+            console.log("User document inserted successfully");
+          });
+          newRoom.save((err, doc) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+
+            console.log("Room document inserted successfully");
+          });
+
+          let users = User.find({}, (err, res) => {
+            if (err) {
+              console.error(err);
+            }
+            return res;
+          });
+          console.log(users);
+
           break;
         case "chatting":
           console.log(data);
-          // BROADCAST the message to all connected clients
-          broadcast(data);
           break;
         case "drawing":
-          // BROADCAST the message to all connected clients
-          broadcast(data);
+          console.log("drawing!");
           break;
         default:
           break;
       }
+      // BROADCAST the message to all connected clients
+      // broadcast(data);
     } catch (err) {
       console.log(err);
     }
   });
 
   connection.on("close", function (reasonCode, desc) {
-    delete clients[userID];
     console.log(reasonCode, desc);
   });
 
@@ -101,16 +103,29 @@ wsServer.on("request", function (request) {
     }
   }
 
-  // pushing new room
-  function createRoom(rooms, roomFromData) {
-    let isExisted = rooms.includes(roomFromData);
-    if (!isExisted && roomFromData !== undefined) {
-      rooms.push(roomFromData);
-      return;
+  function createRoom(rooms, newRoom) {
+    let isExisted = rooms.includes(newRoom);
+    // pushing only rooms that is new & not garbage data
+
+    if (!isExisted && newRoom !== undefined) {
+      rooms.push(newRoom);
     }
-    // console.log(isExisted);
     return;
   }
+});
+
+/* 
+MongoDB >>>>>>>
+----------------
+*/
+mongoose.connect("mongodb://localhost/27017", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+const db = mongoose.connection;
+
+db.once("open", () => {
+  console.log("connected to db!");
 });
 
 /* 
@@ -121,5 +136,6 @@ Cases should be handled:
 - figure a better model for chat messages!
 - pass the user name from App component.
 - utilty functions (broadcast & userID in utils folder).
-- the client should be handled by one component as ir creates 4 connections on single request. 
+- declare client only in one component and pass to all commponents. 
+- add express with websocket.
 */
