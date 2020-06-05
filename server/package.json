@@ -2,13 +2,15 @@
   "name": "nodewithsocketio",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src",
   "scripts": {
-    "start": "nodemon --watch server.js"
+    "start": "nodemon --watch 'src/**/*' ./src/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.15.2",
     "express-ws": "^4.0.0",
     "mongoose": "^5.9.16",

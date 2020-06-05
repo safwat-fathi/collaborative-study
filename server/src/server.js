@@ -1,28 +1,32 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const app = express();
+
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+// routes
+require("./api/routes/routes.js")(app);
 
 const webSocketServer = require("websocket").server;
-const webSocketsServerPort = 8000;
+const PORT = 8000;
 
-const User = require("./models/user.model");
-const Room = require("./models/room.model");
+// database models
+const User = require("../models/user.model");
+const Room = require("../models/room.model");
 
 const http = require("http");
 
 // Spinning the http server and the websocket server.
 const server = http.createServer();
 
-server.listen(webSocketsServerPort);
-
 const wsServer = new webSocketServer({
-  httpServer: server,
+  httpServer: app.listen(PORT, () => console.log(`listening on port ${PORT}`)),
 });
 
-const clients = {};
-const rooms = {};
-
 wsServer.on("request", function (request) {
-  // You can rewrite this part of the code to accept only the requests from allowed origin
   const connection = request.accept(null, request.origin);
   /* 
 	//////////////
