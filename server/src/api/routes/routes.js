@@ -6,9 +6,6 @@ module.exports = (app) => {
 
   // POST test
   app.post("/userReg", (req, res) => {
-    const userData = req.body;
-
-    console.log(userData);
-    res.send(userData);
+    res.send(req.body);
   });
 };
