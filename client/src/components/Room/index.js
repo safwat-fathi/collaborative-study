@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
+// import { w3cwebsocket as W3CWebSocket } from "websocket";
 // ---------------------
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
 // ---------------------
 import style from "./Room.module.css";
 
-const client = new W3CWebSocket("ws://127.0.0.1:8000");
+// const client = new W3CWebSocket("ws://127.0.0.1:8000");
 
 export default class App extends Component {
   constructor(props) {
@@ -31,15 +31,15 @@ export default class App extends Component {
     // };
     console.log(this.props);
 
-    client.onmessage = (e) => {
-      let data = JSON.parse(e.data);
+    // client.onmessage = (e) => {
+    //   let data = JSON.parse(e.data);
 
-      if (data.type === "user data") {
-        this.setState({
-          userID: data.message,
-        });
-      }
-    };
+    //   if (data.type === "user data") {
+    //     this.setState({
+    //       userID: data.message,
+    //     });
+    //   }
+    // };
   }
 
   render() {
