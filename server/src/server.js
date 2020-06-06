@@ -14,8 +14,8 @@ const webSocketServer = require("websocket").server;
 const PORT = 8000;
 
 // database models
-const User = require("../models/user.model");
-const Room = require("../models/room.model");
+// const User = require("../models/user.model");
+// const Room = require("../models/room.model");
 
 const http = require("http");
 

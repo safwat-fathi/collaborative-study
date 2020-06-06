@@ -14,6 +14,6 @@ The type of the message which consist of:
 
 Is the room name create or joined by the user.
 
-### Message:
+### payload:
 
-- The body of the data sent by websocket.
+- The paylaod of the data sent by websocket.
