@@ -1,6 +1,6 @@
 # Messages
 
-Every message is an object contains 3 keys (type, room, message)
+Every message is an object contains 3 keys (type, room, payload)
 
 ## Type:
 
