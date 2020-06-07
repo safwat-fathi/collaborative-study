@@ -40,32 +40,32 @@ wsServer.on("request", function (request) {
 
       switch (data.type) {
         case "join":
-          let room = data.room;
-          let payload = data.payload;
-          let userName = payload.userName;
-          let userID = payload.userID;
-          let roomName = room.roomName;
-          let roomID = room.roomID;
+          // let room = data.room;
+          // let payload = data.payload;
+          // let userName = payload.userName;
+          // let userID = payload.userID;
+          // let roomName = room.roomName;
+          // let roomID = room.roomID;
 
-          const newUser = new User({ name: userName, userID });
-          const newRoom = new Room({ name: roomName, roomID });
+          // const newUser = new User({ name: userName, userID });
+          // const newRoom = new Room({ name: roomName, roomID });
 
-          newUser.save((err, doc) => {
-            if (err) {
-              console.error(err);
-              return;
-            }
+          // newUser.save((err, doc) => {
+          //   if (err) {
+          //     console.error(err);
+          //     return;
+          //   }
 
-            console.log("User document inserted successfully");
-          });
-          newRoom.save((err, doc) => {
-            if (err) {
-              console.error(err);
-              return;
-            }
+          //   console.log("User document inserted successfully");
+          // });
+          // newRoom.save((err, doc) => {
+          //   if (err) {
+          //     console.error(err);
+          //     return;
+          //   }
 
-            console.log("Room document inserted successfully");
-          });
+          //   console.log("Room document inserted successfully");
+          // });
 
           let users = User.find({}, (err, res) => {
             if (err) {
@@ -119,12 +119,14 @@ wsServer.on("request", function (request) {
 });
 
 /* 
+----------------
 MongoDB >>>>>>>
 ----------------
 */
 mongoose.connect("mongodb://localhost/27017", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true,
 });
 const db = mongoose.connection;
 

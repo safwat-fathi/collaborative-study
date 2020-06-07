@@ -62,7 +62,24 @@ class Register extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    let { name, email, password } = this.state;
+    let {
+      name,
+      email,
+      password,
+      nameValid,
+      emailValid,
+      passwordValid,
+    } = this.state;
+
+    let valid = nameValid && emailValid && passwordValid;
+
+    if (!valid) {
+      this.setState({
+        feedBackMsg: "Please fill the form!",
+      });
+
+      return;
+    }
 
     try {
       axios

@@ -1,33 +1,30 @@
 import React, { useState } from "react";
+import axios from "axios";
 // import { Link } from "react-router-dom";
 // import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 // const client = new W3CWebSocket("ws://127.0.0.1:8000");
 
 const Login = () => {
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
 
   const handleSubmit = (e) => {
-    if (name === "" || password === "") {
-      setFeedbackMsg("Please Check you name or password");
-      e.preventDefault();
+    e.preventDefault();
+
+    if (email === "" || password === "") {
+      setFeedbackMsg("Please Check you Email or password");
       return;
     }
-    console.log("submitted");
 
-    // sending name & room data by websocket
-    // client.send(
-    //   JSON.stringify({
-    //     type: "join",
-    //     room: room,
-    //     message: {
-    //       userName: name,
-    //       roomName: room,
-    //     },
-    //   })
-    // );
+    try {
+      axios
+        .post("http://localhost:8000/userLogin", { email, password })
+        .then((res) => console.log(res));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -35,20 +32,20 @@ const Login = () => {
       <h3>Login</h3>
       <form onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="Name"
-          onChange={(e) => setName(e.target.value)}
+          type="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
         />
         <input
-          type="text"
+          type="password"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
         {/* <Link onClick={handleSubmit} to={`/?room=${room}`}> */}
         <input type="submit" value="Login" />
+        {/* </Link> */}
       </form>
-      {feedbackMsg ? <div>{feedbackMsg}</div> : ""}
-      {/* </Link> */}
+      <div>{feedbackMsg}</div>
     </div>
   );
 };
