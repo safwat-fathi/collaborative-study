@@ -1,17 +1,11 @@
 const mongoose = require("mongoose");
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const app = express();
+// const express = require("express");
 
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 // routes
-require("./api/routes/routes.js")(app);
-
+// require("./api/routes/user.js");
+const app = require("./app");
 const webSocketServer = require("websocket").server;
-const PORT = 8000;
+const PORT = 4000;
 
 // database models
 // const User = require("../models/user.model");
