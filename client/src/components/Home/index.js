@@ -3,10 +3,12 @@ import React from "react";
 
 import Login from "../Login";
 import Register from "../Register";
+import CreateAndJoin from "../CreateAndJoinRoom";
 
 const Home = () => {
   return (
     <>
+      <CreateAndJoin />
       <Login />
       <Register />
     </>
