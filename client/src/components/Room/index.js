@@ -1,12 +1,17 @@
 import React, { Component } from "react";
+import { Switch, Route, Router } from "react-router-dom";
 // import { w3cwebsocket as W3CWebSocket } from "websocket";
 // ---------------------
+import Create from "./Create";
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
 // ---------------------
-import style from "./Room.module.css";
+// import style from "./Room.module.css";
 
 // const client = new W3CWebSocket("ws://127.0.0.1:8000");
+
+// Room Wrapper
+const Wrapper = ({ children }) => <div>{children}</div>;
 
 export default class App extends Component {
   constructor(props) {
@@ -29,11 +34,8 @@ export default class App extends Component {
     //     })
     //   );
     // };
-    console.log(this.props);
-
     // client.onmessage = (e) => {
     //   let data = JSON.parse(e.data);
-
     //   if (data.type === "user data") {
     //     this.setState({
     //       userID: data.message,
@@ -44,10 +46,25 @@ export default class App extends Component {
 
   render() {
     return (
-      <div className={style.Room}>
-        <Whiteboard userName={this.state.userName} />
-        <Chat userName={this.state.userName} />
-      </div>
+      <>
+        <Router>
+          <Switch>
+            {/* user after login */}
+            <Route exact path="/room">
+              <Wrapper>
+                <Create />
+              </Wrapper>
+            </Route>
+            {/* room after join or creation */}
+            <Route path="/room?:roomName">
+              <Wrapper>
+                <Whiteboard />
+                <Chat />
+              </Wrapper>
+            </Route>
+          </Switch>
+        </Router>
+      </>
     );
   }
 }

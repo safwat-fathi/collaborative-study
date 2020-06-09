@@ -89,6 +89,10 @@ class Register extends Component {
           password,
         })
         .then((res) => console.log(res));
+
+      this.setState({
+        feedBackMsg: "You have registered successfully!",
+      });
     } catch (err) {
       console.log(err);
     }
