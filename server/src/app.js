@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 
 const userRoutes = require("./api/routes/user");
 
-app.use("/user", userRoutes);
+app.use("/users", userRoutes);
 
 // handle errors if it passed user & room routes
 app.use((req, res, next) => {
