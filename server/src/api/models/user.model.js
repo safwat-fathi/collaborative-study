@@ -19,8 +19,18 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: false,
   },
-  rooms: {
-    type: String,
+  rooms: [
+    {
+      name: String,
+      desc: String,
+    },
+  ],
+  timestamps: {
+    created_at: Date,
+    updated_at: {
+      type: Date,
+      default: Date.now,
+    },
   },
 });
 

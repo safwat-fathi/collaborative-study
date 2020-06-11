@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 // DB driver & User model
 const mongoose = require("mongoose");
-const User = require("../../../models/user");
+const User = require("../models/user.model");
 
-// home test
+// get all users
 router.get("/", (req, res, next) => {
   User.find()
     .select("-__v")
@@ -33,6 +33,9 @@ router.post("/register", (req, res, next) => {
     name,
     email,
     password,
+    timestamps: {
+      created_at: Date.now(),
+    },
   });
 
   user
@@ -40,7 +43,7 @@ router.post("/register", (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.status(201).json({
-        message: "Handling POST requests to /user/register",
+        message: "Handling user register",
         createdUser: result,
       });
     })
@@ -80,7 +83,7 @@ router.post("/login", async (req, res, next) => {
       }
       // user existed
       res.status(200).json({
-        message: "Handling POST requests to /user/login",
+        message: "Handling user login",
         queriedUser: user,
       });
     })
@@ -92,3 +95,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 module.exports = router;
+
+/* 
+- create a route for editing user data (email, password, name).
+*/

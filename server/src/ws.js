@@ -5,14 +5,15 @@ const PORT = 8080;
 
 // Spinning the http server and the websocket server.
 const server = http.createServer(app).listen(PORT, () => {
-  console.log(`WebSocket running on port ${PORT}`);
+  console.log(`WebSocket is running on port ${PORT}`);
 });
 
-const wss = new ws.Server({
-  server,
-});
+const wss = new ws.Server({ server });
 
-wss.on("connection", function connection(ws) {
+wss.on("connection", function connection(ws, req) {
+  const clientIP = req.socket.remoteAddress;
+  console.log(`connected client IP: ${clientIP}`);
+
   // handling messages
   ws.on("message", function incoming(message) {
     console.log(`recieved --> ${message}`);
@@ -23,23 +24,18 @@ wss.on("connection", function connection(ws) {
 
 // // broadcasting function
 // function broadcast(data) {
-// 	// Loop through all clients
-// 	for (let i in clients) {
-// 		// Send a the message to every client connected except sender
-// 		if (clients[i] !== clients[userID]) {
-// 			clients[i].send(JSON.stringify(data));
-// 		}
+// send to all excluding sender
+// wss.clients.forEach(function each(client) {
+// 	if (client !== ws && client.readyState === WebSocket.OPEN) {
+// 		client.send(data);
 // 	}
-// }
-
-// function createRoom(rooms, newRoom) {
-// 	let isExisted = rooms.includes(newRoom);
-// 	// pushing only rooms that is new & not garbage data
-
-// 	if (!isExisted && newRoom !== undefined) {
-// 		rooms.push(newRoom);
+// });
+// send to all including sender
+// 	wss.clients.forEach(function each(client) {
+// 	if (client.readyState === WebSocket.OPEN) {
+// 		client.send(data);
 // 	}
-// 	return;
+// });
 // }
 
 // try {
