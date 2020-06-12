@@ -83,7 +83,7 @@ class Register extends Component {
 
     try {
       axios
-        .post("http://localhost:8000/userReg", {
+        .post("http://localhost:4000/users/register", {
           name,
           email,
           password,
