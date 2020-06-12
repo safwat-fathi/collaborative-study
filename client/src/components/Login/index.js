@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { withRouter } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 // import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 // const client = new W3CWebSocket("ws://127.0.0.1:8080");
@@ -29,24 +29,39 @@ const Login = ({ history }) => {
   };
 
   return (
-    <div>
-      <h3>Login</h3>
+    <div class="col-md-6 offset-md-3 col mt-5">
+      <h3 class="text-center">Login</h3>
       <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input type="submit" value="Login" />
+        <div class="form-group">
+          <label for="emailInput">email</label>
+          <input
+            class="form-control"
+            type="email"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+            id="emailInput"
+          />
+        </div>
+        <div class="form-group">
+          <label for="passwordInput">password</label>
+          <input
+            class="form-control"
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            id="passwordInput"
+          />
+        </div>
+        <input className="btn btn-primary btn-lg btn-block" type="submit" value="Login" />
+        <div class="form-group text-right mt-2">
+          <NavLink to="register" exact>
+             register
+          </NavLink>  
+        </div>
       </form>
       <div>{feedbackMsg}</div>
     </div>
   );
 };
 
-export default withRouter(Login);
+export default Login;
