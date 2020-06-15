@@ -15,10 +15,10 @@
   flex-flow: column;
 }
 /* form styles */
-form {
+/* form {
   display: flex;
   height: 50px;
-}
+} */
 
 input[type="text"] {
   flex: 1;
