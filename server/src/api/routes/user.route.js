@@ -4,28 +4,23 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
-const { use } = require("bcrypt/promises");
+const jwt = require("jsonwebtoken");
+const auth = require("../middleware/auth");
 
-// get all users
-router.get("/", (req, res, next) => {
-  User.find()
-    .select("-__v")
-    .exec()
-    .then((users) => {
-      console.info(users);
-      res.status(200).json({
-        message: "all registered users",
-        users,
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).json({
-        error: err,
-      });
+// testing JWT token
+router.get("/room", auth, (req, res, next) => {
+  try {
+    console.log("authinticated");
+    res.status(200).json({
+      message: "success",
     });
-
-  next();
+  } catch (err) {
+    console.error("not authinticated");
+    res.status(200).json({
+      message: "failed",
+      error: err,
+    });
+  }
 });
 
 // register new user
@@ -46,7 +41,6 @@ router.post("/register", async (req, res, next) => {
     await user.save();
     res.status(201).json({
       message: "user registered successfully",
-      user,
     });
   } catch (err) {
     res.status(400).json({
@@ -77,9 +71,21 @@ router.post("/login", async (req, res, next) => {
       });
     }
 
+    const token = jwt.sign(
+      {
+        userID: user._id,
+        userName: user.name,
+        userEmail: user.email,
+      },
+      "aSuperSecret",
+      {
+        expiresIn: "1h",
+      }
+    );
+
     res.status(200).json({
       message: "login success",
-      user,
+      token,
     });
   } catch (err) {
     console.log(err);
@@ -88,6 +94,15 @@ router.post("/login", async (req, res, next) => {
     });
   }
 
+  next();
+});
+
+// edit user data
+router.post("/edit", auth, (req, res, next) => {
+  // get user ID.
+  // search DB by ID.
+  // get old & new password (confirmed) - email - name.
+  // update DB with these new entries.
   next();
 });
 

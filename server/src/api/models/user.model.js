@@ -41,43 +41,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// attach static method to User model
-// userSchema.statics.findByCredentials = async (email, password) => {
-//   const user = await User.findOne({ email });
-
-//   if (!user) {
-//     return {
-//       message: "Unable to login, Please check email or password",
-//     };
-//     // throw new Error("Unable to login, Please check email or password");
-//   }
-
-//   bcrypt.compare(password, user.password, (err, result) => {
-//     if (err) {
-//       return {
-//         message: "Unable to login, Please check email or password",
-//       };
-//     }
-
-//     return {
-//       message: "login success",
-//       user: result,
-//     };
-//   });
-// };
-
-userSchema.methods.comparePassword = function (candidatePassword, cb) {
-  const user = this;
-
-  bcrypt.compare(candidatePassword, user.password, function (err, isMatch) {
-    if (err) {
-      return cb(err);
-    }
-
-    cb(null, isMatch);
-  });
-};
-
 // hash plain text password before saving
 userSchema.pre("save", function (next) {
   const user = this;
