@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    unique: false,
   },
   rooms: [
     {
@@ -43,34 +42,57 @@ const userSchema = new mongoose.Schema({
 });
 
 // attach static method to User model
-userSchema.statics.findByCredentials = async (email, password) => {
-  const user = await User.findOne({ email });
+// userSchema.statics.findByCredentials = async (email, password) => {
+//   const user = await User.findOne({ email });
 
-  if (!user) {
-    throw new Error("Unable to login, Please check email or password");
-  }
+//   if (!user) {
+//     return {
+//       message: "Unable to login, Please check email or password",
+//     };
+//     // throw new Error("Unable to login, Please check email or password");
+//   }
 
-  const isMatch = bcrypt.compare(password, user.password);
+//   bcrypt.compare(password, user.password, (err, result) => {
+//     if (err) {
+//       return {
+//         message: "Unable to login, Please check email or password",
+//       };
+//     }
 
-  if (!isMatch) {
-    throw new Error("Unable to login, Please check email or password");
-  }
+//     return {
+//       message: "login success",
+//       user: result,
+//     };
+//   });
+// };
+
+userSchema.methods.comparePassword = function (candidatePassword, cb) {
+  const user = this;
+
+  bcrypt.compare(candidatePassword, user.password, function (err, isMatch) {
+    if (err) {
+      return cb(err);
+    }
+
+    cb(null, isMatch);
+  });
 };
 
 // hash plain text password before saving
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", function (next) {
   const user = this;
 
-  if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 10, (err, hash) => {
-      if (err) {
-        return next(err);
-      }
-      return hash;
-    });
+  if (!user.isModified("password")) {
+    return next();
   }
 
-  next();
+  bcrypt.hash(user.password, 10, (err, hash) => {
+    if (err) {
+      return next(err);
+    }
+    user.password = hash;
+    next();
+  });
 });
 
 const User = mongoose.model("User", userSchema);
