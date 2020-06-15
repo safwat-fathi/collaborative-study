@@ -24,28 +24,28 @@ const Login = ({ history }) => {
         .post("http://localhost:4000/users/login", { email, password })
         .then((res) => console.log(res));
     } catch (err) {
-      console.log(err);
+      console.log("err in join",err);
     }
   };
 
   return (
-    <div class="col-md-6 offset-md-3 col mt-5">
-      <h3 class="text-center">Login</h3>
+    <div className="col-md-6 offset-md-3 col mt-5">
+      <h3 className="text-center">Login</h3>
       <form onSubmit={handleSubmit}>
-        <div class="form-group">
+        <div className="form-group">
           <label for="emailInput">email</label>
           <input
-            class="form-control"
+            className="form-control"
             type="email"
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
             id="emailInput"
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <label for="passwordInput">password</label>
           <input
-            class="form-control"
+            className="form-control"
             type="password"
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
@@ -53,7 +53,7 @@ const Login = ({ history }) => {
           />
         </div>
         <input className="btn btn-primary btn-lg btn-block" type="submit" value="Login" />
-        <div class="form-group text-right mt-2">
+        <div className="form-group text-right mt-2">
           <NavLink to="register" exact>
              register
           </NavLink>  
