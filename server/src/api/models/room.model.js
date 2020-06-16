@@ -9,7 +9,7 @@ const roomSchema = new mongoose.Schema({
     trim: true,
     minlength: 3,
   },
-  ownerID: {
+  adminID: {
     type: String,
     required: true,
   },
