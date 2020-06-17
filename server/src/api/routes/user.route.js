@@ -8,20 +8,20 @@ const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
 
 // testing JWT token
-router.get("/room", auth, (req, res, next) => {
-  try {
-    console.log("authinticated");
-    res.status(200).json({
-      message: "success",
-    });
-  } catch (err) {
-    console.error("not authinticated");
-    res.status(200).json({
-      message: "failed",
-      error: err,
-    });
-  }
-});
+// router.get("/room", auth, (req, res, next) => {
+//   try {
+//     console.log("authinticated");
+//     res.status(200).json({
+//       message: "success",
+//     });
+//   } catch (err) {
+//     console.error("not authinticated");
+//     res.status(200).json({
+//       message: "failed",
+//       error: err,
+//     });
+//   }
+// });
 
 // register new user
 router.post("/register", async (req, res, next) => {

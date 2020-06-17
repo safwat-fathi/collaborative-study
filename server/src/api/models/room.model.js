@@ -13,6 +13,21 @@ const roomSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  password: {
+    type: String,
+    required: false,
+  },
+  desc: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  members: [
+    {
+      id: String,
+      name: String,
+    },
+  ],
 });
 // compiling a model
 const Room = mongoose.model("Room", roomSchema);
