@@ -1,6 +1,6 @@
 # Messages via WebSocket
 
-Every message is an object contains 3 keys (type, room, payload)
+Every message is an object contains 3 keys {type, room, payload}.
 
 ## Type:
 
@@ -10,11 +10,11 @@ The type of the message which consist of:
 - chatting.
 - drawing.
 
-### Room:
+## Room:
 
 Is the room name create or joined by the user.
 
-### payload:
+## payload:
 
 - The paylaod of the data sent by websocket.
 
@@ -22,7 +22,7 @@ Is the room name create or joined by the user.
 
 # API endpoints
 
-# Users
+## Users
 
 ### Register a new user:
 
@@ -45,10 +45,31 @@ Is the room name create or joined by the user.
 
 - Not completed.
 
-# Rooms
+## Rooms
 
 ### Get all rooms:
 
 - api endpoint (http://localhost:4000/rooms) with (GET) method.
 - on success response is json with {"message": "success", rooms: Array}.
 - on fail response is json with {"message": "no rooms"}.
+
+### Create room:
+
+- api endpoint (http://localhost:4000/rooms/create) with (POST) method.
+- request body accepts an object with the following keys (name, adminID, desc).
+- on success response is json with {"message": "room created successfully"}.
+- on fail response is json with {"message": "room not created", error: error Object}.
+
+### Edit room:
+
+- api endpoint (http://localhost:4000/rooms/edit) with (POST) method.
+- request body accepts an object with the following keys (oldName, newName, desc).
+- on success response is json with {"message": "room edited successfully", room: Object}.
+- on fail response is json with {"message": "no room found to edit"}.
+
+### Change admin:
+
+- api endpoint (http://localhost:4000/rooms/changeAdmin) with (POST) method.
+- request body accepts an object with the following keys (oldAdminID, newAdminID).
+- on success response is json with {"message": "room edited successfully", room: Object}.
+- on fail response is json with {"message": "no room found to edit"}.
