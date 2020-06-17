@@ -6,11 +6,9 @@ const Room = require("../models/room.model");
 
 // get all rooms
 router.get("/", async (req, res, next) => {
-  const name = req.body.name;
   let rooms = await Room.find({});
 
   if (rooms.length < 1) {
-    console.log("no rooms found");
     return res.status(400).json({
       message: "no rooms",
     });
