@@ -4,7 +4,7 @@ import draw from "../../utils/draw";
 
 import style from "./Whiteboard.module.css";
 
-const client = new W3CWebSocket("ws://127.0.0.1:8000");
+const client = new W3CWebSocket("ws://127.0.0.1:8080");
 
 class Whiteboard extends Component {
   constructor(props) {
@@ -36,9 +36,8 @@ class Whiteboard extends Component {
       try {
         if (data.type === "drawing") {
           this.setState({
-            drawingDataFromWS: data.message,
+            drawingDataFromWS: data.payload,
           });
-
           // now we can draw with the sent coordinations by websocket :)
           draw(
             this.state.ctx,

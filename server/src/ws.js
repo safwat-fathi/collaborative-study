@@ -1,5 +1,5 @@
 const http = require("http");
-const ws = require("ws");
+const WebSocket = require("ws");
 const app = require("./app");
 const PORT = 8080;
 
@@ -8,39 +8,66 @@ const server = http.createServer(app).listen(PORT, () => {
   console.log(`WebSocket is running on port ${PORT}`);
 });
 
-const wss = new ws.Server({ server });
+const wss = new WebSocket.Server({ server });
 
 wss.on("connection", function connection(ws, req) {
-  const clientIP = req.socket.remoteAddress;
-  console.log(`connected client IP: ${clientIP}`);
+  // const clientIP = req.socket.remoteAddress;
 
   // handling messages
   ws.on("message", function incoming(message) {
-    console.log(`recieved --> ${message}`);
-  });
+    try {
+      // parse data sent from client
+      let data = JSON.parse(message);
+      const { type, room, payload } = data;
 
-  ws.send("Hi there, I am a WebSocket server");
+      switch (data.type) {
+        case "join":
+          console.log(`joining room: ${room}`);
+          break;
+        case "chatting":
+          console.log(`chatting on room: ${room}`);
+          // send to all connected clients
+          broadcast(ws, data, false);
+          break;
+        case "drawing":
+          console.log(`drawing on room: ${room}`);
+          // send to all connected clients but not sender
+          broadcast(ws, data, false);
+          break;
+        default:
+          break;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
 });
 
 // // broadcasting function
-// function broadcast(data) {
-// send to all excluding sender
-// wss.clients.forEach(function each(client) {
-// 	if (client !== ws && client.readyState === WebSocket.OPEN) {
-// 		client.send(data);
-// 	}
-// });
-// send to all including sender
-// 	wss.clients.forEach(function each(client) {
-// 	if (client.readyState === WebSocket.OPEN) {
-// 		client.send(data);
-// 	}
-// });
-// }
+function broadcast(ws, data, toSender) {
+  data = JSON.stringify(data);
+
+  if (toSender) {
+    // send to all including sender
+    wss.clients.forEach(function each(client) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(data);
+      }
+    });
+    return;
+  }
+
+  // send to all excluding sender
+  wss.clients.forEach(function each(client) {
+    if (client !== ws && client.readyState === WebSocket.OPEN) {
+      client.send(data);
+    }
+  });
+}
 
 // try {
 //   // parse data sent from client
-//   let data = JSON.parse(message.utf8Data);
+//   let data = JSON.parse(message);
 
 //   switch (data.type) {
 //     case "join":
@@ -56,7 +83,7 @@ wss.on("connection", function connection(ws, req) {
 //       break;
 //   }
 //   // BROADCAST the message to all connected clients
-//   // broadcast(data);
+//   // broadcast(ws, data);
 // } catch (err) {
 //   console.error(err);
 // }

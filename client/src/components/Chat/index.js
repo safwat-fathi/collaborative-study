@@ -5,7 +5,7 @@ import ChatMessage from "./ChatMessage";
 
 import style from "./Chat.module.css";
 
-const client = new W3CWebSocket("ws://127.0.0.1:8000");
+const client = new W3CWebSocket("ws://127.0.0.1:8080");
 
 export default class Chat extends Component {
   constructor(props) {
@@ -40,10 +40,10 @@ export default class Chat extends Component {
 
       try {
         if (data.type === "chatting") {
-          let message = data.message.message;
-          let name = data.message.name;
-          let time = data.message.time;
-          let date = data.message.date;
+          let message = data.payload.message;
+          let name = data.payload.name;
+          let time = data.payload.time;
+          let date = data.payload.date;
 
           this.setState({
             lastMessage: {
@@ -52,7 +52,7 @@ export default class Chat extends Component {
               time,
               date,
             },
-            messages: [...this.state.messages, data.message],
+            messages: [...this.state.messages, data.payload],
           });
         }
       } catch (err) {
@@ -65,7 +65,6 @@ export default class Chat extends Component {
     e.preventDefault();
 
     this.setState({
-      // @ts-ignore
       lastMessage: {
         name: this.state.name,
         message: e.target.value,
@@ -77,6 +76,7 @@ export default class Chat extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    console.log(this.state.lastMessage.message);
 
     client.send(
       JSON.stringify({

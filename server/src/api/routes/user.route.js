@@ -10,12 +10,12 @@ const auth = require("../middleware/auth");
 // testing JWT token
 // router.get("/room", auth, (req, res, next) => {
 //   try {
-//     console.log("authinticated");
+//     console.log("authenticated");
 //     res.status(200).json({
 //       message: "success",
 //     });
 //   } catch (err) {
-//     console.error("not authinticated");
+//     console.error("not authenticated");
 //     res.status(200).json({
 //       message: "failed",
 //       error: err,
