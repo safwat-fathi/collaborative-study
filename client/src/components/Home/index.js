@@ -1,77 +1,70 @@
-import React from "react";
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Redirect,
-  useParams,
-} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
 
-import Login from "../Login";
-import Register from "../Register";
-import CreateAndJoin from "../CreateAndJoinRoom";
-import Whiteboard from "../Whiteboard";
-import Chat from "../Chat";
+// importing components
+import Login from "./Login";
+import Register from "./Register";
+import JoinRoom from "../Room/Join";
 
-const Wrapper = ({ children }) => <div>{children}</div>;
+import { UserAuth, isUserTokenExpired } from "../../context/UserContext";
 
 const Home = () => {
-  const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route {...rest} render={(props) => <Redirect to="/login" />} />
-  );
-  return (
-    <div class="container">
-      <div class="row">
-        <BrowserRouter>
+  const [userAuth, setUserAuth] = useState(false);
+  const [isUserTokenExpired, setIsUserTokenExpired] = useState(true);
 
-          <PrivateRoute path="/" exact />
-  
-          <Switch>
-            <Route
-              path="/login"
-              exact
-              component={ Login }
-            />
-            <Route
-              path="/register"
-              exact
-              component={ Register }
-            />
-            <Route
-              path="/createAndJoinRoom"
-              exact
-              component={ CreateAndJoin }
-            />
-            <Route
-              path="/:roomid/room"
-              exact
-              render={(props) => (
-                <>
-                  <Whiteboard />
-                  <Chat />
-                </>
-              )}
-            />
-            <Route
-              path="*"
-              exact
-              render={(props) => (
-                <>
-                  <h3 className="text-center mt-5 col-12"> error 404 </h3>
-                </>
-              )}
-              />
-          </Switch>
-        </BrowserRouter>
-      </div>
-    </div>
+  const userContext = {
+    userAuth,
+    setUserAuth,
+    isUserTokenExpired,
+    setIsUserTokenExpired,
+  };
+
+  useEffect(() => {
+    let localToken = localStorage.getItem("userToken");
+
+    if (localToken === null) {
+      setIsUserTokenExpired(true);
+      setUserAuth(false);
+      return;
+    }
+
+    let decodedToken = jwt_decode(localToken);
+    console.log(decodedToken);
+
+    // time now (without seconds & milliseconds)
+    let now = +Date.now().toString().slice(0, -3);
+    console.log(typeof now, typeof decodedToken.exp);
+
+    if (now > decodedToken.exp) {
+      console.log("token expired");
+      setIsUserTokenExpired(true);
+      setUserAuth(false);
+    } else {
+      console.log("token valid");
+      setIsUserTokenExpired(false);
+      setUserAuth(true);
+    }
+  }, []);
+
+  return (
+    <UserAuth.Provider value={userContext}>
+      <>
+        {userAuth ? (
+          <>
+            <h1>Welcome, create new room or join one</h1>
+            <JoinRoom />
+          </>
+        ) : (
+          <>
+            <h1>Welcome, login or register new account</h1>
+            <Login />
+            <Register />
+          </>
+        )}
+      </>
+    </UserAuth.Provider>
   );
 };
 
 export default Home;
-
-/* 
-NOTES:
-- this will have switch routes (before user register/login and after that he can join or create new room). 
-- from here user can join or create new room.
-*/

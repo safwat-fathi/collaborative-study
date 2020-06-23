@@ -1,40 +1,40 @@
 import React, { Component } from "react";
-import { Switch, Route, Router } from "react-router-dom";
-// import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 // ---------------------
-import Create from "./Create";
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
 // ---------------------
 // import style from "./Room.module.css";
 
-// const client = new W3CWebSocket("ws://127.0.0.1:8000");
+// const client = new W3CWebSocket("ws://127.0.0.1:8080");
 
-// Room Wrapper
-const Wrapper = ({ children }) => <div>{children}</div>;
-
-export default class App extends Component {
+export default class Room extends Component {
   constructor(props) {
     super(props);
 
+    this.client = new W3CWebSocket("ws://127.0.0.1:8080");
+
     this.state = {
-      userID: null,
+      userID: Math.floor(Math.random() * 100),
       userName: "Safwat",
-      room: "bala7 amhat!",
+      room: "toooozs",
     };
   }
 
   componentDidMount() {
-    // client.onopen = () => {
-    //   client.send(
-    //     JSON.stringify({
-    //       type: "join",
-    //       room: this.state.room,
-    //       message: "new user joined",
-    //     })
-    //   );
-    // };
-    // client.onmessage = (e) => {
+    this.client.onopen = () => {
+      this.client.send(
+        JSON.stringify({
+          type: "join",
+          room: this.state.room,
+          payload: {
+            userName: this.state.userName,
+            userID: this.state.userID,
+          },
+        })
+      );
+    };
+    // this.client.onmessage = (e) => {
     //   let data = JSON.parse(e.data);
     //   if (data.type === "user data") {
     //     this.setState({
@@ -47,23 +47,22 @@ export default class App extends Component {
   render() {
     return (
       <>
-        <Router>
-          <Switch>
-            {/* user after login */}
-            <Route exact path="/room">
-              <Wrapper>
-                <Create />
-              </Wrapper>
-            </Route>
-            {/* room after join or creation */}
-            <Route path="/room?:roomName">
-              <Wrapper>
-                <Whiteboard />
-                <Chat />
-              </Wrapper>
-            </Route>
-          </Switch>
-        </Router>
+        <Whiteboard
+          client={this.client}
+          roomData={{
+            room: this.state.room,
+            userID: this.state.userID,
+            userName: this.state.userName,
+          }}
+        />
+        <Chat
+          client={this.client}
+          roomData={{
+            room: this.state.room,
+            userID: this.state.userID,
+            userName: this.state.userName,
+          }}
+        />
       </>
     );
   }

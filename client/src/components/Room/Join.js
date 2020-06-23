@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // import axios from "axios";
 
-const Create = () => {
+const Join = () => {
   const [roomName, setRoomName] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
 
@@ -24,7 +24,7 @@ const Create = () => {
 
   return (
     <div>
-      <h3>Create a room</h3>
+      <h3>Join a room</h3>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -32,11 +32,11 @@ const Create = () => {
           onChange={(e) => setRoomName(e.target.value)}
         />
 
-        <input type="submit" value="Login" />
+        <input type="submit" value="Join" />
       </form>
       <div>{feedbackMsg}</div>
     </div>
   );
 };
 
-export default Create;
+export default Join;

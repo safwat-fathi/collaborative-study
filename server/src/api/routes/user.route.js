@@ -99,10 +99,16 @@ router.post("/login", async (req, res, next) => {
 
 // edit user data
 router.post("/edit", auth, (req, res, next) => {
-  // get user ID.
-  // search DB by ID.
-  // get old & new password (confirmed) - email - name.
-  // update DB with these new entries.
+  try {
+    res.status(201).json({
+      message: "success",
+    });
+  } catch (err) {
+    res.status(400).json({
+      message: err,
+    });
+  }
+
   next();
 });
 

@@ -1,21 +1,19 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-// ---------------------
-import Home from "../Home";
-import Room from "../Room";
-// ---------------------
+import React from "react";
 
-export default class App extends Component {
-  render() {
-    return (
-      <>
-        <Router>
-          <Switch>
-            <Route path="/" render={Home} />
-            <Route path="/room" render={Room} />
-          </Switch>
-        </Router>
-      </>
-    );
-  }
-}
+import Home from "../Home";
+
+const App = () => {
+  return (
+    <>
+      <Home />
+    </>
+  );
+};
+
+export default App;
+/*
+++ To-Do:
+----------
+- we must check user auth token if it is valid we change user context value of (userAuth) to true and then render Create/Join room component if auth token is not valid we render Login component.
+- after checking user token is valid we store it to locale storage and check on it every time user connect. 
+*/

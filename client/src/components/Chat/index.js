@@ -1,18 +1,17 @@
 import React, { Component } from "react";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 import ChatMessage from "./ChatMessage";
 
 import style from "./Chat.module.css";
 
-const client = new W3CWebSocket("ws://127.0.0.1:8080");
-
 export default class Chat extends Component {
   constructor(props) {
     super(props);
 
+    this.client = this.props.client;
+
     this.state = {
-      name: "",
+      name: this.props.roomData.userName,
       lastMessage: {
         name: "",
         message: "",
@@ -20,11 +19,13 @@ export default class Chat extends Component {
         date: null,
       },
       messages: [],
+      room: this.props.roomData.room,
+      userID: this.props.roomData.userID,
     };
   }
 
   componentDidMount() {
-    client.onmessage = (e) => {
+    this.client.onmessage = (e) => {
       let data = JSON.parse(e.data);
 
       if (data.type === "join") {
@@ -35,7 +36,7 @@ export default class Chat extends Component {
   }
 
   componentDidUpdate() {
-    client.onmessage = (e) => {
+    this.client.onmessage = (e) => {
       let data = JSON.parse(e.data);
 
       try {
@@ -78,7 +79,7 @@ export default class Chat extends Component {
     e.preventDefault();
     console.log(this.state.lastMessage.message);
 
-    client.send(
+    this.client.send(
       JSON.stringify({
         type: "chatting",
         room: this.state.room,

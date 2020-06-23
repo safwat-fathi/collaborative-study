@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const Room = require("../models/room.model");
+const auth = require("../middleware/auth");
 
 // get all rooms
 router.get("/", async (req, res, next) => {
@@ -23,7 +24,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // create room
-router.post("/create", async (req, res, next) => {
+router.post("/create", auth, async (req, res, next) => {
   // - add validation for adminID does exist in users DB.
   // - add password for room.
   const { name, adminID, desc } = req.body;
@@ -39,6 +40,7 @@ router.post("/create", async (req, res, next) => {
     await room.save();
     res.status(200).json({
       message: "room created successfully",
+      room,
     });
   } catch (err) {
     res.status(500).json({

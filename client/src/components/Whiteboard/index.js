@@ -1,15 +1,14 @@
 import React, { Component, createRef } from "react";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
 import draw from "../../utils/draw";
 
 import style from "./Whiteboard.module.css";
-
-const client = new W3CWebSocket("ws://127.0.0.1:8080");
 
 class Whiteboard extends Component {
   constructor(props) {
     super(props);
 
+    // websocket client
+    this.client = this.props.client;
     this.canvas = createRef();
     this.colorPicker = createRef();
 
@@ -31,7 +30,7 @@ class Whiteboard extends Component {
   }
 
   componentDidUpdate() {
-    client.onmessage = (e) => {
+    this.client.onmessage = (e) => {
       let data = JSON.parse(e.data);
       try {
         if (data.type === "drawing") {
@@ -92,7 +91,7 @@ class Whiteboard extends Component {
       offsetY,
       this.state.color,
       this.state.room,
-      client,
+      this.client,
       true
     );
   };
@@ -115,7 +114,7 @@ class Whiteboard extends Component {
       offsetY,
       this.state.color,
       this.state.room,
-      client,
+      this.client,
       true
     );
 

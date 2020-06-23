@@ -100,14 +100,11 @@ class Register extends Component {
 
   render() {
     return (
-      <div class="col-md-6 offset-md-3 col mt-5">
-        <h3 class="text-center">Register</h3>
-        <form class="text-center" class="form-group" onSubmit={this.handleSubmit}>
-          <div class="form-group">
-            <label for="nameInput">name</label>
+      <div>
+        <h3>Register</h3>
+        <form onSubmit={this.handleSubmit}>
+          <div>
             <input
-              class="form-control"
-              id="nameInput"
               onChange={this.handleInput}
               name="name"
               type="text"
@@ -115,11 +112,8 @@ class Register extends Component {
               value={this.state.name}
             />
           </div>
-          <div class="form-group">
-            <label for="emailInput">email</label>
+          <div>
             <input
-              class="form-control"
-              id="emailInput"
               onChange={this.handleInput}
               name="email"
               type="email"
@@ -127,32 +121,28 @@ class Register extends Component {
               value={this.state.email}
             />
           </div>
-          <div class="form-group"> 
-            <label for="passwordInput">Password</label>
+          <div>
             <input
-              class="form-control"
-              id="passwordInput"
               onChange={this.handleInput}
               name="password"
               type="password"
               placeholder="Password"
+              autoComplete="on"
               value={this.state.password}
             />
           </div>
-          <div class="form-group"> 
-            <label for="ConfirmPasswordInput">Confirm Password</label>
+          <div>
             <input
-              class="form-control"
-              id="ConfirmPasswordInput"
               onChange={this.handleInput}
               name="confirm_password"
               type="password"
               placeholder="Confirm Password"
+              autoComplete="on"
               value={this.state.confirm_password}
             />
           </div>
-          <div class="form-group">
-            <input className="btn btn-primary btn-lg btn-block" type="submit" value="Regitser" />
+          <div>
+            <input type="submit" value="Regitser" />
           </div>
         </form>
         <div>{this.state.feedBackMsg}</div>
