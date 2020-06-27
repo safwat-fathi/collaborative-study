@@ -1,13 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 
-import { UserAuth, IsUserTokenExpired } from "../../context/UserContext";
+import { UserContext } from "../../context";
 
 const Login = () => {
-  const { userAuth, setUserAuth } = useContext(UserAuth);
-  const { isUserTokenExpired, setIsUserTokenExpired } = useContext(
-    IsUserTokenExpired
-  );
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+  const { isUserTokenExpired, setIsUserTokenExpired } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,23 +18,18 @@ const Login = () => {
       setFeedbackMsg("Please Check your Email or password");
       return;
     }
+    axios
+      .post("http://localhost:4000/users/login", { email, password })
+      .then((res) => {
+        let token = res.data.token;
 
-    try {
-      axios
-        .post("http://localhost:4000/users/login", { email, password })
-        .then((res) => {
-          let token = res.data.token;
-
-          localStorage.setItem("userToken", token);
-          setUserAuth(true);
-        })
-        .catch((err) => {
-          console.log(err);
-          setFeedbackMsg("Login failed, Please Check your Email or password");
-        });
-    } catch (err) {
-      console.log("error in join", err);
-    }
+        localStorage.setItem("userToken", token);
+        setIsLoggedIn(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setFeedbackMsg("Login failed, Please Check your Email or password");
+      });
   };
 
   return (

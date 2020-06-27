@@ -5,17 +5,17 @@ import axios from "axios";
 // importing components
 import Login from "./Login";
 import Register from "./Register";
-import JoinRoom from "../Room/Join";
+import Rooms from "../Rooms";
 
-import { UserAuth, isUserTokenExpired } from "../../context/UserContext";
+import { UserContext } from "../../context";
 
 const Home = () => {
-  const [userAuth, setUserAuth] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isUserTokenExpired, setIsUserTokenExpired] = useState(true);
 
-  const userContext = {
-    userAuth,
-    setUserAuth,
+  const userCTX = {
+    isLoggedIn,
+    setIsLoggedIn,
     isUserTokenExpired,
     setIsUserTokenExpired,
   };
@@ -25,35 +25,31 @@ const Home = () => {
 
     if (localToken === null) {
       setIsUserTokenExpired(true);
-      setUserAuth(false);
+      setIsLoggedIn(false);
       return;
     }
 
     let decodedToken = jwt_decode(localToken);
-    console.log(decodedToken);
 
     // time now (without seconds & milliseconds)
     let now = +Date.now().toString().slice(0, -3);
-    console.log(typeof now, typeof decodedToken.exp);
 
     if (now > decodedToken.exp) {
-      console.log("token expired");
       setIsUserTokenExpired(true);
-      setUserAuth(false);
+      setIsLoggedIn(false);
     } else {
-      console.log("token valid");
       setIsUserTokenExpired(false);
-      setUserAuth(true);
+      setIsLoggedIn(true);
     }
   }, []);
 
   return (
-    <UserAuth.Provider value={userContext}>
+    <UserContext.Provider value={userCTX}>
       <>
-        {userAuth ? (
+        {isLoggedIn ? (
           <>
             <h1>Welcome, create new room or join one</h1>
-            <JoinRoom />
+            <Rooms />
           </>
         ) : (
           <>
@@ -63,7 +59,7 @@ const Home = () => {
           </>
         )}
       </>
-    </UserAuth.Provider>
+    </UserContext.Provider>
   );
 };
 
