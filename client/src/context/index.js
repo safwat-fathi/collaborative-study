@@ -10,4 +10,6 @@ export const UserContext = createContext({
 export const RoomContext = createContext({
   rooms: [],
   setRooms: () => {},
+  currentRoom: "",
+  setCurrentRoom: () => {},
 });
