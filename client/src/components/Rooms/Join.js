@@ -22,6 +22,10 @@ const Join = () => {
       });
   }, []);
 
+  useEffect(() => {
+    console.log(currentRoom);
+  }, [currentRoom]);
+
   return (
     <>
       <h3>Join a room</h3>
@@ -30,7 +34,12 @@ const Join = () => {
           <div key={room._id}>
             <h4>{room.name}</h4>
             <h4>{room.desc}</h4>
-            <Link to={`/room/${room._id}`}>Join {room.name}</Link>
+            <Link
+              onClick={() => setCurrentRoom(room._id)}
+              to={`/room/${room._id}`}
+            >
+              Join {room.name}
+            </Link>
             <hr />
           </div>
         );
