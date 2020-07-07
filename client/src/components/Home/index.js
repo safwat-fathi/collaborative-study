@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
 
 // importing components
 import Login from "./Login";
@@ -48,12 +47,10 @@ const Home = () => {
       <>
         {isLoggedIn ? (
           <>
-            <h1>Welcome, create new room or join one</h1>
             <Rooms />
           </>
         ) : (
           <>
-            <h1>Welcome, login or register new account</h1>
             <Login />
             <Register />
           </>

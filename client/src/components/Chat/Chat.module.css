@@ -7,7 +7,7 @@
   display: flex;
   background-color: #878b8a;
   flex-flow: column;
-  height: 500px;
+  height: 400px;
   overflow-y: auto;
 }
 .message {

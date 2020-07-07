@@ -1,62 +1,55 @@
 import React, { useContext, useState, useEffect } from "react";
+import jwt_decode from "jwt-decode";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 // ---------------------
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
 // ---------------------
 import { RoomContext } from "../../context";
-// import style from "./Room.module.css";
-
-// const client = new W3CWebSocket("ws://127.0.0.1:8080");
+import style from "./Room.module.css";
 
 const Room = () => {
-  const { currentRoom, setCurrentRoom } = useContext(RoomContext);
-  // componentDidMount() {
-  //   this.client.onopen = () => {
-  //     this.client.send(
-  //       JSON.stringify({
-  //         type: "join",
-  //         room: this.state.room,
-  //         payload: {
-  //           userName: this.state.userName,
-  //           userID: this.state.userID,
-  //         },
-  //       })
-  //     );
-  //   };
-  //   // this.client.onmessage = (e) => {
-  //   //   let data = JSON.parse(e.data);
-  //   //   if (data.type === "user data") {
-  //   //     this.setState({
-  //   //       userID: data.message,
-  //   //     });
-  //   //   }
-  //   // };
-  // }
+  const { currentRoom } = useContext(RoomContext);
+  const { webSocketClient, setWebSocketClient } = useContext(RoomContext);
+  const [userID, setUserID] = useState("");
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    console.log(currentRoom);
+    const ws = new W3CWebSocket("ws://127.0.0.1:8080");
+    setWebSocketClient(ws);
+
+    let localToken = localStorage.getItem("userToken");
+
+    if (localToken === null) {
+      console.log("not authorized");
+      return;
+    }
+
+    let decodedToken = jwt_decode(localToken);
+    setUserID(decodedToken.userID);
+    setUserName(decodedToken.userName);
   }, []);
 
+  useEffect(() => {
+    webSocketClient.onopen = () => {
+      webSocketClient.send(
+        JSON.stringify({
+          type: "join",
+          room: currentRoom,
+          payload: {
+            userID: userID,
+            userName: userName,
+          },
+        })
+      );
+    };
+  });
+
   return (
-    <>
-      {/* <Whiteboard
-        client={this.client}
-        roomData={{
-          room: this.state.room,
-          userID: this.state.userID,
-          userName: this.state.userName,
-        }}
-      />
-      <Chat
-        client={this.client}
-        roomData={{
-          room: this.state.room,
-          userID: this.state.userID,
-          userName: this.state.userName,
-        }}
-      /> */}
-    </>
+    <div className={style.Room}>
+      <Whiteboard />
+      <Chat />
+    </div>
   );
 };
 

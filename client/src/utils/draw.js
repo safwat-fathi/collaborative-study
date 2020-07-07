@@ -17,21 +17,25 @@ export default function drawLine(
   context.stroke();
   context.closePath();
 
-  if (!send) {
-    return;
-  }
+  try {
+    if (!send) {
+      return;
+    }
 
-  client.send(
-    JSON.stringify({
-      type: "drawing",
-      room,
-      payload: {
-        x0,
-        y0,
-        x1,
-        y1,
-        color,
-      },
-    })
-  );
+    client.send(
+      JSON.stringify({
+        type: "drawing",
+        room,
+        payload: {
+          x0,
+          y0,
+          x1,
+          y1,
+          color,
+        },
+      })
+    );
+  } catch (err) {
+    console.log(err);
+  }
 }

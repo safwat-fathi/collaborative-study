@@ -1,11 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 
 import { UserContext } from "../../context";
 
 const Login = () => {
-  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
-  const { isUserTokenExpired, setIsUserTokenExpired } = useContext(UserContext);
+  const { setIsLoggedIn } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -12,4 +12,6 @@ export const RoomContext = createContext({
   setRooms: () => {},
   currentRoom: "",
   setCurrentRoom: () => {},
+  webSocketClient: null,
+  setWebSocketClient: () => {},
 });

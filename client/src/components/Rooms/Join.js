@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -6,9 +6,7 @@ import { RoomContext } from "../../context";
 
 const Join = () => {
   const { rooms, setRooms } = useContext(RoomContext);
-  const { currentRoom, setCurrentRoom } = useContext(RoomContext);
-
-  const [feedbackMsg, setFeedbackMsg] = useState("");
+  const { setCurrentRoom } = useContext(RoomContext);
 
   useEffect(() => {
     axios
@@ -22,18 +20,14 @@ const Join = () => {
       });
   }, []);
 
-  useEffect(() => {
-    console.log(currentRoom);
-  }, [currentRoom]);
-
   return (
     <>
-      <h3>Join a room</h3>
+      <h2>Join a room</h2>
       {rooms.map((room) => {
         return (
           <div key={room._id}>
-            <h4>{room.name}</h4>
-            <h4>{room.desc}</h4>
+            <h3>{room.name}</h3>
+            <p>{room.desc}</p>
             <Link
               onClick={() => setCurrentRoom(room._id)}
               to={`/room/${room._id}`}
