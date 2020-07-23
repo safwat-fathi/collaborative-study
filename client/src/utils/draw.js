@@ -1,4 +1,4 @@
-export default function drawLine(
+export default function draw(
   context,
   x0,
   y0,
@@ -7,7 +7,9 @@ export default function drawLine(
   color,
   room,
   client,
-  send
+  send,
+  canvas,
+  undo
 ) {
   context.beginPath();
   context.moveTo(x0, y0);
@@ -21,6 +23,10 @@ export default function drawLine(
     if (!send) {
       return;
     }
+
+    // if (undo) {
+    //   context.clearRect(0, 0, canvas.current.width, canvas.current.height);
+    // }
 
     client.send(
       JSON.stringify({

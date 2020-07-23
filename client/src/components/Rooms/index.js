@@ -10,6 +10,8 @@ import { Route } from "react-router-dom/cjs/react-router-dom.min";
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
   const [currentRoom, setCurrentRoom] = useState("");
+  const [userID, setUserID] = useState("");
+  const [userName, setUserName] = useState("");
   const [webSocketClient, setWebSocketClient] = useState({});
 
   const roomCTX = {
@@ -17,6 +19,10 @@ const Rooms = () => {
     setRooms,
     currentRoom,
     setCurrentRoom,
+    userID,
+    setUserID,
+    userName,
+    setUserName,
     webSocketClient,
     setWebSocketClient,
   };

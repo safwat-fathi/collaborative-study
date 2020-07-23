@@ -9,10 +9,15 @@ import { RoomContext } from "../../context";
 import style from "./Room.module.css";
 
 const Room = () => {
-  const { currentRoom } = useContext(RoomContext);
-  const { webSocketClient, setWebSocketClient } = useContext(RoomContext);
-  const [userID, setUserID] = useState("");
-  const [userName, setUserName] = useState("");
+  const {
+    currentRoom,
+    userName,
+    setUserName,
+    userID,
+    setUserID,
+    webSocketClient,
+    setWebSocketClient,
+  } = useContext(RoomContext);
 
   useEffect(() => {
     const ws = new W3CWebSocket("ws://127.0.0.1:8080");

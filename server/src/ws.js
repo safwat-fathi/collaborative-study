@@ -25,23 +25,17 @@ wss.on("connection", function connection(ws, req) {
       let data = JSON.parse(message);
       const { type, room, payload } = data;
 
-      switch (data.type) {
-        //   case "create_room":
-        //     console.log(`new room created: ${payload}`);
-        //     break;
+      switch (type) {
         case "join":
-          console.log(payload);
-
           const { userID, userName } = payload;
           clients[userID] = ws;
+          console.log("new user joined");
           // handling duplicated connetcions
           // if (checkClientExist(clients, userID)) {
           //   console.log("user existed");
           //   clients[userID].send("you are already connected!");
           //   ws.close();
           // }
-          console.log(Object.keys(clients));
-
           // let roomsKeys = Object.keys(rooms);
 
           // if (roomsKeys.includes(room)) {
@@ -58,15 +52,13 @@ wss.on("connection", function connection(ws, req) {
         // };
         // console.log(rooms[room].members);
         //   break;
+        // chatting on room
         case "chatting":
-          console.log(`chatting on room: ${room}`);
-          // send to all connected clients
+          console.log(payload);
           broadcast(clients, ws, data);
           break;
+        // drawing on whiteboard
         case "drawing":
-          console.log("drawing");
-
-          // send to all connected clients but not sender
           broadcast(clients, ws, data);
           break;
         default:
