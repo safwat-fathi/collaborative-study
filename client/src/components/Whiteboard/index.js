@@ -22,9 +22,6 @@ const Whiteboard = () => {
   const [y, setY] = useState(0);
   const [color, setColor] = useState("");
   const [drawingDataFromWS, setDrawingDataFromWS] = useState(null);
-  const [room, setRoom] = useState("");
-  // const [pathStart, setPathStart] = useState(null);
-  // const [pathEnd, setPathEnd] = useState(null);
 
   // for undo or redo history
   const [lastDrawings, setLastDrawings] = useState([]);
@@ -34,6 +31,8 @@ const Whiteboard = () => {
     setCtx(canvas.current.getContext("2d"));
   }, []);
 
+  // this hook is needed to re-render when compenent has updates so drawings can take effect
+  // instantaneously and it really has zero functionally effect to the component
   useEffect(() => {
     setRoom(currentRoom);
   });

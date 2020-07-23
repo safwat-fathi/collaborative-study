@@ -20,6 +20,8 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
+  // this hook is needed to re-render when compenent has updates so drawings can take effect
+  // instantaneously and it really has zero functionally effect to the component
   useEffect(() => {
     setChatting(true);
   });
