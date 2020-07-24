@@ -16,6 +16,7 @@ const Whiteboard = () => {
   const btnUndo = useRef(null);
 
   // state
+  // const [active, setActive] = useState(false);
   const [ctx, setCtx] = useState(null);
   const [drawing, setDrawing] = useState(false);
   const [x, setX] = useState(0);
@@ -30,12 +31,6 @@ const Whiteboard = () => {
   useEffect(() => {
     setCtx(canvas.current.getContext("2d"));
   }, []);
-
-  // this hook is needed to re-render when compenent has updates so drawings can take effect
-  // instantaneously and it really has zero functionally effect to the component
-  useEffect(() => {
-    setRoom(currentRoom);
-  });
 
   /* 
 	/////////////////
@@ -62,7 +57,17 @@ const Whiteboard = () => {
     if (!drawing) return;
 
     setDrawing(false);
-    draw(ctx, x, y, offsetX, offsetY, color, room, webSocketClient, true);
+    draw(
+      ctx,
+      x,
+      y,
+      offsetX,
+      offsetY,
+      color,
+      currentRoom,
+      webSocketClient,
+      true
+    );
 
     setStoredDrawings([...storedDrawings, lastDrawings]);
   };
@@ -77,7 +82,17 @@ const Whiteboard = () => {
 
     if (!drawing) return;
 
-    draw(ctx, x, y, offsetX, offsetY, color, room, webSocketClient, true);
+    draw(
+      ctx,
+      x,
+      y,
+      offsetX,
+      offsetY,
+      color,
+      currentRoom,
+      webSocketClient,
+      true
+    );
 
     setX(offsetX);
     setY(offsetY);
@@ -127,7 +142,7 @@ const Whiteboard = () => {
           storedDrawings[i][j].x1,
           storedDrawings[i][j].y1,
           color,
-          room,
+          currentRoom,
           webSocketClient,
           true,
           canvas,

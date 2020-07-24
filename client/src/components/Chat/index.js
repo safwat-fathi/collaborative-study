@@ -20,15 +20,13 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  // this hook is needed to re-render when compenent has updates so drawings can take effect
-  // instantaneously and it really has zero functionally effect to the component
-  useEffect(() => {
-    setChatting(true);
-  });
-
   const handleChange = (e) => {
     setNewMessage(e.target.value);
   };
+
+  useEffect(() => {
+    console.log(webSocketClient);
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,20 +45,20 @@ const Chat = () => {
     setMessages([...messages, newMessage]);
   };
 
-  webSocketClient.onmessage = (e) => {
-    let data = JSON.parse(e.data);
-    const { type, payload } = data;
+  // webSocketClient.onmessage = (e) => {
+  //   let data = JSON.parse(e.data);
+  //   const { type, payload } = data;
 
-    try {
-      if (type === "chatting") {
-        const { user, message } = payload;
+  //   try {
+  //     if (type === "chatting") {
+  //       const { user, message } = payload;
 
-        setMessages([...messages, message]);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //       // setMessages([...messages, message]);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <div className={style.chat}>

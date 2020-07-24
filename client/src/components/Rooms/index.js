@@ -13,6 +13,7 @@ const Rooms = () => {
   const [userID, setUserID] = useState("");
   const [userName, setUserName] = useState("");
   const [webSocketClient, setWebSocketClient] = useState({});
+  const [active, setActive] = useState(false);
 
   const roomCTX = {
     rooms,
@@ -25,6 +26,8 @@ const Rooms = () => {
     setUserName,
     webSocketClient,
     setWebSocketClient,
+    active,
+    setActive,
   };
 
   return (
