@@ -1,77 +1,96 @@
-import React, { useState, useEffect, useContext } from "react";
-import ChatMessage from "./ChatMessage";
+import React, { useState, useEffect, useContext, useRef } from "react";
 
 import { RoomContext } from "../../context";
 
-import style from "./Chat.module.css";
+import "./Chat.css";
 
 const Chat = () => {
+  const chatArea = useRef(null);
   const roomCTX = useContext(RoomContext);
 
   const {
     webSocketClient,
     userName,
-    setUserName,
     userID,
     currentRoom,
+    newMessage,
+    setNewMessage,
+    messages,
+    setMessages,
   } = roomCTX;
 
-  const [chatting, setChatting] = useState(false);
-  const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [content, setContent] = useState("");
+
+  // format time for chat message
+  const formatTime = (timestamp) => {
+    const d = new Date(timestamp);
+
+    const time = `${d.getDate()}/${
+      d.getMonth() + 1
+    }/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+
+    return time;
+  };
 
   const handleChange = (e) => {
+    setContent(e.target.value);
     setNewMessage(e.target.value);
   };
 
-  useEffect(() => {
-    console.log(webSocketClient);
-  });
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    webSocketClient.send(
-      JSON.stringify({
-        type: "chatting",
-        room: currentRoom,
-        payload: {
-          user: userName,
-          message: newMessage,
-        },
-      })
-    );
-
-    setMessages([...messages, newMessage]);
+    try {
+      // data object we send by WS
+      let chatData = {
+        userID: userID,
+        user: userName,
+        message: newMessage,
+        timestamp: formatTime(Date.now()),
+      };
+      // sending chat data
+      webSocketClient.send(
+        JSON.stringify({
+          type: "chatting",
+          room: currentRoom,
+          payload: chatData,
+        })
+      );
+      // updating messages state
+      setMessages([...messages, chatData]);
+      // set input value to none
+      setContent("");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  // webSocketClient.onmessage = (e) => {
-  //   let data = JSON.parse(e.data);
-  //   const { type, payload } = data;
-
-  //   try {
-  //     if (type === "chatting") {
-  //       const { user, message } = payload;
-
-  //       // setMessages([...messages, message]);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  useEffect(() => {
+    // scroll chat area to fit chat message
+    chatArea.current.scrollBy(0, chatArea.current.scrollHeight);
+  }, [messages]);
 
   return (
-    <div className={style.chat}>
+    <div className="chat">
       {/* messages container */}
-      <div className={style.messages}>
+      <div className="messages" ref={chatArea}>
         {messages.map((message, index) => {
           return (
-            <ChatMessage
-              // index is not ideal for keys in react
+            //   // index is not ideal for keys in react
+            <p
               key={index}
-              userName={userName}
-              message={message}
-            />
+              className={`chat-bubble ${
+                userID === message.userID ? "current-user" : "user"
+              }`}
+            >
+              <strong>
+                {userID === message.userID ? "You" : message.user}
+              </strong>
+              :
+              <br />
+              {message.message}
+              <br />
+              <span className="chat-time">{message.timestamp}</span>
+            </p>
           );
         })}
       </div>
@@ -82,6 +101,7 @@ const Chat = () => {
           onChange={handleChange}
           type="text"
           placeholder="Write your message..."
+          value={content}
         />
         <input type="submit" value="Send" />
       </form>

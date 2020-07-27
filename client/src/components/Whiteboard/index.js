@@ -8,7 +8,22 @@ import { RoomContext } from "../../context";
 const Whiteboard = () => {
   const roomCTX = useContext(RoomContext);
 
-  const { currentRoom, webSocketClient } = roomCTX;
+  const {
+    currentRoom,
+    webSocketClient,
+    ctx,
+    setCtx,
+    drawing,
+    setDrawing,
+    x,
+    setX,
+    y,
+    setY,
+    color,
+    setColor,
+    drawingDataFromWS,
+    setDrawingDataFromWS,
+  } = roomCTX;
 
   // refs
   const canvas = useRef(null);
@@ -16,13 +31,12 @@ const Whiteboard = () => {
   const btnUndo = useRef(null);
 
   // state
-  // const [active, setActive] = useState(false);
-  const [ctx, setCtx] = useState(null);
-  const [drawing, setDrawing] = useState(false);
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
-  const [color, setColor] = useState("");
-  const [drawingDataFromWS, setDrawingDataFromWS] = useState(null);
+  // const [ctx, setCtx] = useState(null);
+  // const [drawing, setDrawing] = useState(false);
+  // const [x, setX] = useState(0);
+  // const [y, setY] = useState(0);
+  // const [color, setColor] = useState("");
+  // const [drawingDataFromWS, setDrawingDataFromWS] = useState(null);
 
   // for undo or redo history
   const [lastDrawings, setLastDrawings] = useState([]);
@@ -158,21 +172,21 @@ const Whiteboard = () => {
 	sending data through websocket
 	//////////////////////////////
 	*/
-  webSocketClient.onmessage = (e) => {
-    let data = JSON.parse(e.data);
-    const { type, payload } = data;
+  // webSocketClient.onmessage = (e) => {
+  //   let data = JSON.parse(e.data);
+  //   const { type, payload } = data;
 
-    try {
-      if (type === "drawing") {
-        setDrawingDataFromWS(payload);
-        // now we can draw with the coordinations sent by websocket :)
-        const { x0, y0, x1, y1, color } = drawingDataFromWS;
-        draw(ctx, x0, y0, x1, y1, color);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //   try {
+  //     if (type === "drawing") {
+  //       setDrawingDataFromWS(payload);
+  //       // now we can draw with the coordinations sent by websocket :)
+  //       const { x0, y0, x1, y1, color } = drawingDataFromWS;
+  //       draw(ctx, x0, y0, x1, y1, color);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <div>

@@ -8,6 +8,27 @@ export const UserContext = createContext({
 });
 
 export const RoomContext = createContext({
+  // whiteboard state
+  canvas: null,
+  setCanvas: () => {},
+  ctx: null,
+  setCtx: () => {},
+  drawing: false,
+  setDrawing: () => {},
+  x: 0,
+  setX: () => {},
+  y: 0,
+  setY: () => {},
+  color: "",
+  setColor: () => {},
+  drawingDataFromWS: null,
+  setDrawingDataFromWS: () => {},
+  // chat state
+  newMessage: "",
+  setNewMessage: () => {},
+  messages: [],
+  setMessages: () => {},
+  // join room state
   rooms: [],
   setRooms: () => {},
   currentRoom: "",
@@ -18,6 +39,4 @@ export const RoomContext = createContext({
   setUserName: () => {},
   webSocketClient: null,
   setWebSocketClient: () => {},
-  active: false,
-  setActive: () => {},
 });

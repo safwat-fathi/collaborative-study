@@ -8,12 +8,23 @@ import { RoomContext } from "../../context";
 import { Route } from "react-router-dom/cjs/react-router-dom.min";
 
 const Rooms = () => {
+  // join room state
   const [rooms, setRooms] = useState([]);
   const [currentRoom, setCurrentRoom] = useState("");
   const [userID, setUserID] = useState("");
   const [userName, setUserName] = useState("");
   const [webSocketClient, setWebSocketClient] = useState({});
-  const [active, setActive] = useState(false);
+  // chat state
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  // whiteboard state
+  const [canvas, setCanvas] = useState(null);
+  const [ctx, setCtx] = useState(null);
+  const [drawing, setDrawing] = useState(false);
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+  const [color, setColor] = useState("");
+  const [drawingDataFromWS, setDrawingDataFromWS] = useState(null);
 
   const roomCTX = {
     rooms,
@@ -26,8 +37,24 @@ const Rooms = () => {
     setUserName,
     webSocketClient,
     setWebSocketClient,
-    active,
-    setActive,
+    messages,
+    setMessages,
+    newMessage,
+    setNewMessage,
+    canvas,
+    setCanvas,
+    ctx,
+    setCtx,
+    drawing,
+    setDrawing,
+    x,
+    setX,
+    y,
+    setY,
+    color,
+    setColor,
+    drawingDataFromWS,
+    setDrawingDataFromWS,
   };
 
   return (

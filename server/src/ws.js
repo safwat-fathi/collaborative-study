@@ -44,17 +44,15 @@ wss.on("connection", function connection(ws, req) {
           //   rooms[room].members.push(clients[userID]);
           //   console.log(rooms[room].members);
           // }
+          // console.log("new room");
+          // rooms[room] = {
+          //   members: [clients[userID]],
+          // };
+          // console.log(rooms[room].members);
+          //   break;
+          // chatting on room
           break;
-
-        // console.log("new room");
-        // rooms[room] = {
-        //   members: [clients[userID]],
-        // };
-        // console.log(rooms[room].members);
-        //   break;
-        // chatting on room
         case "chatting":
-          console.log(payload);
           broadcast(clients, ws, data);
           break;
         // drawing on whiteboard

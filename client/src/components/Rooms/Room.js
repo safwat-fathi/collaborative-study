@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 // ---------------------
@@ -7,6 +7,8 @@ import Chat from "../Chat";
 // ---------------------
 import { RoomContext } from "../../context";
 import style from "./Room.module.css";
+// ---------------------
+import draw from "../../utils/draw";
 
 const Room = () => {
   const {
@@ -17,6 +19,24 @@ const Room = () => {
     setUserID,
     webSocketClient,
     setWebSocketClient,
+    messages,
+    setMessages,
+    newMessage,
+    setNewMessage,
+    canvas,
+    setCanvas,
+    ctx,
+    setCtx,
+    drawing,
+    setDrawing,
+    x,
+    setX,
+    y,
+    setY,
+    color,
+    setColor,
+    drawingDataFromWS,
+    setDrawingDataFromWS,
   } = useContext(RoomContext);
 
   useEffect(() => {
@@ -49,6 +69,29 @@ const Room = () => {
       );
     };
   });
+
+  webSocketClient.onmessage = (e) => {
+    try {
+      let data = JSON.parse(e.data);
+      const { type, payload } = data;
+
+      switch (type) {
+        case "chatting":
+          // const { user, message } = payload;
+
+          setMessages([...messages, payload]);
+          break;
+        case "drawing":
+          setDrawingDataFromWS(payload);
+          // now we can draw with the coordinations sent by websocket :)
+          const { x0, y0, x1, y1, color } = drawingDataFromWS;
+          draw(ctx, x0, y0, x1, y1, color);
+          break;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className={style.Room}>
