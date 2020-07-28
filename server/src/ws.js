@@ -3,8 +3,7 @@ const WebSocket = require("ws");
 const app = require("./app");
 
 // import helpers
-const helpers = require("./helpers");
-const { isExisted } = require("./helpers");
+const { broadcast, addClient } = require("./helpers");
 
 const PORT = 8080;
 // Spinning the http server and the websocket server.
@@ -31,16 +30,18 @@ wss.on("connection", function connection(ws, req) {
           const { userID, userName } = payload;
 
           // handling duplicated connections
-          helpers.addClient(clients, ws, userID, userName);
+          addClient(clients, ws, userID, userName, room);
           console.log(clients.length);
           break;
         // chatting on room
         case "chatting":
-          helpers.broadcast(WebSocket, clients, ws, room, data);
+          console.log("chatting");
+          broadcast(WebSocket, clients, ws, room, data);
           break;
         // drawing on whiteboard
         case "drawing":
-          helpers.broadcast(WebSocket, clients, ws, room, data);
+          console.log("drawing");
+          broadcast(WebSocket, clients, ws, room, data);
           break;
         default:
           break;
