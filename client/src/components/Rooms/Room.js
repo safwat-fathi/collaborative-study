@@ -68,8 +68,6 @@ const Room = () => {
 
       switch (type) {
         case "chatting":
-          // const { user, message } = payload;
-
           setMessages([...messages, payload]);
           break;
         case "drawing":

@@ -67,9 +67,6 @@ const Chat = () => {
   useEffect(() => {
     // scroll chat area to fit chat message
     chatArea.current.scrollBy(0, chatArea.current.scrollHeight);
-    return () => {
-      console.log("unsubscribing from chat");
-    };
   }, [messages]);
 
   return (
@@ -78,7 +75,7 @@ const Chat = () => {
       <div className="messages" ref={chatArea}>
         {messages.map((message, index) => {
           return (
-            //   // index is not ideal for keys in react
+            // index is not ideal for keys in react
             <p
               key={index}
               className={`chat-bubble ${
