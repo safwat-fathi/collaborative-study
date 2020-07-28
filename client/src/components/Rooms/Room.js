@@ -6,12 +6,13 @@ import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
 // ---------------------
 import { RoomContext } from "../../context";
-import style from "./Room.module.css";
+import "./Room.css";
 // ---------------------
 import draw from "../../utils/draw";
 
 const Room = () => {
   const {
+    // join room state
     currentRoom,
     userName,
     setUserName,
@@ -19,22 +20,12 @@ const Room = () => {
     setUserID,
     webSocketClient,
     setWebSocketClient,
+    // chat state
     messages,
     setMessages,
-    newMessage,
-    setNewMessage,
-    canvas,
-    setCanvas,
+    // whiteboard state
     ctx,
-    setCtx,
-    drawing,
-    setDrawing,
-    x,
-    setX,
-    y,
-    setY,
     color,
-    setColor,
     drawingDataFromWS,
     setDrawingDataFromWS,
   } = useContext(RoomContext);
@@ -70,7 +61,7 @@ const Room = () => {
     };
   });
 
-  webSocketClient.onmessage = (e) => {
+  webSocketClient.onmessage = async (e) => {
     try {
       let data = JSON.parse(e.data);
       const { type, payload } = data;
@@ -84,7 +75,7 @@ const Room = () => {
         case "drawing":
           setDrawingDataFromWS(payload);
           // now we can draw with the coordinations sent by websocket :)
-          const { x0, y0, x1, y1, color } = drawingDataFromWS;
+          const { x0, y0, x1, y1, color } = await drawingDataFromWS;
           draw(ctx, x0, y0, x1, y1, color);
           break;
       }
@@ -94,7 +85,7 @@ const Room = () => {
   };
 
   return (
-    <div className={style.Room}>
+    <div className="Room">
       <Whiteboard />
       <Chat />
     </div>

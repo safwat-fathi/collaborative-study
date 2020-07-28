@@ -11,12 +11,6 @@
   overflow-y: auto;
 }
 
-/* .chat-area {
-  padding: 20px;
-  height: 400px;
-  overflow-y: scroll;
-} */
-
 .chat-bubble {
   background-color: #bbdefb;
   padding: 10px;

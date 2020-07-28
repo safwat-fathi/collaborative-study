@@ -10,13 +10,10 @@ const server = http.createServer(app).listen(PORT, () => {
 
 const wss = new WebSocket.Server({ server });
 
-let clients = {};
-let rooms = {};
+let clients = [];
 
 wss.on("connection", function connection(ws, req) {
   // const clientIP = req.socket.remoteAddress;
-
-  console.log("new connection");
 
   // handling messages
   ws.on("message", function incoming(message) {
@@ -26,9 +23,13 @@ wss.on("connection", function connection(ws, req) {
       const { type, room, payload } = data;
 
       switch (type) {
+        // case "rooms":
+        //   console.log(type);
+        //   console.log(payload);
+        //   break;
         case "join":
           const { userID, userName } = payload;
-          clients[userID] = ws;
+          clients.push({ ws, userID, userName, room });
           console.log("new user joined");
           // handling duplicated connetcions
           // if (checkClientExist(clients, userID)) {
@@ -38,26 +39,24 @@ wss.on("connection", function connection(ws, req) {
           // }
           // let roomsKeys = Object.keys(rooms);
 
+          // console.log([rooms[room]]);
+
           // if (roomsKeys.includes(room)) {
           //   console.log("room existed");
-          //   console.log(`rooms: ${rooms}`);
           //   rooms[room].members.push(clients[userID]);
-          //   console.log(rooms[room].members);
           // }
           // console.log("new room");
           // rooms[room] = {
           //   members: [clients[userID]],
           // };
-          // console.log(rooms[room].members);
-          //   break;
-          // chatting on room
           break;
+        // chatting on room
         case "chatting":
-          broadcast(clients, ws, data);
+          broadcast(clients, ws, room, data);
           break;
         // drawing on whiteboard
         case "drawing":
-          broadcast(clients, ws, data);
+          broadcast(clients, ws, room, data);
           break;
         default:
           break;
@@ -72,19 +71,20 @@ wss.on("connection", function connection(ws, req) {
 });
 
 // // broadcasting function
-function broadcast(clients, ws, data) {
+function broadcast(clients, ws, room, data) {
   try {
     data = JSON.stringify(data);
 
     // send to all excluding sender
-    for (client in clients) {
+    clients.forEach((client) => {
       if (
-        clients[client] !== ws &&
-        clients[client].readyState === WebSocket.OPEN
+        client.ws !== ws &&
+        client.ws.readyState === WebSocket.OPEN &&
+        client.room === room
       ) {
-        clients[client].send(data);
+        client.ws.send(data);
       }
-    }
+    });
   } catch (err) {
     console.log(err);
   }

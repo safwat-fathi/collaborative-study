@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import draw from "../../utils/draw";
 
-import style from "./Whiteboard.module.css";
+import "./Whiteboard.css";
 
 import { RoomContext } from "../../context";
 
@@ -21,22 +21,12 @@ const Whiteboard = () => {
     setY,
     color,
     setColor,
-    drawingDataFromWS,
-    setDrawingDataFromWS,
   } = roomCTX;
 
   // refs
   const canvas = useRef(null);
   const colorPicker = useRef(null);
   const btnUndo = useRef(null);
-
-  // state
-  // const [ctx, setCtx] = useState(null);
-  // const [drawing, setDrawing] = useState(false);
-  // const [x, setX] = useState(0);
-  // const [y, setY] = useState(0);
-  // const [color, setColor] = useState("");
-  // const [drawingDataFromWS, setDrawingDataFromWS] = useState(null);
 
   // for undo or redo history
   const [lastDrawings, setLastDrawings] = useState([]);
@@ -167,31 +157,10 @@ const Whiteboard = () => {
     console.log("storedDrawings after", storedDrawings);
   };
 
-  /* 
-	//////////////////////////////
-	sending data through websocket
-	//////////////////////////////
-	*/
-  // webSocketClient.onmessage = (e) => {
-  //   let data = JSON.parse(e.data);
-  //   const { type, payload } = data;
-
-  //   try {
-  //     if (type === "drawing") {
-  //       setDrawingDataFromWS(payload);
-  //       // now we can draw with the coordinations sent by websocket :)
-  //       const { x0, y0, x1, y1, color } = drawingDataFromWS;
-  //       draw(ctx, x0, y0, x1, y1, color);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   return (
     <div>
       <canvas
-        className={style.canvas}
+        className="canvas"
         width="600"
         height="400"
         ref={canvas}

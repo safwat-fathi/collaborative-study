@@ -67,6 +67,9 @@ const Chat = () => {
   useEffect(() => {
     // scroll chat area to fit chat message
     chatArea.current.scrollBy(0, chatArea.current.scrollHeight);
+    return () => {
+      console.log("unsubscribing from chat");
+    };
   }, [messages]);
 
   return (
@@ -85,7 +88,6 @@ const Chat = () => {
               <strong>
                 {userID === message.userID ? "You" : message.user}
               </strong>
-              :
               <br />
               {message.message}
               <br />

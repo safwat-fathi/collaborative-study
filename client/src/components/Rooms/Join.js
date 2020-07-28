@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 import { RoomContext } from "../../context";
 
 const Join = () => {
-  const { rooms, setRooms } = useContext(RoomContext);
-  const { setCurrentRoom } = useContext(RoomContext);
+  const { webSocketClient, rooms, setRooms, setCurrentRoom } = useContext(
+    RoomContext
+  );
 
   useEffect(() => {
     axios
@@ -20,6 +21,18 @@ const Join = () => {
       });
   }, []);
 
+  useEffect(() => {
+    webSocketClient.onopen = () => {
+      webSocketClient.send(
+        JSON.stringify({
+          type: "rooms",
+          payload: rooms,
+        })
+      );
+      console.log(rooms);
+    };
+  });
+
   return (
     <>
       <h2>Join a room</h2>
@@ -30,7 +43,7 @@ const Join = () => {
             <p>{room.desc}</p>
             <Link
               onClick={() => setCurrentRoom(room._id)}
-              to={`/room/${room._id}`}
+              to={`/room/${room.name}`}
             >
               Join {room.name}
             </Link>
