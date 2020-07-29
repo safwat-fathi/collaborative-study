@@ -44,13 +44,12 @@ const Room = () => {
     let decodedToken = jwt_decode(localToken);
     setUserID(decodedToken.userID);
     setUserName(decodedToken.userName);
-  }, []);
 
-  useEffect(() => {
-    webSocketClient.onopen = () => {
-      webSocketClient.send(
+    return () => {
+      console.log("component is disconnected");
+      ws.send(
         JSON.stringify({
-          type: "join",
+          type: "closing",
           room: currentRoom,
           payload: {
             userID: userID,
@@ -58,8 +57,27 @@ const Room = () => {
           },
         })
       );
+
+      ws.close();
     };
-  });
+  }, []);
+
+  webSocketClient.onclose = () => {
+    console.log("closing websocket");
+  };
+
+  webSocketClient.onopen = () => {
+    webSocketClient.send(
+      JSON.stringify({
+        type: "join",
+        room: currentRoom,
+        payload: {
+          userID: userID,
+          userName: userName,
+        },
+      })
+    );
+  };
 
   webSocketClient.onmessage = async (e) => {
     try {

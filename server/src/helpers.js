@@ -22,6 +22,7 @@ broadcast = (WebSocket, clients, ws, room, data) => {
 addClient = (clients, ws, userID, userName, room) => {
   if (clients.length === 0) {
     clients.push({ ws, userID, userName, room });
+    return;
   }
 
   for (let client of clients) {

@@ -39,6 +39,7 @@ const Chat = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     try {
       // data object we send by WS
       let chatData = {

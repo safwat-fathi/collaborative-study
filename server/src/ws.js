@@ -26,21 +26,20 @@ wss.on("connection", function connection(ws, req) {
       const { type, room, payload } = data;
 
       switch (type) {
+        case "closing":
+          console.log("closing", payload);
+          break;
         case "join":
-          const { userID, userName } = payload;
-
+          console.log("new connection");
           // handling duplicated connections
-          addClient(clients, ws, userID, userName, room);
-          console.log(clients.length);
+          addClient(clients, ws, payload.userID, payload.userName, room);
           break;
         // chatting on room
         case "chatting":
-          console.log("chatting");
           broadcast(WebSocket, clients, ws, room, data);
           break;
         // drawing on whiteboard
         case "drawing":
-          console.log("drawing");
           broadcast(WebSocket, clients, ws, room, data);
           break;
         default:
@@ -52,5 +51,7 @@ wss.on("connection", function connection(ws, req) {
   });
 
   ws.on("error", (e) => console.log(e));
-  ws.on("close", (e) => console.log("websocket closed " + e));
+  ws.on("close", (e) => {
+    console.log("websocket closed " + e);
+  });
 });
