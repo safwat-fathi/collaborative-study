@@ -5,7 +5,11 @@ import Home from "../Home";
 const App = () => {
   return (
     <>
-      <Home />
+      <div className="container">
+        <div className="row">
+          <Home />
+        </div>
+      </div>
     </>
   );
 };

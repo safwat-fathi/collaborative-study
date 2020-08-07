@@ -32,29 +32,38 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h3>Login</h3>
+
+    <div className="col-md-6 offset-md-3 col mt-5">
+      <h3 className="text-center">Login</h3>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
+          <label htmlFor="emailInput">email</label>
           <input
+            className="form-control"
             type="email"
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
-            autoComplete="on"
           />
         </div>
-        <div>
+        <div className="form-group">
+          <label htmlFor="passwordInput">password</label>
           <input
+            className="form-control"
             type="password"
-            autoComplete="on"
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <input type="submit" value="Login" />
+        <input className="btn btn-primary btn-lg btn-block" type="submit" value="Login" />
+        <div className="form-group text-right mt-2">
+          {/* <NavLink to="register" exact>
+            register
+          </NavLink>   */}
+        </div>
       </form>
       <div>{feedbackMsg}</div>
     </div>
+
   );
 };
 
