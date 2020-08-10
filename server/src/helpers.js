@@ -34,7 +34,17 @@ addClient = (clients, ws, userID, userName, room) => {
   clients.push({ ws, userID, userName, room });
 };
 
+// remove client on websocket close
+removeClient = (clients, userID) => {
+  clients.some((client, index) => {
+    if (client.userID === userID) {
+      clients.splice(index, 1);
+    }
+  });
+};
+
 module.exports = {
   broadcast,
   addClient,
+  removeClient,
 };

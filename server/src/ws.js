@@ -3,7 +3,7 @@ const WebSocket = require("ws");
 const app = require("./app");
 
 // import helpers
-const { broadcast, addClient } = require("./helpers");
+const { broadcast, addClient, removeClient } = require("./helpers");
 
 const PORT = 8080;
 // Spinning the http server and the websocket server.
@@ -27,12 +27,13 @@ wss.on("connection", function connection(ws, req) {
 
       switch (type) {
         case "closing":
-          console.log("closing", payload);
+          const { userID } = payload;
+          removeClient(clients, userID);
           break;
         case "join":
-          console.log("new connection");
           // handling duplicated connections
           addClient(clients, ws, payload.userID, payload.userName, room);
+          console.log("clients joined: ", clients.length);
           break;
         // chatting on room
         case "chatting":
