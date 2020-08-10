@@ -37,6 +37,8 @@ export const RoomContext = createContext({
   setUserID: () => {},
   userName: "",
   setUserName: () => {},
+  userEmail: "",
+  setUserEmail: () => {},
   webSocketClient: null,
   setWebSocketClient: () => {},
 });

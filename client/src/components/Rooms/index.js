@@ -13,6 +13,7 @@ const Rooms = () => {
   const [currentRoom, setCurrentRoom] = useState("");
   const [userID, setUserID] = useState("");
   const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [webSocketClient, setWebSocketClient] = useState({});
   // chat state
   const [messages, setMessages] = useState([]);
@@ -35,6 +36,8 @@ const Rooms = () => {
     setUserID,
     userName,
     setUserName,
+    userEmail,
+    setUserEmail,
     webSocketClient,
     setWebSocketClient,
     messages,

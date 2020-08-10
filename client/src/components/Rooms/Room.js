@@ -41,10 +41,6 @@ const Room = () => {
       return;
     }
 
-    let decodedToken = jwt_decode(localToken);
-    setUserID(decodedToken.userID);
-    setUserName(decodedToken.userName);
-
     return () => {
       console.log("component is disconnected");
       ws.send(

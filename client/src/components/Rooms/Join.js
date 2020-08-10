@@ -2,95 +2,129 @@ import React, { useEffect, useState, useContext } from "react";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import './join.css';
+import "./join.css";
 
-import { RoomContext } from "../../context";
+import { RoomContext, UserContext } from "../../context";
 
 function Modal({ isVisible = false, title, content, onClose }) {
   const [name, setName] = useState("");
   const [adminID, setadminID] = useState("");
   const [desc, setDesc] = useState("");
 
-    useEffect(() => {
-      document.addEventListener('keydown', keydownHandler);
-      console.log('name, adminID, desc',name, adminID, desc)
-      return () => document.removeEventListener('keydown', keydownHandler);
-    });
-    useEffect(() => {
-      let localToken = localStorage.getItem("userToken");
-      let decodedToken = jwt_decode(localToken);
-      setadminID(decodedToken.userID);
-    },[]);
-    
-    const CreateRoom = (e) => {
-      e.preventDefault();
-      let localToken = localStorage.getItem("userToken");
-      const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localToken}`
-      }
-      axios
-        .post("http://localhost:4000/rooms/create", {
-          name, adminID, desc
-        },{
-          headers: headers
-        })
-        .then((res) => {
-          if( res.data.message === "room created successfully" ) {
-            console.log("res.data.message ",res.data.message )
-            onClose()
-            alert(res.data.message)
-          }
-        })
-        .catch ((err) =>{
-          console.log(err);
-        })
-    } 
-    
+  useEffect(() => {
+    document.addEventListener("keydown", keydownHandler);
+    return () => document.removeEventListener("keydown", keydownHandler);
+  });
 
-    function keydownHandler({ key }) {
-      switch (key) {
-        case 'Escape':
+  useEffect(() => {
+    let localToken = localStorage.getItem("userToken");
+    let decodedToken = jwt_decode(localToken);
+    setadminID(decodedToken.userID);
+  }, []);
+
+  const CreateRoom = (e) => {
+    e.preventDefault();
+    let localToken = localStorage.getItem("userToken");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localToken}`,
+    };
+    axios
+      .post(
+        "http://localhost:4000/rooms/create",
+        {
+          name,
+          adminID,
+          desc,
+        },
+        {
+          headers: headers,
+        }
+      )
+      .then((res) => {
+        if (res.data.message === "room created successfully") {
+          console.log("res.data.message ", res.data.message);
           onClose();
-          break;
-        default:
-      }
+          alert(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  function keydownHandler({ key }) {
+    switch (key) {
+      case "Escape":
+        onClose();
+        break;
+      default:
     }
-  
-    return !isVisible ? null : (
-      <div className="modal" onClick={onClose}>
-        <div className="modal-dialog" onClick={e => e.stopPropagation()}>
-          <div className="modal-header">
-            <h3 className="modal-title">{title}</h3>
-            <span className="modal-close" onClick={onClose}>
-              &times;
-            </span>
-          </div>
-          <div className="modal-body">
-            <div className="modal-content">
-              <form onSubmit={CreateRoom}>
-                  <div className="form-group" >
-                      <label className="col-form-label" htmlFor="name">room name</label>
-                      <input type="text" className="form-control" placeholder="please write Room name" id="name" onChange={ (e) => setName(e.target.value) } />
-                  </div>
-                  <div className="form-group">
-                      <label className="col-form-label" htmlFor="descriptiont">room descriptiont</label>
-                      <input type="text" className="form-control" placeholder="please write desc" id="descriptiont" onChange={ (e) => setDesc(e.target.value) }/>
-                  </div>
-                  <input className="btn btn-primary btn-lg btn-block" type="submit" value="create room"/>
-              </form>
-            </div>
+  }
+
+  return !isVisible ? null : (
+    <div className="modal" onClick={onClose}>
+      <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3 className="modal-title">{title}</h3>
+          <span className="modal-close" onClick={onClose}>
+            &times;
+          </span>
+        </div>
+        <div className="modal-body">
+          <div className="modal-content">
+            <form onSubmit={CreateRoom}>
+              <div className="form-group">
+                <label className="col-form-label" htmlFor="name">
+                  room name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="please write Room name"
+                  id="name"
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label className="col-form-label" htmlFor="descriptiont">
+                  room descriptiont
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="please write desc"
+                  id="descriptiont"
+                  onChange={(e) => setDesc(e.target.value)}
+                />
+              </div>
+              <input
+                className="btn btn-primary btn-lg btn-block"
+                type="submit"
+                value="create room"
+              />
+            </form>
           </div>
         </div>
       </div>
-    );
+    </div>
+  );
 }
 
 const Join = () => {
   const [isModal, setModal] = useState(false);
-  const { webSocketClient, rooms, setRooms, setCurrentRoom } = useContext(
-    RoomContext
-  );
+  const {
+    userName,
+    userID,
+    userEmail,
+    setUserID,
+    setUserName,
+    setUserEmail,
+    webSocketClient,
+    rooms,
+    setRooms,
+    setCurrentRoom,
+  } = useContext(RoomContext);
 
   useEffect(() => {
     axios
@@ -102,6 +136,12 @@ const Join = () => {
       .catch((err) => {
         console.log(err);
       });
+
+    let localToken = localStorage.getItem("userToken");
+    let decodedToken = jwt_decode(localToken);
+    setUserID(decodedToken.userID);
+    setUserName(decodedToken.userName);
+    setUserEmail(decodedToken.userEmail);
   }, []);
 
   useEffect(() => {
@@ -112,76 +152,100 @@ const Join = () => {
           payload: rooms,
         })
       );
-      console.log(rooms);
     };
   });
 
   return (
     <>
-            <nav className="navbar col navbar-expand-sm navbar-dark bg-primary">
-                <a className="navbar-brand" href="#" >collaborative-study</a>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
+      <nav className="navbar col navbar-expand-sm navbar-dark bg-primary">
+        <a className="navbar-brand" href="#">
+          collaborative-study
+        </a>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarColor01"
+          aria-controls="navbarColor01"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-                <div className="collapse navbar-collapse" id="navbarColor01">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active" onClick={() => setModal(true)}>
-                        <span className="nav-link" > Create Room </span>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Features</a>
-                        </li>
-                    </ul>
-                    <form className="form-inline my-2 my-lg-0">
-                        <input className="form-control mr-sm-2" type="text" placeholder="serach room by room name"/>
-                        <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                    </form>
-                </div>
-            </nav>
-            
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-4">
-                        <div className="card text-white bg-primary mt-3">
-                            <div className="card-header">your profile</div>
-                            <div className="card-body">
-                                <h4 className="card-title">name :- abdelrahman</h4>
-                                <p className="card-text">email :- aaaa@aa.aa</p>
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="col-8">
-                    {rooms.map((room) => {
-                      return (
-                        <div  key={room._id} className="card bg-light mt-3">
-                            <div className="card-header">public room</div>
-                            <div className="card-body">
-                                <h4 className="card-title">room name : {room.name}</h4>
-                                {/* <h4 className="card-text">creator name: john</h4> */}
-                                <h4 className="card-text">room descriptiont: {room.desc}</h4>
-                                {/* <p className="card-text">members : 5</p> */}
-                                <p className="card-text">
-                                  <Link
-                                    onClick={() => setCurrentRoom(room._id)}
-                                    to={`/room/${room._id}`}
-                                  >
-                                    <button type="button" className="btn btn-primary btn-lg btn-block">join room</button>
-                                  </Link>
-                                </p>
-                            </div>
-                        </div>
-                      );
-                    })}
-                    </div>
-                </div>
+        <div className="collapse navbar-collapse" id="navbarColor01">
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item active" onClick={() => setModal(true)}>
+              <span className="nav-link"> Create Room </span>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#">
+                Features
+              </a>
+            </li>
+          </ul>
+          <form className="form-inline my-2 my-lg-0">
+            <input
+              className="form-control mr-sm-2"
+              type="text"
+              placeholder="serach room by room name"
+            />
+            <button className="btn btn-secondary my-2 my-sm-0" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </nav>
+
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-4">
+            <div className="card text-white bg-primary mt-3">
+              <div className="card-header">your profile</div>
+              <div className="card-body">
+                <h4 className="card-title">name : {userName}</h4>
+                <p className="card-text">email : {userEmail}</p>
+              </div>
             </div>
-            
-            <Modal
-                isVisible={ isModal }
-                title="create room"
-                onClose={() => setModal(false)}
-            />    
+          </div>
+          <div className="col-8">
+            {rooms.map((room) => {
+              return (
+                <div key={room._id} className="card bg-light mt-3">
+                  <div className="card-header">public room</div>
+                  <div className="card-body">
+                    <h4 className="card-title">room name : {room.name}</h4>
+                    {/* <h4 className="card-text">creator name: john</h4> */}
+                    <h4 className="card-text">
+                      room descriptiont: {room.desc}
+                    </h4>
+                    {/* <p className="card-text">members : 5</p> */}
+                    <p className="card-text">
+                      <Link
+                        onClick={() => setCurrentRoom(room._id)}
+                        to={`/room/${room._id}`}
+                      >
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-lg btn-block"
+                        >
+                          join room
+                        </button>
+                      </Link>
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <Modal
+        isVisible={isModal}
+        title="create room"
+        onClose={() => setModal(false)}
+      />
     </>
   );
 };
