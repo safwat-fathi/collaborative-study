@@ -179,9 +179,9 @@ const Join = () => {
               <span className="nav-link"> Create Room </span>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
-                Features
-              </a>
+              <Link className="nav-link" to="/profile">
+                Profile
+              </Link>
             </li>
           </ul>
           <form className="form-inline my-2 my-lg-0">

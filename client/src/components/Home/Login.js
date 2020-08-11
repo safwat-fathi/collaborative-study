@@ -32,7 +32,6 @@ const Login = () => {
   };
 
   return (
-
     <div className="col-md-6 offset-md-3 col mt-5">
       <h3 className="text-center">Login</h3>
       <form onSubmit={handleSubmit}>
@@ -40,6 +39,7 @@ const Login = () => {
           <label htmlFor="emailInput">email</label>
           <input
             className="form-control"
+            id="emailInput"
             type="email"
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
@@ -49,12 +49,17 @@ const Login = () => {
           <label htmlFor="passwordInput">password</label>
           <input
             className="form-control"
+            id="passwordInput"
             type="password"
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <input className="btn btn-primary btn-lg btn-block" type="submit" value="Login" />
+        <input
+          className="btn btn-primary btn-lg btn-block"
+          type="submit"
+          value="Login"
+        />
         <div className="form-group text-right mt-2">
           {/* <NavLink to="register" exact>
             register
@@ -63,7 +68,6 @@ const Login = () => {
       </form>
       <div>{feedbackMsg}</div>
     </div>
-
   );
 };
 

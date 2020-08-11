@@ -102,7 +102,7 @@ class Register extends Component {
     return (
       <div className="col-md-6 offset-md-3 col mt-5">
         <h3 className="text-center">Register</h3>
-        <form className="text-center" className="form-group" onSubmit={this.handleSubmit}>
+        <form className="form-group text-center" onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label htmlFor="nameInput">name</label>
             <input
@@ -125,7 +125,7 @@ class Register extends Component {
               value={this.state.email}
             />
           </div>
-          <div className="form-group"> 
+          <div className="form-group">
             <label htmlFor="passwordInput">Password</label>
             <input
               className="form-control"
@@ -137,7 +137,7 @@ class Register extends Component {
               value={this.state.password}
             />
           </div>
-          <div className="form-group"> 
+          <div className="form-group">
             <label htmlFor="ConfirmPasswordInput">Confirm Password</label>
             <input
               className="form-control"
@@ -150,7 +150,11 @@ class Register extends Component {
             />
           </div>
           <div className="form-group">
-            <input className="btn btn-primary btn-lg btn-block" type="submit" value="Regitser" />
+            <input
+              className="btn btn-primary btn-lg btn-block"
+              type="submit"
+              value="Regitser"
+            />
           </div>
         </form>
         <div>{this.state.feedBackMsg}</div>

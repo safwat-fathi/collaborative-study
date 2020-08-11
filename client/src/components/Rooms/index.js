@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch } from "react-router-dom";
 
 import Join from "./Join";
 import Room from "./Room";
+import Profile from "../Profile";
 
 import { RoomContext } from "../../context";
 import { Route } from "react-router-dom/cjs/react-router-dom.min";
@@ -66,6 +67,7 @@ const Rooms = () => {
         <Switch>
           <Route exact path="/" component={Join} />
           <Route path="/rooms/:name" component={Room} />
+          <Route path="/profile" component={Profile} />
         </Switch>
       </Router>
     </RoomContext.Provider>

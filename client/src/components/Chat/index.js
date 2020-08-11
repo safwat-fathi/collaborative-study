@@ -65,6 +65,7 @@ const Chat = () => {
     }
   };
 
+  // clear messages on new join to room
   useEffect(() => {
     setMessages([]);
   }, []);

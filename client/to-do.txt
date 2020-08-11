@@ -1,0 +1,2 @@
+- navbar needs to be visible on all routes (after login).
+- handle edit profile from backend side.

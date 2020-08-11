@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import jwt_decode from "jwt-decode";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 // ---------------------
 import Whiteboard from "../Whiteboard";
@@ -15,9 +14,7 @@ const Room = () => {
     // join room state
     currentRoom,
     userName,
-    setUserName,
     userID,
-    setUserID,
     webSocketClient,
     setWebSocketClient,
     // chat state
@@ -25,7 +22,6 @@ const Room = () => {
     setMessages,
     // whiteboard state
     ctx,
-    color,
     drawingDataFromWS,
     setDrawingDataFromWS,
   } = useContext(RoomContext);
