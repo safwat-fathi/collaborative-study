@@ -65,7 +65,7 @@ const Rooms = () => {
       <Router>
         <Switch>
           <Route exact path="/" component={Join} />
-          <Route path="/room/:id" component={Room} />
+          <Route path="/rooms/:name" component={Room} />
         </Switch>
       </Router>
     </RoomContext.Provider>

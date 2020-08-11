@@ -7,6 +7,7 @@ Every message is an object contains 3 keys {type, room, payload}.
 The type of the message which consist of:
 
 - join.
+- closing.
 - chatting.
 - drawing.
 

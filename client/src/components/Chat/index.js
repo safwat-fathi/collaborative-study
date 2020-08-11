@@ -66,6 +66,10 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    setMessages([]);
+  }, []);
+
+  useEffect(() => {
     // scroll chat area to fit chat message
     chatArea.current.scrollBy(0, chatArea.current.scrollHeight);
   }, [messages]);

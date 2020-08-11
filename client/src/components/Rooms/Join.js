@@ -223,7 +223,7 @@ const Join = () => {
                     <p className="card-text">
                       <Link
                         onClick={() => setCurrentRoom(room._id)}
-                        to={`/room/${room._id}`}
+                        to={`/rooms/${room.name}`}
                       >
                         <button
                           type="button"

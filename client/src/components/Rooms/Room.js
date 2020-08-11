@@ -42,7 +42,6 @@ const Room = () => {
     }
 
     return () => {
-      console.log("component is disconnected");
       ws.send(
         JSON.stringify({
           type: "closing",
@@ -57,10 +56,6 @@ const Room = () => {
       ws.close();
     };
   }, []);
-
-  webSocketClient.onclose = () => {
-    console.log("closing websocket");
-  };
 
   webSocketClient.onopen = () => {
     webSocketClient.send(
