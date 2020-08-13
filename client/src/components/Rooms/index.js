@@ -7,6 +7,7 @@ import Profile from "../Profile";
 
 import { RoomContext } from "../../context";
 import { Route } from "react-router-dom/cjs/react-router-dom.min";
+import Logout from "../Logout";
 
 const Rooms = () => {
   // join room state
@@ -68,6 +69,7 @@ const Rooms = () => {
           <Route exact path="/" component={Join} />
           <Route path="/rooms/:name" component={Room} />
           <Route path="/profile" component={Profile} />
+          <Route path="/logout" component={Logout} />
         </Switch>
       </Router>
     </RoomContext.Provider>

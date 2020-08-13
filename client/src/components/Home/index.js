@@ -22,24 +22,31 @@ const Home = () => {
   useEffect(() => {
     let localToken = localStorage.getItem("userToken");
 
-    if (localToken === null) {
+    if (localToken == null) {
+      console.log("localToken>>>>>>>",localToken)
       setIsUserTokenExpired(true);
       setIsLoggedIn(false);
-      return;
-    }
-
-    let decodedToken = jwt_decode(localToken);
-
-    // time now (without seconds & milliseconds)
-    let now = +Date.now().toString().slice(0, -3);
-
-    if (now > decodedToken.exp) {
-      setIsUserTokenExpired(true);
-      setIsLoggedIn(false);
+      return
     } else {
-      setIsUserTokenExpired(false);
-      setIsLoggedIn(true);
+
+      let decodedToken = jwt_decode(localToken);
+  
+      // time now (without seconds & milliseconds)
+      let now = +Date.now().toString().slice(0, -3);
+  
+      if (now > decodedToken.exp) {
+        setIsUserTokenExpired(true);
+        setIsLoggedIn(false);
+      } else {
+        setIsUserTokenExpired(false);
+        setIsLoggedIn(true);
+      }
+    
     }
+
+
+    
+
   }, []);
 
   return (

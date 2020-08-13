@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 import "./join.css";
 
 import { RoomContext, UserContext } from "../../context";
+import Navbar from '../Navbar';
 
-function Modal({ isVisible = false, title, content, onClose }) {
+function Modal({ isVisible = false, title, onClose }) {
   const [name, setName] = useState("");
   const [adminID, setadminID] = useState("");
   const [desc, setDesc] = useState("");
@@ -157,45 +158,8 @@ const Join = () => {
 
   return (
     <>
-      <nav className="navbar col navbar-expand-sm navbar-dark bg-primary">
-        <a className="navbar-brand" href="#">
-          collaborative-study
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarColor01"
-          aria-controls="navbarColor01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
 
-        <div className="collapse navbar-collapse" id="navbarColor01">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item active" onClick={() => setModal(true)}>
-              <span className="nav-link"> Create Room </span>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/profile">
-                Profile
-              </Link>
-            </li>
-          </ul>
-          <form className="form-inline my-2 my-lg-0">
-            <input
-              className="form-control mr-sm-2"
-              type="text"
-              placeholder="serach room by room name"
-            />
-            <button className="btn btn-secondary my-2 my-sm-0" type="submit">
-              Search
-            </button>
-          </form>
-        </div>
-      </nav>
+      <Navbar model={setModal} />
 
       <div className="container-fluid">
         <div className="row">

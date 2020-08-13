@@ -9,6 +9,7 @@ import "./Room.css";
 // ---------------------
 import draw from "../../utils/draw";
 
+import Navbar from '../Navbar';
 const Room = () => {
   const {
     // join room state
@@ -88,10 +89,13 @@ const Room = () => {
   };
 
   return (
-    <div className="Room">
-      <Whiteboard />
-      <Chat />
-    </div>
+    <>
+      <Navbar exit />
+      <div className="Room">
+        <Whiteboard />
+        <Chat />
+      </div>
+    </>
   );
 };
 
