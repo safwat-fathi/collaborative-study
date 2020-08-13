@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { UserContext } from "../../context";
 
-const Login = () => {
+const Login = (props) => {
   const { setIsLoggedIn } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
@@ -60,10 +60,10 @@ const Login = () => {
           type="submit"
           value="Login"
         />
-        <div className="form-group text-right mt-2">
-          {/* <NavLink to="register" exact>
-            register
-          </NavLink>   */}
+        <div className="form-group">
+          <div className="btn form-group text-right mt-2" onClick={ ()=> props.setForm(false) }>
+              goto register
+          </div>
         </div>
       </form>
       <div>{feedbackMsg}</div>

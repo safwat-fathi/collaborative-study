@@ -11,7 +11,7 @@ import { UserContext } from "../../context";
 const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isUserTokenExpired, setIsUserTokenExpired] = useState(true);
-
+  const [ form , setForm ] = useState( true )
   const userCTX = {
     isLoggedIn,
     setIsLoggedIn,
@@ -58,8 +58,12 @@ const Home = () => {
           </>
         ) : (
           <>
-            <Login />
-            <Register />
+          {
+            form ? 
+            <Login setForm={ setForm } /> 
+            : 
+            <Register setForm={ setForm }/>
+          }
           </>
         )}
       </>
