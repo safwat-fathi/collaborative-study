@@ -7,22 +7,6 @@ const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
 
-// testing JWT token
-// router.get("/room", auth, (req, res, next) => {
-//   try {
-//     console.log("authenticated");
-//     res.status(200).json({
-//       message: "success",
-//     });
-//   } catch (err) {
-//     console.error("not authenticated");
-//     res.status(200).json({
-//       message: "failed",
-//       error: err,
-//     });
-//   }
-// });
-
 // register new user
 router.post("/register", async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -98,8 +82,45 @@ router.post("/login", async (req, res, next) => {
 });
 
 // edit user data
-router.post("/edit", auth, (req, res, next) => {
+router.post("/edit", auth, async (req, res, next) => {
   try {
+    const { email, type, name, oldPassword, newPassword } = req.body;
+
+    switch (type) {
+      case "name":
+        // finding by email and changing Document name with given name
+        // in the req.body
+        await User.findOneAndUpdate(
+          { email },
+          { name },
+          {
+            new: true,
+          }
+        );
+        break;
+      // ===================
+      // ===================
+      case "password":
+        // find user
+        let user = await User.findOne({ email });
+        // check old password
+        let isMatch = await bcrypt.compare(oldPassword, user.password);
+
+        if (!isMatch) {
+          return res.status(400).json({
+            message: "password not matched",
+          });
+        }
+
+        // update password
+        user.password = newPassword;
+        await user.save();
+        console.log(user);
+        break;
+      default:
+        break;
+    }
+    //
     res.status(201).json({
       message: "success",
     });
