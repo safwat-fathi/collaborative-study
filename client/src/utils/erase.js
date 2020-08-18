@@ -1,17 +1,8 @@
-export default function erasing(
-  context,
-  x,
-  y,
-  room,
-  client,
-  send,
-  canvas,
-  eraserImg
-) {
+export default function erasing(context, x, y, room, client, send) {
   context.clearRect(x, y, 20, 20);
 
   // changing cursor style to eraser
-  canvas.current.style.cursor = `url(${eraserImg}) 1 10, auto`;
+  // canvas.current.style.cursor = `url(${eraserImg}) 1 10, auto`;
 
   try {
     if (!send) {

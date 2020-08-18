@@ -84,7 +84,6 @@ const Room = () => {
           draw(ctx, x0, y0, x1, y1, color);
           break;
         case "erasing":
-          console.log(payload);
           setDrawingDataFromWS(payload);
           // now we can draw with the coordinations sent by websocket :)
           const { x, y } = await drawingDataFromWS;

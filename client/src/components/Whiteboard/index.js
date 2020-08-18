@@ -124,16 +124,7 @@ const Whiteboard = () => {
     }
 
     if (isErasing && erasing) {
-      erase(
-        ctx,
-        offsetX,
-        offsetY,
-        currentRoom,
-        webSocketClient,
-        true,
-        canvas,
-        eraserImg
-      );
+      erase(ctx, offsetX, offsetY, currentRoom, webSocketClient, true);
     }
 
     return;
@@ -210,6 +201,18 @@ const Whiteboard = () => {
     setIsDrawing(false);
   };
 
+  // saving button
+  const handleSave = (e) => {
+    e.preventDefault();
+
+    const image = canvas.current
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+
+    console.log(image);
+    window.location.href = image;
+  };
+
   return (
     <div>
       <canvas
@@ -231,6 +234,9 @@ const Whiteboard = () => {
       </button>
       <button onClick={handlePen} ref={btnUndo}>
         pen
+      </button>
+      <button onClick={handleSave} ref={btnUndo}>
+        save
       </button>
     </div>
   );
