@@ -15,6 +15,8 @@ export const RoomContext = createContext({
   setCtx: () => {},
   drawing: false,
   setDrawing: () => {},
+  erasing: false,
+  setErasing: () => {},
   x: 0,
   setX: () => {},
   y: 0,

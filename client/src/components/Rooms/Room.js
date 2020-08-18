@@ -8,8 +8,9 @@ import { RoomContext } from "../../context";
 import "./Room.css";
 // ---------------------
 import draw from "../../utils/draw";
+import erase from "../../utils/erase";
 
-import Navbar from '../Navbar';
+import Navbar from "../Navbar";
 const Room = () => {
   const {
     // join room state
@@ -81,6 +82,13 @@ const Room = () => {
           // now we can draw with the coordinations sent by websocket :)
           const { x0, y0, x1, y1, color } = await drawingDataFromWS;
           draw(ctx, x0, y0, x1, y1, color);
+          break;
+        case "erasing":
+          console.log(payload);
+          setDrawingDataFromWS(payload);
+          // now we can draw with the coordinations sent by websocket :)
+          const { x, y } = await drawingDataFromWS;
+          erase(ctx, x, y, currentRoom);
           break;
       }
     } catch (err) {

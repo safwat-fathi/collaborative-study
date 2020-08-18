@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import draw from "../../utils/draw";
+import erase from "../../utils/erase";
 
 import "./Whiteboard.css";
+import eraserImg from "./eraser.png";
+import brushImg from "./brush.png";
 
 import { RoomContext } from "../../context";
 
@@ -15,6 +18,8 @@ const Whiteboard = () => {
     setCtx,
     drawing,
     setDrawing,
+    erasing,
+    setErasing,
     x,
     setX,
     y,
@@ -32,6 +37,9 @@ const Whiteboard = () => {
   const [lastDrawings, setLastDrawings] = useState([]);
   const [storedDrawings, setStoredDrawings] = useState([]);
 
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [isErasing, setIsErasing] = useState(false);
+
   useEffect(() => {
     setCtx(canvas.current.getContext("2d"));
   }, []);
@@ -43,11 +51,14 @@ const Whiteboard = () => {
 	*/
   const mouseDownHandler = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
-
-    setDrawing(true);
     setX(offsetX);
     setY(offsetY);
-    setLastDrawings([]);
+
+    if (isErasing) {
+      setErasing(true);
+    } else if (isDrawing) {
+      setDrawing(true);
+    }
   };
 
   /* 
@@ -58,22 +69,28 @@ const Whiteboard = () => {
   const mouseUpHandler = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
 
-    if (!drawing) return;
+    if (isDrawing && drawing) {
+      setDrawing(false);
+      draw(
+        ctx,
+        x,
+        y,
+        offsetX,
+        offsetY,
+        color,
+        currentRoom,
+        webSocketClient,
+        true
+      );
 
-    setDrawing(false);
-    draw(
-      ctx,
-      x,
-      y,
-      offsetX,
-      offsetY,
-      color,
-      currentRoom,
-      webSocketClient,
-      true
-    );
+      setStoredDrawings([...storedDrawings, lastDrawings]);
+      return;
+    }
 
-    setStoredDrawings([...storedDrawings, lastDrawings]);
+    if (isErasing && erasing) {
+      setErasing(false);
+      return;
+    }
   };
 
   /* 
@@ -84,27 +101,42 @@ const Whiteboard = () => {
   const mouseMoveHandler = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
 
-    if (!drawing) return;
+    if (isDrawing && drawing) {
+      draw(
+        ctx,
+        x,
+        y,
+        offsetX,
+        offsetY,
+        color,
+        currentRoom,
+        webSocketClient,
+        true
+      );
 
-    draw(
-      ctx,
-      x,
-      y,
-      offsetX,
-      offsetY,
-      color,
-      currentRoom,
-      webSocketClient,
-      true
-    );
+      setX(offsetX);
+      setY(offsetY);
 
-    setX(offsetX);
-    setY(offsetY);
+      setLastDrawings([
+        ...lastDrawings,
+        { x0: x, y0: y, x1: offsetX, y1: offsetY },
+      ]);
+    }
 
-    setLastDrawings([
-      ...lastDrawings,
-      { x0: x, y0: y, x1: offsetX, y1: offsetY },
-    ]);
+    if (isErasing && erasing) {
+      erase(
+        ctx,
+        offsetX,
+        offsetY,
+        currentRoom,
+        webSocketClient,
+        true,
+        canvas,
+        eraserImg
+      );
+    }
+
+    return;
   };
 
   /* 
@@ -157,6 +189,27 @@ const Whiteboard = () => {
     console.log("storedDrawings after", storedDrawings);
   };
 
+  // pen logic
+  const handlePen = (e) => {
+    e.preventDefault();
+
+    canvas.current.style.cursor = `url(${brushImg}) 1 10, auto`;
+
+    setIsDrawing(true);
+    setIsErasing(false);
+    setLastDrawings([]);
+  };
+
+  // eraser logic
+  const handleEraser = (e) => {
+    e.preventDefault();
+
+    canvas.current.style.cursor = `url(${eraserImg}) 1 10, auto`;
+
+    setIsErasing(true);
+    setIsDrawing(false);
+  };
+
   return (
     <div>
       <canvas
@@ -172,6 +225,12 @@ const Whiteboard = () => {
       <input onChange={handleColorChange} ref={colorPicker} type="color" />
       <button onClick={handleUndo} ref={btnUndo}>
         undo
+      </button>
+      <button onClick={handleEraser} ref={btnUndo}>
+        erase
+      </button>
+      <button onClick={handlePen} ref={btnUndo}>
+        pen
       </button>
     </div>
   );
