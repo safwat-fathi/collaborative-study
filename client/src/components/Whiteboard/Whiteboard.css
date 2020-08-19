@@ -1,3 +1,15 @@
 canvas {
   border: 2px solid yellowgreen;
 }
+
+
+.box {
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 3px;
+  width: 60px;
+  height: 60px;
+  padding: 10px;
+  float: left;
+  font-size: 12px;
+}

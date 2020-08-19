@@ -5,7 +5,7 @@ import Home from "../Home";
 const App = () => {
   return (
     <>
-      <div className="container">
+      <div className="container-fluid">
         <div className="row">
           <Home />
         </div>
