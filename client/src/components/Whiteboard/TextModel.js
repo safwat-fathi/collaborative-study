@@ -40,7 +40,7 @@ export default function TextModel({ isVisible = false, title, onClose, clicked})
 
     const handelSubmit=(e)=>{
       e.preventDefault();
-      clicked( drag.deltaPosition.x, drag.deltaPosition.y, equation );
+      clicked( drag.deltaPosition.x.toFixed(0), drag.deltaPosition.y.toFixed(0), equation );
       resetState()
     }
 
@@ -97,8 +97,8 @@ export default function TextModel({ isVisible = false, title, onClose, clicked})
                         <div style={{height: '170px', width: '100%', padding: '5px'}}>
                             <Draggable onDrag={handleDrag} bounds="parent" {...dragHandlers}>
                                 <div className="box">
-                                <div>deltas</div>
-                                <div>x: {deltaPosition.x.toFixed(0)}, y: {deltaPosition.y.toFixed(0)}</div>
+                                <div>{equation}</div>
+                                {/* <div>x: {deltaPosition.x.toFixed(0)}, y: {deltaPosition.y.toFixed(0)}</div> */}
                                 </div>
                             </Draggable>
                         </div>

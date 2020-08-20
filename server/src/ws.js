@@ -42,6 +42,9 @@ wss.on("connection", function connection(ws, req) {
         case "drawing":
           broadcast(WebSocket, clients, ws, room, data);
           break;
+        case "erasing":
+          broadcast(WebSocket, clients, ws, room, data);
+          break;
         default:
           break;
       }

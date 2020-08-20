@@ -1,7 +1,16 @@
 import React, { Component, useEffect, useState, useContext, useRef } from "react";
 import draw ,{ writeText }from "../../utils/draw";
 import TextModel from './TextModel';
+import erase from "../../utils/erase";
+
 import "./Whiteboard.css";
+import plateColor from "./plateColor.svg";
+import undoIcon from "./undoIcon.svg";
+import pencil from "./pencil.svg";
+import eraserIcon from "./eraser.svg";
+import eraserImg from "./eraser.png";
+import brushImg from "./brush.png";
+import saveIcon from "./saveIcon.png";
 
 import { RoomContext } from "../../context";
 
@@ -15,6 +24,8 @@ const Whiteboard = () => {
     setCtx,
     drawing,
     setDrawing,
+    erasing,
+    setErasing,
     x,
     setX,
     y,
@@ -34,8 +45,26 @@ const Whiteboard = () => {
   const [lastDrawings, setLastDrawings] = useState([]);
   const [storedDrawings, setStoredDrawings] = useState([]);
 
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [isErasing, setIsErasing] = useState(false);
+  const [width, setWidth] = useState(false);
+  const [height, setheight] = useState(false);
+
   useEffect(() => {
     setCtx(canvas.current.getContext("2d"));
+  }, []);
+  
+  const updateWindowDimensions = ()=>{
+    setWidth(window.innerWidth - 280);
+    setheight(window.innerHeight - 65);
+  }
+
+  useEffect(() => {
+    updateWindowDimensions();
+    window.addEventListener('resize', updateWindowDimensions);
+    return () => {
+      window.removeEventListener('resize', updateWindowDimensions);
+    }
   }, []);
 
   /* 
@@ -45,11 +74,14 @@ const Whiteboard = () => {
 	*/
   const mouseDownHandler = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
-
-    setDrawing(true);
     setX(offsetX);
     setY(offsetY);
-    setLastDrawings([]);
+
+    if (isErasing) {
+      setErasing(true);
+    } else if (isDrawing) {
+      setDrawing(true);
+    }
   };
 
   /* 
@@ -60,22 +92,28 @@ const Whiteboard = () => {
   const mouseUpHandler = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
 
-    if (!drawing) return;
+    if (isDrawing && drawing) {
+      setDrawing(false);
+      draw(
+        ctx,
+        x,
+        y,
+        offsetX,
+        offsetY,
+        color,
+        currentRoom,
+        webSocketClient,
+        true
+      );
 
-    setDrawing(false);
-    draw(
-      ctx,
-      x,
-      y,
-      offsetX,
-      offsetY,
-      color,
-      currentRoom,
-      webSocketClient,
-      true
-    );
+      setStoredDrawings([...storedDrawings, lastDrawings]);
+      return;
+    }
 
-    setStoredDrawings([...storedDrawings, lastDrawings]);
+    if (isErasing && erasing) {
+      setErasing(false);
+      return;
+    }
   };
 
   /* 
@@ -86,27 +124,33 @@ const Whiteboard = () => {
   const mouseMoveHandler = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
 
-    if (!drawing) return;
+    if (isDrawing && drawing) {
+      draw(
+        ctx,
+        x,
+        y,
+        offsetX,
+        offsetY,
+        color,
+        currentRoom,
+        webSocketClient,
+        true
+      );
 
-    draw(
-      ctx,
-      x,
-      y,
-      offsetX,
-      offsetY,
-      color,
-      currentRoom,
-      webSocketClient,
-      true
-    );
+      setX(offsetX);
+      setY(offsetY);
 
-    setX(offsetX);
-    setY(offsetY);
+      setLastDrawings([
+        ...lastDrawings,
+        { x0: x, y0: y, x1: offsetX, y1: offsetY },
+      ]);
+    }
 
-    setLastDrawings([
-      ...lastDrawings,
-      { x0: x, y0: y, x1: offsetX, y1: offsetY },
-    ]);
+    if (isErasing && erasing) {
+      erase(ctx, offsetX, offsetY, currentRoom, webSocketClient, true);
+    }
+
+    return;
   };
 
   /* 
@@ -159,8 +203,6 @@ const Whiteboard = () => {
     console.log("storedDrawings after", storedDrawings);
   };
 
-  const [ text, setText] = useState('');
-
   const handleWriteText = (x,y,text) => {
     writeText(
       ctx,
@@ -174,51 +216,40 @@ const Whiteboard = () => {
     );
   }
 
-  // const [equationList, setEquationList] = useState([]);
-  // // handle click event of the Add button
-  // const handleAddClick = (index) => {
-  //   setEquationList([...equationList, { text : "" }]);
-  //   handleWriteText(index)
-  // };
-  //   // handle input change
-  //   const handleInputChange = (e, index) => {
-  //     const { name, value } = e.target;
-  //     const list = [...equationList];
-  //     list[index][name] = value;
-  //     setEquationList(list);
-  //   };
-  
-  //   // handle click event of the Remove button
-  //   const handleRemoveClick = index => {
-  //     const list = [...equationList];
-  //     list.splice(index, 1);
-  //     setEquationList(list);
-  //   };
+  const handlePen = (e) => {
+    e.preventDefault();
 
+    canvas.current.style.cursor = `crosshair`;
 
-    // const handleDrag = (e, ui) => {
-    //   const {x, y} = drag.deltaPosition;
-    //   setDrag({
-    //   ...drag,
-    //   deltaPosition: {
-    //     x: x + ui.deltaX,
-    //     y: y + ui.deltaY,
-    //   }});
-    // };
-  
-    // const onStart = () => {
-    //   setDrag({...drag,activeDrags: ++drag.activeDrags});
-    // };
-  
-    // const onStop = () => {
-    //   setDrag({...drag,activeDrags: --drag.activeDrags});
-    // };
+    setIsDrawing(true);
+    setIsErasing(false);
+    setLastDrawings([]);
+  };
 
-    // const dragHandlers = {onStart: onStart, onStop: onStop};
-    // const {deltaPosition} = drag;
+  // eraser logic
+  const handleEraser = (e) => {
+    e.preventDefault();
+
+    canvas.current.style.cursor = `url(${eraserImg}) 1 10, auto`;
+
+    setIsErasing(true);
+    setIsDrawing(false);
+  };
+
+  // saving button
+  const handleSave = (e) => {
+    e.preventDefault();
+
+    const image = canvas.current
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+
+    console.log(image);
+    window.location.href = image;
+  };
 
   return (
-    <div>
+    <div className="whiteboard">
       <TextModel
         clicked={handleWriteText}
         isVisible={isModal}
@@ -227,132 +258,45 @@ const Whiteboard = () => {
       />
       <canvas
         className="canvas"
-        width="600"
-        height="400"
+        width={width}
+        height={height}
         ref={canvas}
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
         onMouseOut={mouseUpHandler}
         onMouseMove={mouseMoveHandler}
       ></canvas>
+      <ul className="tools">
+        <li className="tools_item">
+          <div className="tools_item-button" title="Color">
+            <img src={plateColor} alt="Color" />
+            <input className="plate-color" onChange={handleColorChange} ref={colorPicker} type="color" />
+            <div className="packed__color" style={{backgroundColor:color}}></div>
+          </div>
+        </li>
+        <li className="tools_item" title="Undo">
+          <img src={undoIcon} alt="undoIcon" onClick={handleUndo} ref={btnUndo}/>
+        </li>
+        <li className="tools_item" title="Write text">
+          <button onClick={()=>{ setIsModal(true); }} >
+            A-a
+          </button>
+        </li>
+        <li className="tools_item" title="Eraser">
+          <img src={eraserIcon} alt="Eraser" onClick={handleEraser}/>
+        </li>
+        <li className="tools_item" title="Draw">
+          <img src={brushImg} alt="pencil" onClick={handlePen}/>
+        </li>
+        <li className="tools_item" title="Save Board">
+          <img src={saveIcon} alt="saveicon" onClick={handleSave} />
+        </li>
 
-      <input onChange={handleColorChange} ref={colorPicker} type="color" />
-      <button onClick={handleUndo} ref={btnUndo}>
-        undo
-      </button>
-
-      <button onClick={()=>{ setIsModal(true); }} >
-        model
-      </button>
-
-      <button onClick={()=>{ handleWriteText(); }} >
-        write text
-      </button>
-      <div>
-        {/* <DraggableComponent/> */}
-        {/* { equationList && equationList.map((x, i) => {
-          return (
-            <div className="box">
-              <input
-                name="text"
-                placeholder="Enter equation here "
-                value={x.text}
-                onChange={e => handleInputChange(e, i)}
-              />
-              <div className="btn-box">
-                {equationList.length !== 1 && <button
-                  className="mr10"
-                  onClick={() => handleRemoveClick(i)}> Remove </button>}
-                {equationList.length - 1 === i && <button onClick={()=>handleAddClick(i)}>Add</button>}
-              </div>
-            </div>
-          );
-        }) } */}
-      </div>
+      </ul>
     </div>
   );
 };
 
 export default Whiteboard;
 
-// export class DraggableComponent extends Component {
-
-//   //  const [ drag ,setDrag ] = useState({
-//   //   activeDrags: 0,
-//   //   deltaPosition: {
-//   //     x
-//   // });
-
-//   state = {
-//     activeDrags: 0,
-//     deltaPosition: {
-//       x: 0, y: 0
-//     }
-//     // ,
-//     // controlledPosition: {
-//     //   x: -400, y: 200
-//     // }
-//   };
-
-//   const handleDrag = (e, ui) => {
-//     const {x, y} = this.state.deltaPosition;
-//     this.setState({
-//       deltaPosition: {
-//         x: x + ui.deltaX,
-//         y: y + ui.deltaY,
-//       }
-//     });
-//   };
-
-//   const onStart = () => {
-//     this.setState({activeDrags: ++this.state.activeDrags});
-//   };
-
-//   const onStop = () => {
-//     this.setState({activeDrags: --this.state.activeDrags});
-//   };
-
-//   // For controlled component
-//   // adjustXPos = (e) => {
-//   //   e.preventDefault();
-//   //   e.stopPropagation();
-//   //   const {x, y} = this.state.controlledPosition;
-//   //   this.setState({controlledPosition: {x: x - 10, y}});
-//   // };
-
-//   // adjustYPos = (e) => {
-//   //   e.preventDefault();
-//   //   e.stopPropagation();
-//   //   const {controlledPosition} = this.state;
-//   //   const {x, y} = controlledPosition;
-//   //   this.setState({controlledPosition: {x, y: y - 10}});
-//   // };
-
-//   // onControlledDrag = (e, position) => {
-//   //   const {x, y} = position;
-//   //   this.setState({controlledPosition: {x, y}});
-//   // };
-
-//   // onControlledDragStop = (e, position) => {
-//   //   this.onControlledDrag(e, position);
-//   //   this.onStop();
-//   // };
-
-//   render() {
-//     const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
-//     const {deltaPosition, controlledPosition} = this.state;
-//     return (
-//       <div className="box" style={{height: '500px', width: '500px', position: 'relative', overflow: 'auto', padding: '0'}}>
-//         <div style={{height: '500px', width: '500px', padding: '10px'}}>
-//           <Draggable onDrag={this.handleDrag} bounds="parent" {...dragHandlers}>
-//             <div className="box">
-//               <div>I track my deltas</div>
-//               <div>x: {deltaPosition.x.toFixed(0)}, y: {deltaPosition.y.toFixed(0)}</div>
-//             </div>
-//           </Draggable>
-//         </div>
-//       </div>
-//     )
-//   }
-// }
 

@@ -24,6 +24,7 @@ const Rooms = () => {
   const [canvas, setCanvas] = useState(null);
   const [ctx, setCtx] = useState(null);
   const [drawing, setDrawing] = useState(false);
+  const [erasing, setErasing] = useState(false);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [color, setColor] = useState("");
@@ -52,6 +53,8 @@ const Rooms = () => {
     setCtx,
     drawing,
     setDrawing,
+    erasing,
+    setErasing,
     x,
     setX,
     y,

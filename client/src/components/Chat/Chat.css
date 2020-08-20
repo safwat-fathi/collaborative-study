@@ -1,13 +1,15 @@
 .chat {
   display: flex;
   flex-flow: column;
+  height: 100%;
 }
 
 .messages {
   display: flex;
-  background-color: #c7c7c7;
+  background-color: rgb(250, 250, 250);
   flex-flow: column;
-  height: 400px;
+  height: calc(100% - 75px);
+  max-height: 500px;
   overflow-y: auto;
 }
 
@@ -35,11 +37,27 @@
 }
 
 /* form styles */
-/* form {
+form {
   display: flex;
-  height: 50px;
-} */
+  height: 75px;
+}
 
+input[type="submit"] {
+  height: 50px;
+  width: 75px;
+  margin-top: 12px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+}
 input[type="text"] {
   flex: 1;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  height: 50px;
+  margin-top: 12px;
+}
+input[type="text"]:focus,input[type="submit"]  {
+  outline: none;
 }
