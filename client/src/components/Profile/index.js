@@ -50,7 +50,7 @@ const Profile = () => {
   return (
     <>
       <Navbar edit />
-      <div className="col-md-6 offset-md-3 col mt-5">
+      <div className="col-md-4 offset-md-4 col mt-5">
         <h3 className="text-center">edit profile</h3>
         <form className="form-group" onSubmit={handleSubmit}>
           <div className="form-group">

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
 // DB driver & User model
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
@@ -132,6 +133,49 @@ router.post("/edit", auth, async (req, res, next) => {
 
   next();
 });
+
+// -------------
+// upload files
+// -------------
+
+// multer configs
+let storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "src/uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+let upload = multer({ storage }).array("file");
+
+router.post(
+  "/uploads",
+  /* auth, */ async (req, res, next) => {
+    try {
+      upload(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+          return res.status(500).json({
+            message: err,
+          });
+        } else if (err) {
+          return res.status(500).json({
+            message: err,
+          });
+        }
+        console.log(req.file);
+        return res.status(200).send(req.file);
+      });
+    } catch (err) {
+      res.status(400).json({
+        message: err,
+      });
+    }
+
+    next();
+  }
+);
 
 module.exports = router;
 

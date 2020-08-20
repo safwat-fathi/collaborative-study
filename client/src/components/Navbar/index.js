@@ -3,13 +3,13 @@ import { Link , useParams } from "react-router-dom";
 
 const RoomName = () => {
   let  { name }  = useParams();
-  return (<h3 className="heading col-7 text-center"> Room : { name } </h3>)
+  return (<h3 className="heading col-7 text-center text-capitalize"> Room : { name } </h3>)
 }
 
  const Navbar = (props)=>{
     return (
         <nav className="navbar col-12 navbar-expand-sm navbar-dark bg-primary">
-        <a className="navbar-brand col-2 text-center" >
+        <a className="navbar-brand col-2 text-center text-capitalize" >
           collaborative-study
         </a>
         <button

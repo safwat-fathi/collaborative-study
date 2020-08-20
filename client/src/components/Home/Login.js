@@ -32,7 +32,8 @@ const Login = (props) => {
   };
 
   return (
-    <div className="col-md-6 offset-md-3 col mt-5">
+    <div className="col-md-4 offset-md-4 col mt-5">
+      <h2 className="text-center mb-5">Collaborative Study</h2>
       <h3 className="text-center">Login</h3>
       <form onSubmit={handleSubmit}>
         <div className="form-group">

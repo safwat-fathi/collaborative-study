@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState, useContext, useRef } from "react";
 import draw ,{ writeText }from "../../utils/draw";
 import TextModel from './TextModel';
+import axios from "axios";
 import erase from "../../utils/erase";
 
 import "./Whiteboard.css";
@@ -44,11 +45,14 @@ const Whiteboard = () => {
   // for undo or redo history
   const [lastDrawings, setLastDrawings] = useState([]);
   const [storedDrawings, setStoredDrawings] = useState([]);
-
+  // drawing or erasing state
   const [isDrawing, setIsDrawing] = useState(false);
   const [isErasing, setIsErasing] = useState(false);
+  // set width & height canves
   const [width, setWidth] = useState(false);
   const [height, setheight] = useState(false);
+  // file upload state
+  const [files, setFiles] = useState([]);
 
   useEffect(() => {
     setCtx(canvas.current.getContext("2d"));
@@ -248,6 +252,38 @@ const Whiteboard = () => {
     window.location.href = image;
   };
 
+  // upload file handler
+  const uploadInputHandler = (e) => {
+    if (e.target.files.length > 1) {
+      let currentFiles = files;
+      currentFiles.push(...e.target.files);
+      setFiles(currentFiles);
+      return;
+    }
+
+    let currentFiles = files;
+    let savedFile = e.target.files[0];
+    currentFiles.push(savedFile);
+    setFiles(currentFiles);
+  };
+
+  const uploadBtnHandler = (e) => {
+    console.log(files);
+    // const data = new FormData();
+
+    // for (let i = 0; i < files.length; i++) {
+    //   data.append("file", files[i]);
+    // }
+    axios
+      .post("http://localhost:4000/users/uploads", files, {})
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="whiteboard">
       <TextModel
@@ -291,8 +327,14 @@ const Whiteboard = () => {
         <li className="tools_item" title="Save Board">
           <img src={saveIcon} alt="saveicon" onClick={handleSave} />
         </li>
-
       </ul>
+
+        <div className="upload" title="upload file on Board">
+          {/* upload file input */}
+          <input type="file" name="file" onChange={uploadInputHandler} multiple />
+          <button className="btn btn-light" onClick={uploadBtnHandler}>upload</button>
+        </div>
+
     </div>
   );
 };

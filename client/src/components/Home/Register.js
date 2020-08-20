@@ -100,7 +100,7 @@ class Register extends Component {
 
   render() {
     return (
-      <div className="col-md-6 offset-md-3 col mt-5">
+      <div className="col-md-4 offset-md-4 col mt-5">
         <h3 className="text-center">Register</h3>
         <form className="form-group" onSubmit={this.handleSubmit}>
           <div className="form-group">
