@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import './login.css';
+import splashimage from './splash.jpg';
 import { UserContext } from "../../context";
 
 const Login = (props) => {
@@ -35,7 +36,7 @@ const Login = (props) => {
     <>
     <div className="col-md-4 offset-md-4 col mt-5" onClick={()=>{setAddclass(true)}}>
       <div className={`cover ${addClass ? 'd-none':''}`}>
-        <img src="https://wearepf.com/wp-content/uploads/2015/05/37357047_m.jpg" alt="splash image" id="icon"/>
+        <img src={splashimage} alt="splash image" id="icon"/>
       </div>
       <h2 className="text-center mb-5">Collaborative Study</h2>
       <h3 className="text-center">Login</h3>
