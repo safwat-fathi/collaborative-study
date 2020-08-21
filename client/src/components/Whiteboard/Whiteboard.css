@@ -44,6 +44,7 @@ canvas {
 }
 
 .tools_item img{
+  cursor: pointer;
   display: inline-block;
   padding: 5px;
   max-width: 42px;
@@ -52,6 +53,7 @@ canvas {
   max-height: 42px;
 }
 .plate-color{
+  cursor: pointer;
   display: block;
   width: 100%;
   height: 100%;

@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
-
+import './login.css';
 import { UserContext } from "../../context";
 
 const Login = (props) => {
   const { setIsLoggedIn } = useContext(UserContext);
-
+  const [ addClass ,setAddclass] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
@@ -32,7 +32,11 @@ const Login = (props) => {
   };
 
   return (
-    <div className="col-md-4 offset-md-4 col mt-5">
+    <>
+    <div className="col-md-4 offset-md-4 col mt-5" onClick={()=>{setAddclass(true)}}>
+      <div className={`cover ${addClass ? 'd-none':''}`}>
+        <img src="https://wearepf.com/wp-content/uploads/2015/05/37357047_m.jpg" alt="splash image" id="icon"/>
+      </div>
       <h2 className="text-center mb-5">Collaborative Study</h2>
       <h3 className="text-center">Login</h3>
       <form onSubmit={handleSubmit}>
@@ -69,6 +73,7 @@ const Login = (props) => {
       </form>
       <div>{feedbackMsg}</div>
     </div>
+    </>
   );
 };
 
