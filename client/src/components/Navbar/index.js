@@ -1,23 +1,28 @@
 import React from 'react'
-import { Link } from "react-router-dom";
+import { Link , useParams } from "react-router-dom";
 
-export default function index(props) {
+const RoomName = () => {
+  let  { name }  = useParams();
+  return (<h3 className="heading col-7 text-center text-capitalize"> Room : { name } </h3>)
+}
+
+ const Navbar = (props)=>{
     return (
-        <nav className="navbar col navbar-expand-sm navbar-dark bg-primary">
-        <a className="navbar-brand" href="#">
+        <nav className="navbar col-12 navbar-expand-sm navbar-dark bg-primary">
+        <a className="navbar-brand col-2 text-center text-capitalize" >
           collaborative-study
         </a>
         <button
           className="navbar-toggler"
           type="button"
-          data-toggle="collapse"
-          data-target="#navbarColor01"
-          aria-controls="navbarColor01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
+        { !props.roomname ? null  :  (
+            <RoomName/>
+          )
+        }
 
         <div className="collapse navbar-collapse" id="navbarColor01">
           <ul className={`navbar-nav ${ props.exit || props.edit ?'ml-auto':'mr-auto'}`}>
@@ -63,3 +68,5 @@ export default function index(props) {
       </nav>
     )
 }
+
+export default Navbar;

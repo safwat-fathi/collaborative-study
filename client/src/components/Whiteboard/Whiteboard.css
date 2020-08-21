@@ -1,3 +1,99 @@
 canvas {
-  border: 2px solid yellowgreen;
+  border: .5px solid #ddd;
+}
+.whiteboard{
+  width: calc( 100% - 235px );
+  position: relative;
+}
+
+.box {
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 3px;
+  width: 60px;
+  height: 60px;
+  padding: 10px;
+  float: left;
+  font-size: 12px;
+}
+
+.tools{
+  list-style: none;
+  position: absolute;
+  width: auto;
+  border: 1px solid #ddd;
+  margin: 0;
+  padding: 10px 5px;
+  left: 15px;
+  top: 15px;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+}
+.tools_item {
+  margin: 10px 0;
+  cursor: pointer;
+}
+.tools_item-button{
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.tools_item img{
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px;
+  max-width: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  max-height: 42px;
+}
+.plate-color{
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 0;
+}
+.packed__color{
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+  border: none;
+  background-color: black;
+}
+
+.upload{
+  display: flex;
+  width: 299px;
+  height: 50px;
+  border:1px solid #ddd;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  font-size: 14px;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+.upload input{
+  padding: 10px;
+  display: inline-block;
+  width: 220px;
+}
+.upload button{
+  border-radius: 20px;
 }

@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
-
+import './login.css';
+import splashimage from './splash.jpg';
 import { UserContext } from "../../context";
 
-const Login = () => {
+const Login = (props) => {
   const { setIsLoggedIn } = useContext(UserContext);
-
+  const [ addClass ,setAddclass] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
@@ -32,7 +33,12 @@ const Login = () => {
   };
 
   return (
-    <div className="col-md-6 offset-md-3 col mt-5">
+    <>
+    <div className="col-md-4 offset-md-4 col mt-5" onClick={()=>{setAddclass(true)}}>
+      <div className={`cover ${addClass ? 'd-none':''}`}>
+        <img src={splashimage} alt="splash image" id="icon"/>
+      </div>
+      <h2 className="text-center mb-5">Collaborative Study</h2>
       <h3 className="text-center">Login</h3>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -60,14 +66,15 @@ const Login = () => {
           type="submit"
           value="Login"
         />
-        <div className="form-group text-right mt-2">
-          {/* <NavLink to="register" exact>
-            register
-          </NavLink>   */}
+        <div className="form-group">
+          <div className="btn form-group text-right mt-2" onClick={ ()=> props.setForm(false) }>
+              goto register
+          </div>
         </div>
       </form>
       <div>{feedbackMsg}</div>
     </div>
+    </>
   );
 };
 

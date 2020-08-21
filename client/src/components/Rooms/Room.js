@@ -101,7 +101,7 @@ const Room = () => {
 
   return (
     <>
-      <Navbar exit />
+      <Navbar roomname exit />
       <div className="Room">
         <Whiteboard />
         <Chat />

@@ -100,9 +100,9 @@ class Register extends Component {
 
   render() {
     return (
-      <div className="col-md-6 offset-md-3 col mt-5">
+      <div className="col-md-4 offset-md-4 col mt-5">
         <h3 className="text-center">Register</h3>
-        <form className="form-group text-center" onSubmit={this.handleSubmit}>
+        <form className="form-group" onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label htmlFor="nameInput">name</label>
             <input
@@ -155,6 +155,9 @@ class Register extends Component {
               type="submit"
               value="Regitser"
             />
+          </div>
+          <div className="btn form-group text-right mt-2" onClick={ ()=> this.props.setForm(true) }>
+            back to login
           </div>
         </form>
         <div>{this.state.feedBackMsg}</div>

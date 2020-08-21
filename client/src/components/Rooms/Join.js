@@ -163,26 +163,26 @@ const Join = () => {
 
       <div className="container-fluid">
         <div className="row">
-          <div className="col-4">
-            <div className="card text-white bg-primary mt-3">
-              <div className="card-header">your profile</div>
+          <div className="col-3  offset-sm-1">
+            <div className="card bg-light mt-3">
+              <div className="card-header text-capitalize">your profile</div>
               <div className="card-body">
                 <h4 className="card-title">name : {userName}</h4>
                 <p className="card-text">email : {userEmail}</p>
               </div>
             </div>
           </div>
-          <div className="col-8">
+          <div className="col-6  offset-sm-1">
             {rooms.map((room) => {
               return (
                 <div key={room._id} className="card bg-light mt-3">
-                  <div className="card-header">public room</div>
+                  <div className="card-header text-capitalize">public room</div>
                   <div className="card-body">
-                    <h4 className="card-title">room name : {room.name}</h4>
+                    <h4 className="card-title text-capitalize">room name : {room.name}</h4>
                     {/* <h4 className="card-text">creator name: john</h4> */}
-                    <h4 className="card-text">
+                    <p className="card-text text-capitalize">
                       room descriptiont: {room.desc}
-                    </h4>
+                    </p>
                     {/* <p className="card-text">members : 5</p> */}
                     <p className="card-text">
                       <Link
@@ -191,7 +191,7 @@ const Join = () => {
                       >
                         <button
                           type="button"
-                          className="btn btn-primary btn-lg btn-block"
+                          className="btn btn-primary btn-lg d-block mx-auto text-center text-capitalize"
                         >
                           join room
                         </button>
