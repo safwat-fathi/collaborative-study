@@ -28,11 +28,9 @@ const FileUpload = () => {
   const uploadBtnHandler = (e) => {
     e.preventDefault();
 
-    console.log(files);
-
     const data = new FormData();
-    data.append("file", files[0]);
-    console.log(data);
+    data.append("file", files);
+
     axios
       .post("http://localhost:4000/users/uploads", data, {
         headers: {
@@ -40,7 +38,7 @@ const FileUpload = () => {
         },
       })
       .then((res) => {
-        console.log(res.statusText);
+        console.log(res.status);
       })
       .catch((err) => {
         console.log(err);
