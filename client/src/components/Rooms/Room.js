@@ -3,6 +3,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 // ---------------------
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
+import FilesList from "../FilesList";
 // ---------------------
 import { RoomContext } from "../../context";
 import "./Room.css";
@@ -26,6 +27,7 @@ const Room = () => {
     ctx,
     drawingDataFromWS,
     setDrawingDataFromWS,
+    files,
   } = useContext(RoomContext);
 
   useEffect(() => {
@@ -89,6 +91,8 @@ const Room = () => {
           const { x, y } = await drawingDataFromWS;
           erase(ctx, x, y, currentRoom);
           break;
+        default:
+          break;
       }
     } catch (err) {
       console.log(err);
@@ -101,6 +105,7 @@ const Room = () => {
       <div className="Room">
         <Whiteboard />
         <Chat />
+        {/* <FilesList /> */}
       </div>
     </>
   );

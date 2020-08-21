@@ -54,11 +54,11 @@ const Profile = () => {
         <h3 className="text-center">edit profile</h3>
         <form className="form-group" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="NewemailInput">New Name</label>
+            <label htmlFor="NewnameInput">New Name</label>
             <input
               className="form-control"
-              id="NewemailInput"
-              type="email"
+              id="NewnameInput"
+              type="text"
               placeholder="Enter New Name"
               onChange={(e) => setNewName(e.target.value)}
             />

@@ -140,19 +140,20 @@ router.post("/edit", auth, async (req, res, next) => {
 
 // multer configs
 let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "src/uploads");
+  destination: function (req, file, cb) {
+    console.log("asdasd");
+    cb(null, "./src/uploads");
   },
-  filename: (req, file, cb) => {
+  filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-let upload = multer({ storage }).array("file");
+let upload = multer({ storage }).single("file");
 
 router.post(
   "/uploads",
-  /* auth, */ async (req, res, next) => {
+  /* auth, */ (req, res, next) => {
     try {
       upload(req, res, (err) => {
         if (err instanceof multer.MulterError) {
@@ -164,7 +165,7 @@ router.post(
             message: err,
           });
         }
-        console.log(req.file);
+
         return res.status(200).send(req.file);
       });
     } catch (err) {
