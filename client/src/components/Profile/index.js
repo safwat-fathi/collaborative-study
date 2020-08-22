@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Navbar from "../Navbar";
+import './style.css';
+import { RoomContext } from "../../context";
 
 const Profile = () => {
+  const [edit, setEdit] = useState(true);
   const [newName, setNewName] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
-
+  const { userName, userEmail } = useContext(RoomContext);
   useEffect(() => {
     // clearing state after user is done editing
     return () => {
@@ -20,9 +23,16 @@ const Profile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("submitted");
-    if (newName === "" || oldPassword === "" || newPassword === "") {
-      setFeedbackMsg("Please Check your Email or password");
-      return;
+    if(edit){
+      if ( newName === "") {
+        setFeedbackMsg("Please Check your username");
+        return;
+      }
+    } else {
+      if ( oldPassword === "" || newPassword === "") {
+        setFeedbackMsg("Please Checkyour password");
+        return;
+      }
     }
     /* 
 		request body should contain this object:
@@ -31,66 +41,118 @@ const Profile = () => {
 			type of data to change: 'name/password', 
 			data: {old data, new data}
 		} 
-		*/
-
-    // axios
-    //   .post("http://localhost:4000/users/login", { email, password })
-    //   .then((res) => {
-    //     let token = res.data.token;
-
-    //     localStorage.setItem("userToken", token);
-    //     setIsLoggedIn(true);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setFeedbackMsg("Login failed, Please Check your Email or password");
-    //   });
+    */
+    // console.log(userEmail,newName,oldPassword,newPassword)
+    const postbody = {}
+    if( edit ){
+      postbody = {
+        email : userEmail,
+        type : 'name',
+        name: newName,
+      }
+    } else {
+      postbody = {
+        email : userEmail,
+        type : 'password',
+        name:'',
+        oldPassword : oldPassword,
+        newPassword : newPassword
+      }
+    }
+    let localToken = localStorage.getItem("userToken");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localToken}`,
+    };
+    axios
+      .post(
+        "http://localhost:4000/users/edit",
+        postbody, {
+          headers: headers,
+        }
+      )
+      .then((res) => {
+        console.log("res.data.message>>>>",res.data.message)
+        // if (res.data.message === "room created successfully") {
+        //   console.log("res.data.message ", res.data.message);
+        //   onClose();
+        //   alert(res.data.message);
+        // }
+      })
+      .catch((err) => {
+        console.log("error>>",err);
+      });
   };
 
   return (
     <>
       <Navbar edit />
-      <div className="col-md-4 offset-md-4 col mt-5">
-        <h3 className="text-center">edit profile</h3>
-        <form className="form-group" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="NewemailInput">New Name</label>
-            <input
-              className="form-control"
-              id="NewemailInput"
-              type="email"
-              placeholder="Enter New Name"
-              onChange={(e) => setNewName(e.target.value)}
-            />
+      <div className="col-md-4 offset-md-4 col mt-5 edit-profile">
+        <h3 className="edit-title text-capitalize">edit profile</h3>
+        <div className="form-group">
+        <div class="switch">
+          <span>
+            edit user name
+          </span>
+          <div class="toggle-switch">
+            <input type="checkbox" id="toggle" class="button" onChange={ ()=> setEdit(!edit) } />
+            <label for="toggle" class="border">toggle button</label>
           </div>
+          <span>
+           edit password
+          </span>
+        </div>
 
-          {/* change password */}
-          <div className="form-group">
-            <label htmlFor="passwordInput">Old Password</label>
-            <input
-              className="form-control"
-              id="passwordInput"
-              type="password"
-              placeholder="Enter Old Password"
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
+        </div>
+        <form className="form-group" onSubmit={handleSubmit}>
+          
+          { edit ? (
+            <>
+              {/* change name */}
+              <div className="form-group">
+                <label htmlFor="NewemailInput">New Name</label>
+                <input
+                  className="form-control"
+                  id="NewemailInput"
+                  type="text"
+                  placeholder="john doo"
+                  onChange={(e) => setNewName(e.target.value)}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+            {/* change password */}
+            <div className="form-group">
+              <label htmlFor="passwordInput">Old Password</label>
+              <input
+                className="form-control"
+                id="passwordInput"
+                type="password"
+                placeholder="..."
+                onChange={(e) => setOldPassword(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
             <label htmlFor="NewpasswordInput">New Password</label>
             <input
               className="form-control"
               id="NewpasswordInput"
               type="password"
-              placeholder="Enter New Password"
+              placeholder="..."
               onChange={(e) => setNewPassword(e.target.value)}
             />
           </div>
+            </>
+          )
+          }
           <input
             className="btn btn-primary btn-lg btn-block"
             type="submit"
             value="Save"
           />
         </form>
+
         <div>{feedbackMsg}</div>
       </div>
     </>

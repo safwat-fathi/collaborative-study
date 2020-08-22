@@ -34,12 +34,14 @@ const Login = (props) => {
 
   return (
     <>
-    <div className="col-md-4 offset-md-4 col mt-5" onClick={()=>{setAddclass(true)}}>
+    <div className="col-12">
+      <h2 className="text-center mt-5">Collaborative Study</h2>
+    </div>
+    <div className="col-md-4 offset-md-4 col mt-5 login-profile" onClick={()=>{setAddclass(true)}}>
       <div className={`cover ${addClass ? 'd-none':''}`}>
         <img src={splashimage} alt="splash image" id="icon"/>
       </div>
-      <h2 className="text-center mb-5">Collaborative Study</h2>
-      <h3 className="text-center">Login</h3>
+      <h3 className="text-center mt-2 login-title">Login</h3>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="emailInput">email</label>
@@ -67,8 +69,8 @@ const Login = (props) => {
           value="Login"
         />
         <div className="form-group">
-          <div className="btn form-group text-right mt-2" onClick={ ()=> props.setForm(false) }>
-              goto register
+          <div className="btn form-group text-right mt-2 text-capitalize" onClick={ ()=> props.setForm(false) }>
+               register
           </div>
         </div>
       </form>

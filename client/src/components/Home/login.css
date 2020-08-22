@@ -42,3 +42,29 @@
 		opacity: 0;
 	}
 }
+/* ///////
+
+/////// */
+.login-title{
+    font-size: 30px;
+    color: #fff;
+    line-height: 1.2;
+    text-align: center;
+    width: 100%;
+    background-color: #0069d9;
+    padding-top: 40px;
+    padding-bottom: 39px; 
+    position: absolute;
+    right: 0;
+    left: 0;
+    top:-10px;
+
+}
+.login-profile{
+    position: relative;
+    padding-top: 125px;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+}
