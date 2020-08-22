@@ -7,32 +7,35 @@ import { RoomContext } from "../../context";
 const FileUpload = () => {
   const roomCTX = useContext(RoomContext);
 
-  // file upload state
-  const { webSocketClient, currentRoom, files, setFiles } = roomCTX;
+  const { files, setFiles } = roomCTX;
+
+  const [fileNames, setFileNames] = useState([]);
 
   const uploadInputHandler = (e) => {
-    // if (e.target.files.length > 1) {
-    //   let currentFiles = files;
-    //   currentFiles.push(...e.target.files);
-    //   setFiles(currentFiles);
-    //   return;
-    // }
-
-    // let currentFiles = files;
-    // let savedFile = e.target.files[0];
-    // currentFiles.push(savedFile);
-    // setFiles(currentFiles);
-    setFiles(e.target.files[0]);
+    setFiles(e.target.files);
   };
+
+  useEffect(() => {
+    if (files !== null) {
+      for (let i = 0; i < files.length; i++) {
+        fileNames.push(files[i].name);
+      }
+
+      // console.log(fileNames);
+    }
+  });
 
   const uploadBtnHandler = (e) => {
     e.preventDefault();
-
+    console.log(files);
     const data = new FormData();
-    data.append("file", files);
+
+    for (let i = 0; i < files.length; i++) {
+      data.append("file", files[i]);
+    }
 
     axios
-      .post("http://localhost:4000/users/uploads", data, {
+      .post("http://localhost:4000/rooms/uploads", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -49,6 +52,17 @@ const FileUpload = () => {
     <div>
       <input type="file" name="file" onChange={uploadInputHandler} multiple />
       <button onClick={uploadBtnHandler}>upload</button>
+
+      <>
+        {fileNames.map((fileName) => {
+          return (
+            <a
+              download={`${fileName}`}
+              href={`./uploads/${fileName}`}
+            >{`${fileName}`}</a>
+          );
+        })}
+      </>
     </div>
   );
 };

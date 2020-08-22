@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
 // DB driver & User model
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
@@ -126,46 +125,6 @@ router.post("/edit", auth, async (req, res, next) => {
       message: "success",
     });
   } catch (err) {
-    res.status(400).json({
-      message: err,
-    });
-  }
-
-  next();
-});
-
-// -------------
-// upload files
-// -------------
-
-// multer configs
-let storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-let upload = multer({ storage }).single("file");
-
-router.post("/uploads", (req, res, next) => {
-  try {
-    upload(req, res, function (err) {
-      if (err instanceof multer.MulterError) {
-        return res.status(500).json(err);
-      } else if (err) {
-        return res.status(500).json(err);
-      }
-    });
-
-    console.log("file received");
-    return res.status(200).json({
-      message: "success",
-    });
-  } catch (err) {
-    console.log(err);
     res.status(400).json({
       message: err,
     });
