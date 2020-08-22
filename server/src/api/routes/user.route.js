@@ -140,42 +140,39 @@ router.post("/edit", auth, async (req, res, next) => {
 
 // multer configs
 let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "src/uploads");
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads");
   },
-  filename: (req, file, cb) => {
+  filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-let upload = multer({ storage }).array("file");
+let upload = multer({ storage }).single("file");
 
-router.post(
-  "/uploads",
-  /* auth, */ async (req, res, next) => {
-    try {
-      upload(req, res, (err) => {
-        if (err instanceof multer.MulterError) {
-          return res.status(500).json({
-            message: err,
-          });
-        } else if (err) {
-          return res.status(500).json({
-            message: err,
-          });
-        }
-        console.log(req.file);
-        return res.status(200).send(req.file);
-      });
-    } catch (err) {
-      res.status(400).json({
-        message: err,
-      });
-    }
+router.post("/uploads", (req, res, next) => {
+  try {
+    upload(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+        return res.status(500).json(err);
+      } else if (err) {
+        return res.status(500).json(err);
+      }
+    });
 
-    next();
+    console.log("file received");
+    return res.status(200).json({
+      message: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: err,
+    });
   }
-);
+
+  next();
+});
 
 module.exports = router;
 

@@ -29,6 +29,8 @@ const Rooms = () => {
   const [y, setY] = useState(0);
   const [color, setColor] = useState("");
   const [drawingDataFromWS, setDrawingDataFromWS] = useState(null);
+  // uplaod file/s state
+  const [files, setFiles] = useState(null);
 
   const roomCTX = {
     rooms,
@@ -63,6 +65,8 @@ const Rooms = () => {
     setColor,
     drawingDataFromWS,
     setDrawingDataFromWS,
+    files,
+    setFiles,
   };
 
   return (

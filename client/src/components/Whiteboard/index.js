@@ -1,9 +1,19 @@
-import React, { Component, useEffect, useState, useContext, useRef } from "react";
-import draw ,{ writeText }from "../../utils/draw";
-import TextModel from './TextModel';
+import React, {
+  Component,
+  useEffect,
+  useState,
+  useContext,
+  useRef,
+} from "react";
+
+import FileUpload from "../FileUpload";
+import TextModel from "./TextModel";
+
+import draw, { writeText } from "../../utils/draw";
 import axios from "axios";
 import erase from "../../utils/erase";
 
+// styles & images
 import "./Whiteboard.css";
 import plateColor from "./plateColor.svg";
 import undoIcon from "./undoIcon.svg";
@@ -13,6 +23,7 @@ import eraserImg from "./eraser.png";
 import brushImg from "./brush.png";
 import saveIcon from "./saveIcon.png";
 
+// context
 import { RoomContext } from "../../context";
 
 const Whiteboard = () => {
@@ -40,7 +51,7 @@ const Whiteboard = () => {
   const colorPicker = useRef(null);
   const btnUndo = useRef(null);
 
-  // for text model 
+  // for text model
   const [isModal, setIsModal] = useState(false);
   // for undo or redo history
   const [lastDrawings, setLastDrawings] = useState([]);
@@ -57,18 +68,18 @@ const Whiteboard = () => {
   useEffect(() => {
     setCtx(canvas.current.getContext("2d"));
   }, []);
-  
-  const updateWindowDimensions = ()=>{
+
+  const updateWindowDimensions = () => {
     setWidth(window.innerWidth - 280);
     setheight(window.innerHeight - 65);
-  }
+  };
 
   useEffect(() => {
     updateWindowDimensions();
-    window.addEventListener('resize', updateWindowDimensions);
+    window.addEventListener("resize", updateWindowDimensions);
     return () => {
-      window.removeEventListener('resize', updateWindowDimensions);
-    }
+      window.removeEventListener("resize", updateWindowDimensions);
+    };
   }, []);
 
   /* 
@@ -171,7 +182,9 @@ const Whiteboard = () => {
 	undo handler
 	/////////////////
 	*/
-  const handleUndo = () => {
+  const handleUndo = (e) => {
+    e.preventDefault();
+
     ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
 
     if (!storedDrawings.length) {
@@ -207,18 +220,18 @@ const Whiteboard = () => {
     console.log("storedDrawings after", storedDrawings);
   };
 
-  const handleWriteText = (x,y,text) => {
+  const handleWriteText = (x, y, text) => {
     writeText(
       ctx,
       text,
-      (x * 2),
-      (y * 2),
+      x * 2,
+      y * 2,
       color,
       currentRoom,
       webSocketClient,
       true
     );
-  }
+  };
 
   const handlePen = (e) => {
     e.preventDefault();
@@ -252,38 +265,6 @@ const Whiteboard = () => {
     window.location.href = image;
   };
 
-  // upload file handler
-  const uploadInputHandler = (e) => {
-    if (e.target.files.length > 1) {
-      let currentFiles = files;
-      currentFiles.push(...e.target.files);
-      setFiles(currentFiles);
-      return;
-    }
-
-    let currentFiles = files;
-    let savedFile = e.target.files[0];
-    currentFiles.push(savedFile);
-    setFiles(currentFiles);
-  };
-
-  const uploadBtnHandler = (e) => {
-    console.log(files);
-    // const data = new FormData();
-
-    // for (let i = 0; i < files.length; i++) {
-    //   data.append("file", files[i]);
-    // }
-    axios
-      .post("http://localhost:4000/users/uploads", files, {})
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   return (
     <div className="whiteboard">
       <TextModel
@@ -306,39 +287,51 @@ const Whiteboard = () => {
         <li className="tools_item">
           <div className="tools_item-button" title="Color">
             <img src={plateColor} alt="Color" />
-            <input className="plate-color" onChange={handleColorChange} ref={colorPicker} type="color" />
-            <div className="packed__color" style={{backgroundColor:color}}></div>
+            <input
+              className="plate-color"
+              onChange={handleColorChange}
+              ref={colorPicker}
+              type="color"
+            />
+            <div
+              className="packed__color"
+              style={{ backgroundColor: color }}
+            ></div>
           </div>
         </li>
         <li className="tools_item" title="Undo">
-          <img src={undoIcon} alt="undoIcon" onClick={handleUndo} ref={btnUndo}/>
+          <img
+            src={undoIcon}
+            alt="undoIcon"
+            onClick={handleUndo}
+            ref={btnUndo}
+          />
         </li>
         <li className="tools_item" title="Write text">
-          <button onClick={()=>{ setIsModal(true); }} >
+          <button
+            onClick={() => {
+              setIsModal(true);
+            }}
+          >
             A-a
           </button>
         </li>
         <li className="tools_item" title="Eraser">
-          <img src={eraserIcon} alt="Eraser" onClick={handleEraser}/>
+          <img src={eraserIcon} alt="Eraser" onClick={handleEraser} />
         </li>
         <li className="tools_item" title="Draw">
-          <img src={brushImg} alt="pencil" onClick={handlePen}/>
+          <img src={brushImg} alt="pencil" onClick={handlePen} />
         </li>
         <li className="tools_item" title="Save Board">
           <img src={saveIcon} alt="saveicon" onClick={handleSave} />
         </li>
       </ul>
 
-        <div className="upload" title="upload file on Board">
-          {/* upload file input */}
-          <input type="file" name="file" onChange={uploadInputHandler} multiple />
-          <button className="btn btn-light" onClick={uploadBtnHandler}>upload</button>
-        </div>
-
+      <div className="upload" title="upload file on Board">
+        <FileUpload />
+      </div>
     </div>
   );
 };
 
 export default Whiteboard;
-
-
