@@ -44,7 +44,7 @@ const RoomName = () => {
                         {props.edit ? 'back' : 'exit room'}
                     </Link>
                 </li>
-                  )
+              )
             }
             <li className="nav-item">
                 <Link className="nav-link" to="/logout">
@@ -57,11 +57,9 @@ const RoomName = () => {
                 <input
                 className="form-control mr-sm-2"
                 type="text"
-                placeholder="serach room by room name"
+                placeholder="Search in Rooms"
+                onChange={props.filter}
                 />
-                <button className="btn btn-secondary my-2 my-sm-0" type="submit">
-                Search
-                </button>
             </form>
           )}
         </div>

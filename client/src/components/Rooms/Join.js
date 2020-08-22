@@ -127,12 +127,16 @@ const Join = () => {
     setCurrentRoom,
   } = useContext(RoomContext);
 
+  const [filterRoom, setFilterRoom] = useState([]);
+  const [inputChar, setInputChar] = useState('');
+
   useEffect(() => {
     axios
       .get("http://localhost:4000/rooms")
       .then((res) => {
         let data = res.data;
         setRooms(data.rooms);
+        setFilterRoom(data.rooms);
       })
       .catch((err) => {
         console.log(err);
@@ -156,10 +160,26 @@ const Join = () => {
     };
   });
 
+  useEffect(() => {
+
+    const newList = rooms && rooms
+                    .filter(d => inputChar === '' || d.name.includes(inputChar))
+
+    setFilterRoom(newList)
+
+    console.log(newList)
+
+  },[inputChar]);
+
+  const onChangeHandlerfilter = (e)=>{
+    setInputChar(e.target.value)
+  }
+
+
   return (
     <>
 
-      <Navbar model={setModal} />
+      <Navbar filter={onChangeHandlerfilter} model={setModal} />
 
       <div className="container-fluid">
         <div className="row">
@@ -173,7 +193,7 @@ const Join = () => {
             </div>
           </div>
           <div className="col-6  offset-sm-1">
-            {rooms.map((room) => {
+            {filterRoom.map((room) => {
               return (
                 <div key={room._id} className="card bg-light mt-3">
                   <div className="card-header text-capitalize">public room</div>
