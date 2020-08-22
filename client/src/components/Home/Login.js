@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import './login.css';
-import splashimage from './splash.jpg';
+import splashimage from './splash.jpeg';
 import { UserContext } from "../../context";
 
 const Login = (props) => {
