@@ -7,62 +7,71 @@ import { RoomContext } from "../../context";
 const FileUpload = () => {
   const roomCTX = useContext(RoomContext);
 
-  const { files, setFiles } = roomCTX;
+  const { webSocketClient, currentRoom, files, setFiles } = roomCTX;
 
-  const [fileNames, setFileNames] = useState([]);
+  const [filename, setFilename] = useState("Choose File");
+  const [uploadedFile, setUploadedFile] = useState({});
 
-  const uploadInputHandler = (e) => {
+  const changeHandler = (e) => {
     setFiles(e.target.files);
+    setFilename(e.target.files[0].name);
+    // for (let i = 0; i < e.target.files.length; i++) {
+    //   let fileName = "";
+    //   fileName += `${e.target.files[i].name} `;
+    //   setFileName(fileName);
+    // }
   };
 
-  useEffect(() => {
-    if (files !== null) {
-      for (let i = 0; i < files.length; i++) {
-        fileNames.push(files[i].name);
-      }
-
-      // console.log(fileNames);
-    }
-  });
-
-  const uploadBtnHandler = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
-    console.log(files);
-    const data = new FormData();
 
-    for (let i = 0; i < files.length; i++) {
-      data.append("file", files[i]);
-    }
+    console.log("submitted");
+    // sending files through uploading to server
+    // -----------------------------------
+    const formData = new FormData();
 
-    axios
-      .post("http://localhost:4000/rooms/uploads", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res.status);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // for (let i = 0; i < files.length; i++) {
+    //   formData.append("file", files[i]);
+    // }
+    formData.append("file", files[0]);
+    // axios
+    //   .post("http://localhost:4000/rooms/uploads", formData, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     const { fileName, filePath } = res.data;
+    //     setUploadedFile({ fileName, filePath });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (
     <div>
-      <input type="file" name="file" onChange={uploadInputHandler} multiple />
-      <button onClick={uploadBtnHandler}>upload</button>
-
-      <>
-        {fileNames.map((fileName) => {
-          return (
-            <a
-              download={`${fileName}`}
-              href={`./uploads/${fileName}`}
-            >{`${fileName}`}</a>
-          );
-        })}
-      </>
+      <form onSubmit={submitHandler}>
+        <div className="custom-file mb-4">
+          <input
+            className="custom-file-input"
+            id="customFile"
+            type="file"
+            name="file"
+            onChange={changeHandler}
+          />
+          <label htmlFor="customFile" className="custom-file-label">
+            {filename}
+          </label>
+        </div>
+        <input type="submit" value="Upload" onClick={submitHandler} />
+      </form>
+      <div>
+        {/* <a href={uploadedFile.filePath} download>
+          {uploadedFile.fileName ? uploadedFile.fileName : ""}
+        </a> */}
+      </div>
     </div>
   );
 };

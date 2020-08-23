@@ -1,8 +1,8 @@
 const express = require("express");
+const path = require("path").resolve(__dirname, "../../../../");
 const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const multer = require("multer");
 const Room = require("../models/room.model");
 const auth = require("../middleware/auth");
 
@@ -105,37 +105,29 @@ router.post("/changeAdmin", async (req, res, next) => {
 // upload files
 // -------------
 
-// multer configs
-let storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
-let upload = multer({ storage }).array("file");
-
 router.post("/uploads", (req, res, next) => {
   try {
-    upload(req, res, function (err) {
-      if (err instanceof multer.MulterError) {
-        return res.status(500).json(err);
-      } else if (err) {
-        return res.status(500).json(err);
+    if (req.files === null) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const file = req.files.file;
+
+    file.mv(`${path}/client/public/uploads/${file.name}`, (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: err });
       }
     });
-
-    console.log("file received");
-
-    return res.status(200).json({
-      message: "success",
-    });
+    return res.status(200).send(file);
+    // return res.json({
+    //   fileName: file.name,
+    //   filePath: `/public/uploads/${file.name}`,
+    // });
   } catch (err) {
     console.log(err);
 
-    res.status(400).json({
+    return res.status(400).json({
       message: err,
     });
   }

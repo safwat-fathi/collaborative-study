@@ -9,6 +9,8 @@ import React, {
 import FileUpload from "../FileUpload";
 import TextModel from "./TextModel";
 
+import { saveAs } from "file-saver";
+
 import draw, { writeText } from "../../utils/draw";
 import axios from "axios";
 import erase from "../../utils/erase";
@@ -50,6 +52,7 @@ const Whiteboard = () => {
   const canvas = useRef(null);
   const colorPicker = useRef(null);
   const btnUndo = useRef(null);
+  const btnSave = useRef(null);
 
   // for text model
   const [isModal, setIsModal] = useState(false);
@@ -257,12 +260,9 @@ const Whiteboard = () => {
   const handleSave = (e) => {
     e.preventDefault();
 
-    const image = canvas.current
-      .toDataURL("image/png")
-      .replace("image/png", "image/octet-stream");
-
-    console.log(image);
-    window.location.href = image;
+    canvas.current.toBlob(function (blob) {
+      saveAs(blob, "pretty image.png");
+    });
   };
 
   return (
@@ -326,10 +326,6 @@ const Whiteboard = () => {
           <img src={saveIcon} alt="saveicon" onClick={handleSave} />
         </li>
       </ul>
-
-      <div className="upload" title="upload file on Board">
-        <FileUpload />
-      </div>
     </div>
   );
 };

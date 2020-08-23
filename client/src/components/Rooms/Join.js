@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./join.css";
 
 import { RoomContext, UserContext } from "../../context";
-import Navbar from '../Navbar';
+import Navbar from "../Navbar";
 
 function Modal({ isVisible = false, title, onClose }) {
   const [name, setName] = useState("");
@@ -128,13 +128,14 @@ const Join = () => {
   } = useContext(RoomContext);
 
   const [filterRoom, setFilterRoom] = useState([]);
-  const [inputChar, setInputChar] = useState('');
+  const [inputChar, setInputChar] = useState("");
 
   useEffect(() => {
     axios
       .get("http://localhost:4000/rooms")
       .then((res) => {
         let data = res.data;
+        console.log(data);
         setRooms(data.rooms);
         setFilterRoom(data.rooms);
       })
@@ -161,24 +162,19 @@ const Join = () => {
   });
 
   useEffect(() => {
+    const newList =
+      rooms &&
+      rooms.filter((d) => inputChar === "" || d.name.includes(inputChar));
 
-    const newList = rooms && rooms
-                    .filter(d => inputChar === '' || d.name.includes(inputChar))
+    setFilterRoom(newList);
+  }, [inputChar]);
 
-    setFilterRoom(newList)
-
-    console.log(newList)
-
-  },[inputChar]);
-
-  const onChangeHandlerfilter = (e)=>{
-    setInputChar(e.target.value)
-  }
-
+  const onChangeHandlerfilter = (e) => {
+    setInputChar(e.target.value);
+  };
 
   return (
     <>
-
       <Navbar filter={onChangeHandlerfilter} model={setModal} />
 
       <div className="container-fluid">
@@ -198,7 +194,9 @@ const Join = () => {
                 <div key={room._id} className="card bg-light mt-3">
                   <div className="card-header text-capitalize">public room</div>
                   <div className="card-body">
-                    <h4 className="card-title text-capitalize">room name : {room.name}</h4>
+                    <h4 className="card-title text-capitalize">
+                      room name : {room.name}
+                    </h4>
                     {/* <h4 className="card-text">creator name: john</h4> */}
                     <p className="card-text text-capitalize">
                       room descriptiont: {room.desc}

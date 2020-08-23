@@ -3,7 +3,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 // ---------------------
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
-import FilesList from "../FilesList";
+import FileUpload from "../FileUpload";
 // ---------------------
 import { RoomContext } from "../../context";
 import "./Room.css";
@@ -105,8 +105,8 @@ const Room = () => {
       <div className="Room">
         <Whiteboard />
         <Chat />
-        {/* <FilesList /> */}
       </div>
+      <FileUpload />
     </>
   );
 };
