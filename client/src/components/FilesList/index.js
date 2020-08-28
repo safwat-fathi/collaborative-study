@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
+import axios from "axios";
+import { saveAs } from "file-saver";
 
 // context
 import { RoomContext } from "../../context";
@@ -7,25 +9,44 @@ const FilesList = () => {
   const roomCTX = useContext(RoomContext);
   const [isEmpty, setIsEmpty] = useState(true);
 
-  const { webSocketClient, currentRoom, files, setFiles } = roomCTX;
+  const { files, setFiles } = roomCTX;
 
   useEffect(() => {
-    if (files.length > 0) {
-      setIsEmpty(false);
-    }
-
-    // console.log(files);
-    // console.log(`isEmpty: ${isEmpty}`);
-  });
+    axios
+      .get("http://localhost:4000/rooms/5ef4bd84a4f4b01b51b52344/uploads")
+      .then((res) => {
+        console.log(res.data);
+        setFiles(res.data);
+        setIsEmpty(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div>
-      <h2>files: {files.length}</h2>
-      <ul>
-        {files.map((file, i) => {
-          return <li key={i}>{file.name}</li>;
-        })}
-      </ul>
+      {!isEmpty ? (
+        <div>
+          <h2>files uplaoded: {files.length}</h2>
+          <ul>
+            {files.map((file, i) => {
+              return (
+                <li key={i}>
+                  <a
+                    href={`data:${file.mimetype};base64,${file.data}`}
+                    download={`${file.name}`}
+                  >
+                    {file.name}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : (
+        "Loading files..."
+      )}
     </div>
   );
 };

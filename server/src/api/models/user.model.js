@@ -41,6 +41,15 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.methods.getPublicProfile = function () {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.password;
+
+  return userObject;
+};
+
 // hash plain text password before saving
 userSchema.pre("save", function (next) {
   const user = this;

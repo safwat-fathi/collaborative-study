@@ -134,7 +134,3 @@ router.post("/edit", auth, async (req, res, next) => {
 });
 
 module.exports = router;
-
-/* 
-- create a route for editing user data (email, password, name).
-*/

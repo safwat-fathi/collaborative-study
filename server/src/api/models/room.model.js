@@ -28,6 +28,7 @@ const roomSchema = new mongoose.Schema({
       name: String,
     },
   ],
+  uploads: [],
 });
 // compiling a model
 const Room = mongoose.model("Room", roomSchema);

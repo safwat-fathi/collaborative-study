@@ -30,10 +30,10 @@ const FileUpload = () => {
     // -----------------------------------
     const formData = new FormData();
 
-    // for (let i = 0; i < files.length; i++) {
-    //   formData.append("file", files[i]);
-    // }
-    formData.append("file", files[0]);
+    for (let i = 0; i < files.length; i++) {
+      formData.append("file", files[i]);
+    }
+    // formData.append("file", files[0]);
     // axios
     //   .post("http://localhost:4000/rooms/uploads", formData, {
     //     headers: {
@@ -67,11 +67,6 @@ const FileUpload = () => {
         </div>
         <input type="submit" value="Upload" onClick={submitHandler} />
       </form>
-      <div>
-        {/* <a href={uploadedFile.filePath} download>
-          {uploadedFile.fileName ? uploadedFile.fileName : ""}
-        </a> */}
-      </div>
     </div>
   );
 };

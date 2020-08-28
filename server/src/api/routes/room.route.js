@@ -1,7 +1,7 @@
 const express = require("express");
-const path = require("path").resolve(__dirname, "../../../../");
 const router = express.Router();
 const mongoose = require("mongoose");
+const fs = require("fs");
 const bcrypt = require("bcrypt");
 const Room = require("../models/room.model");
 const auth = require("../middleware/auth");
@@ -104,30 +104,56 @@ router.post("/changeAdmin", async (req, res, next) => {
 // -------------
 // upload files
 // -------------
-
-router.post("/uploads", (req, res, next) => {
+router.post("/:id/uploads", auth, async (req, res, next) => {
   try {
-    if (req.files === null) {
+    let room = await Room.findById(req.params.id);
+
+    if (req.files === null || !room) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const file = req.files.file;
+    let uploads = [];
+    if (req.files.uploads.length) {
+      uploads = req.files.uploads;
+      room.uploads = [...uploads, ...room.uploads];
+    } else {
+      uploads = req.files.uploads;
+      room.uploads = [uploads, ...room.uploads];
+    }
 
-    file.mv(`${path}/client/public/uploads/${file.name}`, (err) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ message: err });
-      }
-    });
-    return res.status(200).send(file);
-    // return res.json({
-    //   fileName: file.name,
-    //   filePath: `/public/uploads/${file.name}`,
-    // });
+    await room.save();
+
+    return res.status(200).send(room.uploads);
+    // return res.status(200).json({ message: 'success' });
   } catch (err) {
     console.log(err);
 
-    return res.status(400).json({
+    return res.status(500).json({
+      message: err,
+    });
+  }
+
+  next();
+});
+
+// -------------
+// get uploaded files
+// -------------
+router.get("/:id/uploads", async (req, res, next) => {
+  try {
+    let room = await Room.findById(req.params.id);
+
+    if (!room || !room.uploads) {
+      return res.status(400).json({ message: "No files uploaded" });
+    }
+
+    // res.set("Content-Type", "image/png");
+    return res.send(room.uploads);
+    // return res.status(200).send({ uploads: room.uploads });
+  } catch (err) {
+    console.log(err);
+
+    return res.status(500).json({
       message: err,
     });
   }

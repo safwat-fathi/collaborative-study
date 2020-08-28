@@ -135,7 +135,7 @@ const Join = () => {
       .get("http://localhost:4000/rooms")
       .then((res) => {
         let data = res.data;
-        console.log(data);
+
         setRooms(data.rooms);
         setFilterRoom(data.rooms);
       })
