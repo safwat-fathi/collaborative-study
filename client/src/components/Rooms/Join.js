@@ -146,7 +146,11 @@ const Join = () => {
     let localToken = localStorage.getItem("userToken");
     let decodedToken = jwt_decode(localToken);
     setUserID(decodedToken.userID);
-    setUserName(decodedToken.userName);
+    if(userName==''){
+      setUserName(decodedToken.userName);
+    }else if (decodedToken.userName !== userName) {
+      setUserName(userName);
+    }
     setUserEmail(decodedToken.userEmail);
   }, []);
 

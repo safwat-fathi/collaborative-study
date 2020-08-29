@@ -10,7 +10,8 @@ const Profile = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
-  const { userName, userEmail } = useContext(RoomContext);
+  const {  userEmail, setUserName } = useContext(RoomContext);
+
   useEffect(() => {
     // clearing state after user is done editing
     return () => {
@@ -30,7 +31,7 @@ const Profile = () => {
       }
     } else {
       if ( oldPassword === "" || newPassword === "") {
-        setFeedbackMsg("Please Checkyour password");
+        setFeedbackMsg("Please Check your password");
         return;
       }
     }
@@ -43,7 +44,7 @@ const Profile = () => {
 		} 
     */
     // console.log(userEmail,newName,oldPassword,newPassword)
-    const postbody = {}
+    let postbody = {}
     if( edit ){
       postbody = {
         email : userEmail,
@@ -64,6 +65,7 @@ const Profile = () => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localToken}`,
     };
+    console.log("postbody",postbody)
     axios
       .post(
         "http://localhost:4000/users/edit",
@@ -73,11 +75,12 @@ const Profile = () => {
       )
       .then((res) => {
         console.log("res.data.message>>>>",res.data.message)
-        // if (res.data.message === "room created successfully") {
-        //   console.log("res.data.message ", res.data.message);
-        //   onClose();
-        //   alert(res.data.message);
-        // }
+        if (res.data.message === "success") {
+          if(edit){
+            setUserName(newName)
+          }
+          alert(res.data.message);
+        }
       })
       .catch((err) => {
         console.log("error>>",err);
