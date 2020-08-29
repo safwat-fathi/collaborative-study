@@ -12,8 +12,15 @@ const FilesList = () => {
   const { files, setFiles } = roomCTX;
 
   useEffect(() => {
+    const token = localStorage.getItem("userToken");
+
+    const headers = { headers: { Authorization: `Bearer ${token}` } };
+
     axios
-      .get("http://localhost:4000/rooms/5ef4bd84a4f4b01b51b52344/uploads")
+      .get(
+        "http://localhost:4000/rooms/5ef4bd84a4f4b01b51b52344/uploads",
+        headers
+      )
       .then((res) => {
         console.log(res.data);
         setFiles(res.data);

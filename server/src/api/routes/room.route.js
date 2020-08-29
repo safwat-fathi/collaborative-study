@@ -113,18 +113,19 @@ router.post("/:id/uploads", auth, async (req, res, next) => {
     }
 
     let uploads = [];
-    if (req.files.uploads.length) {
-      uploads = req.files.uploads;
-      room.uploads = [...uploads, ...room.uploads];
-    } else {
-      uploads = req.files.uploads;
-      room.uploads = [uploads, ...room.uploads];
-    }
+    console.log(req.files);
+    // if (req.files.uploads.length) {
+    //   uploads = req.files.uploads;
+    //   room.uploads = [...uploads, ...room.uploads];
+    // } else {
+    //   uploads = req.files.uploads;
+    //   room.uploads = [uploads, ...room.uploads];
+    // }
 
-    await room.save();
+    // await room.save();
 
-    return res.status(200).send(room.uploads);
-    // return res.status(200).json({ message: 'success' });
+    // return res.status(200).send(room.uploads);
+    return res.status(200).json({ message: "success" });
   } catch (err) {
     console.log(err);
 
@@ -139,7 +140,7 @@ router.post("/:id/uploads", auth, async (req, res, next) => {
 // -------------
 // get uploaded files
 // -------------
-router.get("/:id/uploads", async (req, res, next) => {
+router.get("/:id/uploads", auth, async (req, res, next) => {
   try {
     let room = await Room.findById(req.params.id);
 
@@ -147,9 +148,7 @@ router.get("/:id/uploads", async (req, res, next) => {
       return res.status(400).json({ message: "No files uploaded" });
     }
 
-    // res.set("Content-Type", "image/png");
     return res.send(room.uploads);
-    // return res.status(200).send({ uploads: room.uploads });
   } catch (err) {
     console.log(err);
 

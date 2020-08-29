@@ -1,53 +1,55 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-// context
-import { RoomContext } from "../../context";
-
 const FileUpload = () => {
-  const roomCTX = useContext(RoomContext);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [filesNames, setFilesNames] = useState("");
 
-  const { webSocketClient, currentRoom, files, setFiles } = roomCTX;
-
-  const [filename, setFilename] = useState("Choose File");
-  const [uploadedFile, setUploadedFile] = useState({});
+  useEffect(() => {
+    console.log(uploadedFiles);
+    console.log(filesNames);
+  }, [uploadedFiles]);
 
   const changeHandler = (e) => {
-    setFiles(e.target.files);
-    setFilename(e.target.files[0].name);
-    // for (let i = 0; i < e.target.files.length; i++) {
-    //   let fileName = "";
-    //   fileName += `${e.target.files[i].name} `;
-    //   setFileName(fileName);
-    // }
+    setUploadedFiles(e.target.files);
+
+    for (let file of uploadedFiles) {
+      setFilesNames(`${filesNames} ${file.name}`);
+    }
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
 
     console.log("submitted");
+    const token = localStorage.getItem("userToken");
+
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
     // sending files through uploading to server
     // -----------------------------------
     const formData = new FormData();
 
-    for (let i = 0; i < files.length; i++) {
-      formData.append("file", files[i]);
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      formData.append("uploads", uploadedFiles[i]);
     }
-    // formData.append("file", files[0]);
-    // axios
-    //   .post("http://localhost:4000/rooms/uploads", formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     const { fileName, filePath } = res.data;
-    //     setUploadedFile({ fileName, filePath });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+
+    axios
+      .post(
+        "http://localhost:4000/rooms/5ef4bd84a4f4b01b51b52344/uploads",
+        formData,
+        headers
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -58,11 +60,12 @@ const FileUpload = () => {
             className="custom-file-input"
             id="customFile"
             type="file"
-            name="file"
+            name="uploads"
             onChange={changeHandler}
+            multiple
           />
           <label htmlFor="customFile" className="custom-file-label">
-            {filename}
+            {filesNames}
           </label>
         </div>
         <input type="submit" value="Upload" onClick={submitHandler} />
