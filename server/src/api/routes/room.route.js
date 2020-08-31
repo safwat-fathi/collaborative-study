@@ -5,7 +5,7 @@ const fs = require("fs");
 const bcrypt = require("bcrypt");
 
 // contorllers
-const { getRooms, createRoom } = require("../controllers/room");
+const { getRooms, createRoom } = require("../controllers/room.controller");
 
 // middleware
 const auth = require("../middleware/auth");
