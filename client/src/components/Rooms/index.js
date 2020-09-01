@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import withAuth from "../HOCs/WithAuth";
 import Join from "./Join";
 import Room from "./Room";
 import Profile from "../Profile";
+import Logout from "../Logout";
 
 import { RoomContext } from "../../context";
-import { Route } from "react-router-dom/cjs/react-router-dom.min";
-import Logout from "../Logout";
 
 const Rooms = () => {
   // join room state
@@ -83,4 +83,4 @@ const Rooms = () => {
   );
 };
 
-export default Rooms;
+export default withAuth(Rooms);

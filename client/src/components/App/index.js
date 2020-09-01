@@ -1,14 +1,20 @@
 import React from "react";
 
-import Home from "../Home";
+import Rooms from "../Rooms/index";
+
+import splashimage from "./splash.jpeg";
+
+import "./App.css";
 
 const App = () => {
   return (
     <>
-      <div className="container-fluid">
-        <div className="row">
-          <Home />
-        </div>
+      {/* splash screen */}
+      {/* <div>
+          <img src={splashimage} alt="splash image" id="icon" />
+        </div> */}
+      <div className="container">
+        <Rooms />
       </div>
     </>
   );

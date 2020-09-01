@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../utils/api";
 
 const FileUpload = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -22,11 +22,9 @@ const FileUpload = () => {
     e.preventDefault();
 
     console.log("submitted");
-    const token = localStorage.getItem("userToken");
 
-    const headers = {
+    const config = {
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
       },
     };
@@ -38,17 +36,13 @@ const FileUpload = () => {
       formData.append("uploads", uploadedFiles[i]);
     }
 
-    axios
-      .post(
-        "http://localhost:4000/rooms/5ef4bd84a4f4b01b51b52344/uploads",
-        formData,
-        headers
-      )
+    api
+      .post("/rooms/5ef4bd84a4f4b01b51b52344/uploads", formData, config)
       .then((res) => {
         console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 

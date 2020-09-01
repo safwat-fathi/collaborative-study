@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import axios from "axios";
+import api from "../../utils/api";
 import { saveAs } from "file-saver";
 
 // context
@@ -16,11 +16,8 @@ const FilesList = () => {
 
     const headers = { headers: { Authorization: `Bearer ${token}` } };
 
-    axios
-      .get(
-        "http://localhost:4000/rooms/5ef4bd84a4f4b01b51b52344/uploads",
-        headers
-      )
+    api
+      .get("/rooms/5ef4bd84a4f4b01b51b52344/uploads", headers)
       .then((res) => {
         console.log(res.data);
         setFiles(res.data);

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import './register.css';
+import "./register.css";
 class Register extends Component {
   state = {
     name: "",
@@ -155,9 +155,6 @@ class Register extends Component {
               type="submit"
               value="Regitser"
             />
-          </div>
-          <div className="btn form-group text-right mt-2 text-capitalize" onClick={ ()=> this.props.setForm(true) }>
-            login
           </div>
         </form>
         <div>{this.state.feedBackMsg}</div>
