@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 
 import { RoomContext } from "../../context";
 
-import "./Chat.css";
-
 const Chat = () => {
   const chatArea = useRef(null);
   const roomCTX = useContext(RoomContext);

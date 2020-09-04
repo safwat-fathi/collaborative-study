@@ -69,12 +69,13 @@ const Rooms = () => {
     setFiles,
   };
 
+  console.log("from rooms");
   return (
     <RoomContext.Provider value={roomCTX}>
       <Router>
         <Switch>
           <Route exact path="/" component={Join} />
-          <Route path="/rooms/:name" component={Room} />
+          <Route path="/rooms/:id" component={Room} />
           <Route path="/profile" component={Profile} />
           <Route path="/logout" component={Logout} />
         </Switch>

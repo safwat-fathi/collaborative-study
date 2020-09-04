@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import "./register.css";
+
 class Register extends Component {
   state = {
     name: "",
@@ -100,7 +100,7 @@ class Register extends Component {
 
   render() {
     return (
-      <div className="col-md-4 offset-md-4 col mt-5 register-profile">
+      <div className="register-profile">
         <h3 className="text-center register-title">Register</h3>
         <form className="form-group" onSubmit={this.handleSubmit}>
           <div className="form-group">

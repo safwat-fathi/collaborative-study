@@ -5,14 +5,14 @@ import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
 import FilesList from "../FilesList";
 import FileUpload from "../FileUpload";
+import Navbar from "../Navbar";
 // ---------------------
 import { RoomContext } from "../../context";
-import "./Room.css";
 // ---------------------
 import draw from "../../utils/draw";
 import erase from "../../utils/erase";
 
-import Navbar from "../Navbar";
+import "./Room.css";
 const Room = () => {
   const {
     // join room state

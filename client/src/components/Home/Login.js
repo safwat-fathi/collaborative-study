@@ -1,10 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { UserContext } from "../../context";
 
 const Login = (props) => {
   const { setIsLoggedIn } = useContext(UserContext);
-  const [addClass, setAddclass] = useState(false);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
@@ -32,7 +32,7 @@ const Login = (props) => {
 
   return (
     <>
-      <div className="col-md-4 offset-md-4 col mt-5 login-profile">
+      <div className="login-profile">
         <h3 className="text-center mt-2 login-title">Login</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -55,11 +55,13 @@ const Login = (props) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <input
-            className="btn btn-primary btn-lg btn-block"
-            type="submit"
-            value="Login"
-          />
+          <div className="form-group">
+            <input
+              className="btn btn-primary btn-lg btn-block"
+              type="submit"
+              value="Login"
+            />
+          </div>
         </form>
         <div>{feedbackMsg}</div>
       </div>

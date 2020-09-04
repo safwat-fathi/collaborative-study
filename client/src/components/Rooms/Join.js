@@ -146,9 +146,9 @@ const Join = () => {
     let localToken = localStorage.getItem("userToken");
     let decodedToken = jwt_decode(localToken);
     setUserID(decodedToken.userID);
-    if(userName==''){
+    if (userName == "") {
       setUserName(decodedToken.userName);
-    }else if (decodedToken.userName !== userName) {
+    } else if (decodedToken.userName !== userName) {
       setUserName(userName);
     }
     setUserEmail(decodedToken.userEmail);
@@ -209,7 +209,7 @@ const Join = () => {
                     <p className="card-text">
                       <Link
                         onClick={() => setCurrentRoom(room._id)}
-                        to={`/rooms/${room.name}`}
+                        to={`/rooms/${room._id}`}
                       >
                         <button
                           type="button"
