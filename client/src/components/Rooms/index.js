@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import withAuth from "../HOCs/WithAuth";
@@ -7,7 +7,7 @@ import Room from "./Room";
 import Profile from "../Profile";
 import Logout from "../Logout";
 
-import { RoomContext } from "../../context";
+// import { RoomContext } from "../../context";
 
 const Rooms = () => {
   // join room state
@@ -69,7 +69,6 @@ const Rooms = () => {
     setFiles,
   };
 
-  console.log("from rooms");
   return (
     <RoomContext.Provider value={roomCTX}>
       <Router>
@@ -84,4 +83,4 @@ const Rooms = () => {
   );
 };
 
-export default withAuth(Rooms);
+export default Rooms;

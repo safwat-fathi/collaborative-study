@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 
 // importing components
@@ -8,8 +8,6 @@ import Register from "../Home/Register";
 import { UserContext } from "../../context";
 
 const LoginRedirect = () => {
-  const [form, setForm] = useState(true);
-
   return (
     <>
       <h1 className="text-center">Please login first or register to proceed</h1>
@@ -22,7 +20,7 @@ const LoginRedirect = () => {
 };
 
 const WithAuth = (Component) => {
-  return function AuthenticatedComponent() {
+  return function AuthComponent(props) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isUserTokenExpired, setIsUserTokenExpired] = useState(true);
 
@@ -33,17 +31,14 @@ const WithAuth = (Component) => {
       setIsUserTokenExpired,
     };
 
-    console.log(`from AuthenticatedComponent (isLoggedIn): ${isLoggedIn}`);
-    console.log(
-      `from AuthenticatedComponent (isUserTokenExpired): ${isUserTokenExpired}`
-    );
-
     useEffect(() => {
       const localToken = localStorage.getItem("userToken");
+
+      console.log("in with auth");
+
       if (localToken == null) {
         setIsUserTokenExpired(true);
         setIsLoggedIn(false);
-        return;
       } else {
         const decodedToken = jwt_decode(localToken);
 
@@ -51,26 +46,22 @@ const WithAuth = (Component) => {
         let now = +Date.now().toString().slice(0, -3);
 
         if (now > decodedToken.exp) {
-          console.log("in if stat. now > decodedToken.exp");
           setIsUserTokenExpired(true);
           setIsLoggedIn(false);
         } else {
-          console.log("in if stat. is logged in");
           setIsUserTokenExpired(false);
           setIsLoggedIn(true);
         }
       }
     }, []);
 
-    useEffect(() => {
-      // console.log(isLoggedIn);
-    });
+    console.log(isLoggedIn);
 
     return (
       <>
         {isLoggedIn && !isUserTokenExpired ? (
           <UserContext.Provider value={userCTX}>
-            <Component />
+            <Component {...props} />
           </UserContext.Provider>
         ) : (
           <LoginRedirect />
@@ -79,5 +70,7 @@ const WithAuth = (Component) => {
     );
   };
 };
+
+// };
 
 export default WithAuth;

@@ -9,8 +9,8 @@ import Navbar from "../Navbar";
 // ---------------------
 import { RoomContext } from "../../context";
 // ---------------------
-import draw from "../../utils/draw";
-import erase from "../../utils/erase";
+import draw from "../../helpers/draw";
+import erase from "../../helpers/erase";
 
 import "./Room.css";
 const Room = () => {

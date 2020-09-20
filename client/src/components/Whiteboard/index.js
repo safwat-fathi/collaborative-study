@@ -11,9 +11,9 @@ import TextModel from "./TextModel";
 
 import { saveAs } from "file-saver";
 
-import draw, { writeText } from "../../utils/draw";
+import draw, { writeText } from "../../helpers/draw";
 import axios from "axios";
-import erase from "../../utils/erase";
+import erase from "../../helpers/erase";
 
 // styles & images
 import "./Whiteboard.css";
