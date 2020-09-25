@@ -20,10 +20,10 @@ clone the project first and open it in your terminal and change directory to fol
 npm install
 ```
 
-If you are in linux you may prefix the previuos command with
+If you are in linux you may prefix the previuos command with 'sudo'
 
 ```bash
-sudo
+sudo npm install
 ```
 
 ### server

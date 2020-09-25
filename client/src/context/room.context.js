@@ -1,44 +1,23 @@
-import { useState, useContext, createContext } from "react";
+import React, { useState, useContext, createContext } from "react";
 
-export const RoomContext = createContext();
-
-// {
-//   // whiteboard state
-//   canvas: null,
-//   setCanvas: () => {},
-//   ctx: null,
-//   setCtx: () => {},
-//   drawing: false,
-//   setDrawing: () => {},
-//   erasing: false,
-//   setErasing: () => {},
-//   x: 0,
-//   setX: () => {},
-//   y: 0,
-//   setY: () => {},
-//   color: "",
-//   setColor: () => {},
-//   drawingDataFromWS: null,
-//   setDrawingDataFromWS: () => {},
-//   // chat state
-//   newMessage: "",
-//   setNewMessage: () => {},
-//   messages: [],
-//   setMessages: () => {},
-//   // join room state
-//   rooms: [],
-//   setRooms: () => {},
-//   currentRoom: "",
-//   setCurrentRoom: () => {},
-//   userID: "",
-//   setUserID: () => {},
-//   userName: "",
-//   setUserName: () => {},
-//   userEmail: "",
-//   setUserEmail: () => {},
-//   webSocketClient: null,
-//   setWebSocketClient: () => {},
-// }
+export const RoomContext = createContext({
+  canvas: null,
+  ctx: null,
+  drawing: false,
+  erasing: false,
+  x: 0,
+  y: 0,
+  color: "",
+  drawingDataFromWS: null,
+  setCanvas: () => {},
+  setCtx: () => {},
+  setDrawing: () => {},
+  setErasing: () => {},
+  setX: () => {},
+  setY: () => {},
+  setColor: () => {},
+  setDrawingDataFromWS: () => {},
+});
 
 export const RoomProvider = ({ children }) => {
   const [canvas, setCanvas] = useState(null);

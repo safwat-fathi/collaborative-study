@@ -1,11 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
-import { UserContext } from "../../context";
-
-const Login = (props) => {
-  const { setIsLoggedIn } = useContext(UserContext);
-
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
@@ -24,7 +20,7 @@ const Login = (props) => {
         let token = res.data.token;
 
         localStorage.setItem("userToken", token);
-        setIsLoggedIn(true);
+        // setIsLoggedIn(true);
       })
       .catch((err) => {
         console.log(err);
@@ -40,6 +36,7 @@ const Login = (props) => {
           <div className="form-group">
             <label htmlFor="emailInput">email</label>
             <input
+              autoComplete="on"
               className="form-control"
               id="emailInput"
               type="email"
@@ -50,6 +47,7 @@ const Login = (props) => {
           <div className="form-group">
             <label htmlFor="passwordInput">password</label>
             <input
+              autoComplete="on"
               className="form-control"
               id="passwordInput"
               type="password"
