@@ -4,13 +4,13 @@ import axios from "axios";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [feedbackMsg, setFeedbackMsg] = useState("");
+  const [feedBackMsg, setFeedBackMsg] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (email === "" || password === "") {
-      setFeedbackMsg("Please Check your Email or password");
+      setFeedBackMsg("Please Check your Email or password");
       return;
     }
 
@@ -24,7 +24,7 @@ const Login = () => {
       })
       .catch((err) => {
         console.log(err);
-        setFeedbackMsg("Login failed, Please Check your Email or password");
+        setFeedBackMsg("Login failed, Please Check your Email or password");
       });
   };
 
@@ -63,7 +63,7 @@ const Login = () => {
             />
           </div>
         </form>
-        <div>{feedbackMsg}</div>
+        {feedBackMsg && <div>{feedBackMsg}</div>}
       </div>
     </>
   );

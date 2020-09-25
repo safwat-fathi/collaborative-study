@@ -1,59 +1,45 @@
 import React, { useState } from "react";
 import axios from "axios";
+// validate fields helper
+import { validateField } from "../../helpers";
 // useForm hook to validate form inputs
 import { useForm } from "../../hooks";
 
 const Register = () => {
-  // component own state
+  // component state
   const [nameValid, setNameValid] = useState(false);
   const [emailValid, setEmailValid] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
-  const [feedBackMsg, setFeedBackMsg] = useState("");
-
-  // checking input validation
-  const validateField = (fieldName, fieldValue) => {
-    switch (fieldName) {
-      case "name":
-        setNameValid(/^[a-zA-Z]+/i.test(fieldValue) && fieldValue.length > 2);
-        setFeedBackMsg(nameValid ? "" : "Please check Name!");
-        break;
-      case "email":
-        setEmailValid(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/g.test(fieldValue));
-        setFeedBackMsg(emailValid ? "" : "Please check Email!");
-        break;
-      case "password":
-      case "confirmPassword":
-        setPasswordValid(
-          fieldValue.length > 5 &&
-            inputValues.password === inputValues.confirmPassword
-        );
-        setFeedBackMsg(passwordValid ? "" : "Please check Password!");
-        break;
-      default:
-        break;
-    }
-
-    setNameValid(nameValid);
-    setEmailValid(emailValid);
-    setPasswordValid(passwordValid);
-    setFeedBackMsg(feedBackMsg);
-  };
-
+  const [feedBackMsg, setFeedBackMsg] = useState(false);
   // input field values
-  const [inputValues, setInputValues] = useForm(
-    {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-    validateField
-  );
+  const [inputValues, setInputValues] = useForm({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    let { nameValid, emailValid, passwordValid, feedBackMsg } = validateField(
+      e.target.name,
+      e.target.value,
+      inputValues
+    );
+
+    if (nameValid) {
+      setNameValid(nameValid);
+    }
+    if (emailValid) {
+      setEmailValid(emailValid);
+    }
+    // setPasswordValid(passwordValid);
+    setFeedBackMsg(feedBackMsg);
+    setInputValues(e);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    let valid = nameValid && emailValid && passwordValid;
+    let valid = nameValid && emailValid; /* && passwordValid */
 
     if (!valid) {
       setFeedBackMsg("Please fill the form!");
@@ -84,7 +70,7 @@ const Register = () => {
           <input
             autoComplete="on"
             className="form-control"
-            onChange={(e) => setInputValues(e)}
+            onChange={handleChange}
             name="name"
             type="text"
             placeholder="Name"
@@ -96,7 +82,7 @@ const Register = () => {
           <input
             autoComplete="on"
             className="form-control"
-            onChange={(e) => setInputValues(e)}
+            onChange={handleChange}
             name="email"
             type="email"
             placeholder="Email"
@@ -107,7 +93,7 @@ const Register = () => {
           <label htmlFor="passwordInput">Password</label>
           <input
             className="form-control"
-            onChange={(e) => setInputValues(e)}
+            onChange={handleChange}
             name="password"
             type="password"
             placeholder="Password"
@@ -119,7 +105,7 @@ const Register = () => {
           <label htmlFor="ConfirmPasswordInput">Confirm Password</label>
           <input
             className="form-control"
-            onChange={(e) => setInputValues(e)}
+            onChange={handleChange}
             name="confirmPassword"
             type="password"
             placeholder="Confirm Password"
@@ -135,7 +121,7 @@ const Register = () => {
           />
         </div>
       </form>
-      <div>{feedBackMsg}</div>
+      {feedBackMsg && <div>{feedBackMsg}</div>}
     </div>
   );
 };
