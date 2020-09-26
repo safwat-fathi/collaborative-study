@@ -1,5 +1,7 @@
+import axios from "axios";
+
 // checking inputs validation (register form)
-// initialState is passed on from consuming component
+// initialState is passed on from consuming component (register component)
 export const validateField = (fieldName, fieldValue, initialState) => {
   let nameValid = false,
     emailValid = false,
@@ -21,7 +23,7 @@ export const validateField = (fieldName, fieldValue, initialState) => {
     //     fieldValue.length > 5 &&
     //     initialState.password === initialState.confirmPassword;
     //   feedBackMsg = passwordValid ? "" : "Please check Password!";
-    //   break;
+    // break;
     default:
       break;
   }
@@ -33,3 +35,10 @@ export const validateField = (fieldName, fieldValue, initialState) => {
     feedBackMsg,
   };
 };
+
+export const api = axios.create({
+  baseURL: "http://localhost:4000",
+  headers: {
+    "Content-type": "application/json",
+  },
+});

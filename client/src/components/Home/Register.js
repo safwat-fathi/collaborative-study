@@ -6,11 +6,6 @@ import { validateField } from "../../helpers";
 import { useForm } from "../../hooks";
 
 const Register = () => {
-  // component state
-  const [nameValid, setNameValid] = useState(false);
-  const [emailValid, setEmailValid] = useState(false);
-  const [passwordValid, setPasswordValid] = useState(false);
-  const [feedBackMsg, setFeedBackMsg] = useState(false);
   // input field values
   const [inputValues, setInputValues] = useForm({
     name: "",
@@ -18,6 +13,12 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+
+  // component state
+  const [nameValid, setNameValid] = useState(false);
+  const [emailValid, setEmailValid] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [feedBackMsg, setFeedBackMsg] = useState(false);
 
   const handleChange = (e) => {
     let { nameValid, emailValid, passwordValid, feedBackMsg } = validateField(
@@ -32,9 +33,13 @@ const Register = () => {
     if (emailValid) {
       setEmailValid(emailValid);
     }
+    // if (passwordValid) {
+    //   setPasswordValid(passwordValid);
+    // }
+
     // setPasswordValid(passwordValid);
-    setFeedBackMsg(feedBackMsg);
     setInputValues(e);
+    setFeedBackMsg(feedBackMsg);
   };
 
   const handleSubmit = (e) => {
