@@ -7,35 +7,44 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedBackMsg, setFeedBackMsg] = useState("");
-
-  const { response, loading, error } = useFetch({
+  // custom hook to post/get data
+  const [response, callAPI] = useFetch({
     api,
+    url: "users/login",
     method: "post",
-    url: "/users/login",
-    data: { email: "doby@test.com", password: "123" },
+    paylaod: { email, password },
+    headers: {
+      "Content-type": "application/json",
+    },
   });
 
+  const { data, loading, error } = response;
+
   useEffect(() => {
-    console.log("awdawawd");
-    console.log(email);
-    console.log(password);
-  }, [response]);
+    if (data === null) {
+      console.log("response is null", data);
+    }
+
+    if (error) {
+      setFeedBackMsg("Sorry, error occurred!", error);
+    }
+
+    if (!loading) {
+      console.log("done", data);
+      let token = data.token;
+      localStorage.setItem("userToken", token);
+    }
+  }, [data]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (email === "" || password === "" || error) {
+    if (email === "" || password === "") {
       setFeedBackMsg("Login failed, Please Check your Email or password");
       return;
     }
 
-    if (response !== null) {
-      console.log("loading", loading);
-      console.log("response", response);
-      let token = response.token;
-
-      localStorage.setItem("userToken", token);
-    }
+    callAPI();
     // axios
     //   .post("http://localhost:4000/users/login", { email, password })
     //   .then((res) => {

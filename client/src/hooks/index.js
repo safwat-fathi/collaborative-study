@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export const useForm = (initialState) => {
   const [values, setValues] = useState(initialState);
@@ -11,35 +11,43 @@ export const useForm = (initialState) => {
   ];
 };
 
-export const useFetch = ({ api, url, method, data = null }) => {
+export const useFetch = ({ api, url, method, headers, paylaod = null }) => {
   // useFetch state
-  const [response, setResponse] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [response, setResponse] = useState({
+    data: null,
+    loading: true,
+    error: null,
+  });
 
-  useEffect(() => {
-    try {
-      api[method](url, data)
-        .then((res) => {
-          setResponse(res.data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          setError(err);
-        });
-      // intercepting request to check auth token
-      // api.interceptors.request.use((config) => {
-      //   const token = localStorage.getItem("userToken");
-
-      //   config.headers.Authorization = token ? `Bearer ${token}` : "";
-      //   return config;
-      // });
-    } catch (err) {
-      console.log(err);
-      setError(err);
+  const callAPI = useCallback(async () => {
+    // setResponse(prevState => ({...prevState, loading: true}))
+    let res = await api[method](url, paylaod, headers);
+    console.log(res);
+    if (res.status === 200) {
+      setResponse({ data: null, loading: false, error: "" });
     }
-    console.log("from useFetch hook");
-  }, []);
 
-  return { response, error, loading };
+    setResponse({ data: res.data, loading: false, error: null });
+
+    // api[method](url, paylaod, headers)
+    //   .then((res) => {
+    //     // console.log("paylaod: ", paylaod);
+    //     // console.log("data: ", res.data);
+
+    //     setResponse({ data: res.data, loading: false, error: null });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setResponse({ data: null, loading: false, error: err });
+    //   });
+    // intercepting request to check auth token
+    // api.interceptors.request.use((config) => {
+    //   const token = localStorage.getItem("userToken");
+
+    //   config.headers.Authorization = token ? `Bearer ${token}` : "";
+    //   return config;
+    // });
+  }, [api, method, url, headers, paylaod]);
+  // console.log("response from custom hook: ", response);
+  return [response, callAPI];
 };
