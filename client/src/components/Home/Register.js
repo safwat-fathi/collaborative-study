@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+// import axios from "axios";
 // validate fields helper
-import { validateField } from "../../helpers";
+import { validateField, api } from "../../helpers";
 // useForm hook to validate form inputs
-import { useForm } from "../../hooks";
+import { useFetch, useForm } from "../../hooks";
 
 const Register = () => {
   // input field values
@@ -13,6 +13,20 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+
+  // custom hook to post register form data
+  const [response, callAPI] = useFetch({
+    api,
+    method: "post",
+    url: "users/register",
+    paylaod: {
+      name: inputValues.name,
+      email: inputValues.email,
+      password: inputValues.password,
+    },
+  });
+
+  const { data, error } = response;
 
   // component state
   const [nameValid, setNameValid] = useState(false);
@@ -42,6 +56,18 @@ const Register = () => {
     setFeedBackMsg(feedBackMsg);
   };
 
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+      setFeedBackMsg("Sorry, error occurred!");
+    }
+
+    if (data !== null) {
+      console.log(data);
+      setFeedBackMsg("You have registered successfully!");
+    }
+  }, [data, error]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let valid = nameValid && emailValid; /* && passwordValid */
@@ -51,19 +77,7 @@ const Register = () => {
       return;
     }
 
-    try {
-      axios
-        .post("http://localhost:4000/users/register", {
-          name: inputValues.name,
-          email: inputValues.email,
-          password: inputValues.password,
-        })
-        .then((res) => console.log(res));
-
-      setFeedBackMsg("You have registered successfully!");
-    } catch (err) {
-      console.log(err);
-    }
+    callAPI();
   };
 
   return (

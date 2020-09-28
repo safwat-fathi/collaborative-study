@@ -7,7 +7,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedBackMsg, setFeedBackMsg] = useState("");
-  // custom hook to post/get data
+
+  // custom hook to post login form data
   const [response, callAPI] = useFetch({
     api,
     url: "users/login",
@@ -18,23 +19,18 @@ const Login = () => {
     },
   });
 
-  const { data, loading, error } = response;
+  const { data, error } = response;
 
   useEffect(() => {
-    if (data === null) {
-      console.log("response is null", data);
-    }
-
     if (error) {
-      setFeedBackMsg("Sorry, error occurred!", error);
+      setFeedBackMsg("Sorry, error occurred!");
     }
 
-    if (!loading) {
-      console.log("done", data);
+    if (data !== null) {
       let token = data.token;
       localStorage.setItem("userToken", token);
     }
-  }, [data]);
+  }, [data, error]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,18 +41,6 @@ const Login = () => {
     }
 
     callAPI();
-    // axios
-    //   .post("http://localhost:4000/users/login", { email, password })
-    //   .then((res) => {
-    //     let token = res.data.token;
-
-    //     localStorage.setItem("userToken", token);
-    //     // setIsLoggedIn(true);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setFeedBackMsg("Login failed, Please Check your Email or password");
-    //   });
   };
 
   return (
