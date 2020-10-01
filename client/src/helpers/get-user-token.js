@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 
-export const validateUserToken = () => {
+export const getUserToken = () => {
   let localToken = localStorage.getItem("userToken");
 
   if (localToken) {
@@ -11,7 +11,7 @@ export const validateUserToken = () => {
     // check if token expired
     if (now > decodedToken.exp) {
       console.log("token expired");
-      return false;
+      return null;
     } else {
       console.log("token valid");
       return decodedToken;

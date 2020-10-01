@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import WithAuth from "../HOCs/WithAuth";
+import PrivateRoute from "../HOCs/PrivateRoute";
 import Join from "./Join";
 import Room from "./Room";
 import Profile from "../Profile";
@@ -82,4 +82,4 @@ const Rooms = (props) => {
   );
 };
 
-export default WithAuth(Rooms);
+export default Rooms;

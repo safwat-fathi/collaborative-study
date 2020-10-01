@@ -10,7 +10,7 @@ const userInitialState = {
   error: null,
 };
 
-const loginReducer = (state = userInitialState, action) => {
+export const loginReducer = (state = userInitialState, action) => {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {

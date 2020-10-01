@@ -1,24 +1,40 @@
 import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  withRouter,
+} from "react-router-dom";
+import { compose } from "redux";
+import { connect } from "react-redux";
 
 // utils
-import { useUserContext, RoomProvider, UserProvider } from "../../context";
+import PrivateRoute from "../HOCs/PrivateRoute";
 // components
+import Home from "../Home";
 import Rooms from "../Rooms";
-import { login } from "../../services/user.services";
+// import { login } from "../../services/user.services";
+// import { getUserToken } from "../../helpers/get-user-token";
 // resources
 // import splashimage from "./splash.jpeg";
 import "./App.css";
 
-const App = () => {
+const App = (props) => {
+  console.log(props);
   // const { setIsLoggedIn, setIsUserTokenExpired } = useUserContext();
-  login("doby@test.com", "123");
+  // login("doby@test.com", "123");
+  // console.log(getUserToken());
   return (
-    <UserProvider>
-      <RoomProvider>
-        <Rooms />
-      </RoomProvider>
-    </UserProvider>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <PrivateRoute path="/rooms" component={Rooms} />
+        <Route>Error 404, did not found that path</Route>
+      </Switch>
+    </Router>
   );
 };
 
-export default App;
+const mapStateToProps = (state) => state;
+
+export default compose(withRouter, connect(mapStateToProps))(App);
