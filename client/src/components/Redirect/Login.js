@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
-import { api } from "../../helpers";
+import { api } from "../../helpers/api";
 import { useFetch } from "../../hooks";
 
 const Login = () => {

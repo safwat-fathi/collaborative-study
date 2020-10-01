@@ -20,6 +20,7 @@ export const useFetch = ({ api, url, method, headers, paylaod = null }) => {
   });
 
   const callAPI = useCallback(async () => {
+    // setResponse(prevState => ({...prevState, loading: true}))
     try {
       let res = await api[method](url, paylaod, headers);
 
@@ -35,6 +36,6 @@ export const useFetch = ({ api, url, method, headers, paylaod = null }) => {
     //   return config;
     // });
   }, [api, method, url, headers, paylaod]);
-
+  // console.log("response from custom hook: ", response);
   return [response, callAPI];
 };

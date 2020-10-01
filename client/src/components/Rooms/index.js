@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import withAuth from "../HOCs/WithAuth";
+import WithAuth from "../HOCs/WithAuth";
 import Join from "./Join";
 import Room from "./Room";
 import Profile from "../Profile";
@@ -71,7 +71,6 @@ const Rooms = (props) => {
   // };
 
   return (
-    // <RoomContext.Provider value={roomCTX}>
     <Router>
       <Switch>
         <Route exact path="/" component={Join} />
@@ -80,8 +79,7 @@ const Rooms = (props) => {
         <Route path="/logout" component={Logout} />
       </Switch>
     </Router>
-    // </RoomContext.Provider>
   );
 };
 
-export default Rooms;
+export default WithAuth(Rooms);

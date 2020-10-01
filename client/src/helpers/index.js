@@ -1,5 +1,3 @@
-import axios from "axios";
-
 // checking inputs validation (register form)
 // initialState is passed on from consuming component (register component)
 export const validateField = (fieldName, fieldValue, initialState) => {
@@ -35,7 +33,3 @@ export const validateField = (fieldName, fieldValue, initialState) => {
     feedBackMsg,
   };
 };
-
-export const api = axios.create({
-  baseURL: "http://localhost:4000/",
-});

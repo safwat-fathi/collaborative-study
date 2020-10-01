@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
 // validate fields helper
-import { validateField, api } from "../../helpers";
+import { validateField } from "../../helpers";
+import { api } from "../../helpers/api";
 // useForm hook to validate form inputs
 import { useFetch, useForm } from "../../hooks";
 

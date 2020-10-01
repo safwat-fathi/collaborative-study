@@ -17,31 +17,31 @@ const auth = require("../middleware/auth");
 // -------------
 // get all rooms
 // -------------
-router.get("/", auth, getRooms);
+router.get("/", /* auth, */ getRooms);
 
 // -------------
 // create room
 // -------------
-router.post("/create", auth, createRoom);
+router.post("/create", /* auth, */ createRoom);
 
 // -------------
 // edit room
 // -------------
-router.post("/edit", auth, editRoom);
+router.post("/edit", /* auth, */ editRoom);
 
 // -------------
 // change admin
 // -------------
-router.post("/changeAdmin", auth, changeAdmin);
+router.post("/changeAdmin", /* auth, */ changeAdmin);
 
 // -------------
 // upload files
 // -------------
-router.post("/:id/uploads", auth, uploadFiles);
+router.post("/:id/uploads", /* auth, */ uploadFiles);
 
 // -------------
 // get uploaded files
 // -------------
-router.get("/:id/uploads", auth, getFiles);
+router.get("/:id/uploads", /* auth, */ getFiles);
 
 module.exports = router;

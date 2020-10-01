@@ -19,12 +19,15 @@ function Modal({ isVisible = false, title, onClose }) {
 
   useEffect(() => {
     let localToken = localStorage.getItem("userToken");
-    let decodedToken = jwt_decode(localToken);
-    setadminID(decodedToken.userID);
+    if (localToken !== null) {
+      let decodedToken = jwt_decode(localToken);
+      setadminID(decodedToken.userID);
+    }
   }, []);
 
   const CreateRoom = (e) => {
     e.preventDefault();
+
     let localToken = localStorage.getItem("userToken");
     const headers = {
       "Content-Type": "application/json",
@@ -144,25 +147,27 @@ const Join = () => {
       });
 
     let localToken = localStorage.getItem("userToken");
-    let decodedToken = jwt_decode(localToken);
-    setUserID(decodedToken.userID);
-    if (userName == "") {
-      setUserName(decodedToken.userName);
-    } else if (decodedToken.userName !== userName) {
-      setUserName(userName);
+    if (localToken !== null) {
+      let decodedToken = jwt_decode(localToken);
+      setUserID(decodedToken.userID);
+      if (userName == "") {
+        setUserName(decodedToken.userName);
+      } else if (decodedToken.userName !== userName) {
+        setUserName(userName);
+      }
+      setUserEmail(decodedToken.userEmail);
     }
-    setUserEmail(decodedToken.userEmail);
   }, []);
 
   useEffect(() => {
-    webSocketClient.onopen = () => {
-      webSocketClient.send(
-        JSON.stringify({
-          type: "rooms",
-          payload: rooms,
-        })
-      );
-    };
+    // webSocketClient.onopen = () => {
+    //   webSocketClient.send(
+    //     JSON.stringify({
+    //       type: "rooms",
+    //       payload: rooms,
+    //     })
+    //   );
+    // };
   });
 
   useEffect(() => {
@@ -193,7 +198,7 @@ const Join = () => {
             </div>
           </div>
           <div className="col-6  offset-sm-1">
-            {filterRoom.map((room) => {
+            {/* {filterRoom.map((room) => {
               return (
                 <div key={room._id} className="card bg-light mt-3">
                   <div className="card-header text-capitalize">public room</div>
@@ -201,11 +206,9 @@ const Join = () => {
                     <h4 className="card-title text-capitalize">
                       room name : {room.name}
                     </h4>
-                    {/* <h4 className="card-text">creator name: john</h4> */}
                     <p className="card-text text-capitalize">
                       room descriptiont: {room.desc}
                     </p>
-                    {/* <p className="card-text">members : 5</p> */}
                     <p className="card-text">
                       <Link
                         onClick={() => setCurrentRoom(room._id)}
@@ -222,7 +225,7 @@ const Join = () => {
                   </div>
                 </div>
               );
-            })}
+            })} */}
           </div>
         </div>
       </div>

@@ -1,42 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import jwt_decode from "jwt-decode";
 
-// importing components
-import Login from "../Home/Login";
-import Register from "../Home/Register";
+import { UserContext, useUserContext } from "../../context";
 
-import { UserContext } from "../../context";
-
-const LoginRedirect = () => {
-  return (
-    <>
-      <h1 className="text-center">Please login first or register to proceed</h1>
-      <div>
-        <Login />
-        <Register />
-      </div>
-    </>
-  );
-};
+import Redirect from "../Redirect";
 
 const WithAuth = (Component) => {
   return function AuthComponent(props) {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isUserTokenExpired, setIsUserTokenExpired] = useState(true);
-
-    const userCTX = {
+    const {
       isLoggedIn,
-      setIsLoggedIn,
       isUserTokenExpired,
+      setIsLoggedIn,
       setIsUserTokenExpired,
-    };
+    } = useUserContext();
 
     useEffect(() => {
       const localToken = localStorage.getItem("userToken");
 
-      console.log("in with auth");
+      // console.log("from withAuth HOC", localToken);
 
-      if (localToken == null) {
+      if (localToken === null) {
         setIsUserTokenExpired(true);
         setIsLoggedIn(false);
       } else {
@@ -46,27 +29,27 @@ const WithAuth = (Component) => {
         let now = +Date.now().toString().slice(0, -3);
 
         if (now > decodedToken.exp) {
+          console.log("token expired");
           setIsUserTokenExpired(true);
           setIsLoggedIn(false);
         } else {
+          console.log("token valid");
           setIsUserTokenExpired(false);
           setIsLoggedIn(true);
         }
       }
-    }, []);
-
-    console.log(isLoggedIn);
+    }, [isLoggedIn, isUserTokenExpired]);
 
     return (
-      <>
-        {isLoggedIn && !isUserTokenExpired ? (
-          <UserContext.Provider value={userCTX}>
-            <Component {...props} />
-          </UserContext.Provider>
-        ) : (
-          <LoginRedirect />
-        )}
-      </>
+      <UserContext.Consumer>
+        {(state) =>
+          isLoggedIn && !isUserTokenExpired ? (
+            <Component {...props} context={state} />
+          ) : (
+            <Redirect />
+          )
+        }
+      </UserContext.Consumer>
     );
   };
 };

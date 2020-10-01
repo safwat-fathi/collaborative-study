@@ -3,6 +3,8 @@ import React, { createContext, useState, useContext } from "react";
 export const UserContext = createContext({
   isLoggedIn: false,
   setIsLoggedIn: () => {},
+  isUserTokenExpired: true,
+  setIsUserTokenExpired: () => {},
 });
 
 export const UserProvider = ({ children }) => {

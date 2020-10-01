@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-// import Rooms from "../Rooms/index";
-import Login from "../Home/Login";
-import Register from "../Home/Register";
+// utils
+import { useUserContext, RoomProvider, UserProvider } from "../../context";
+// components
+import Rooms from "../Rooms";
+import { login } from "../../services/user.services";
+// resources
 // import splashimage from "./splash.jpeg";
-import { RoomProvider, UserProvider } from "../../context";
 import "./App.css";
 
 const App = () => {
+  // const { setIsLoggedIn, setIsUserTokenExpired } = useUserContext();
+  login("doby@test.com", "123");
   return (
     <UserProvider>
       <RoomProvider>
-        <Login />
-        <Register />
+        <Rooms />
       </RoomProvider>
     </UserProvider>
   );
