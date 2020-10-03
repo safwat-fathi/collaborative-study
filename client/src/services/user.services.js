@@ -1,4 +1,3 @@
-// import { useFetch } from "../../hooks";
 import { api } from "../helpers/api";
 
 export const login = async (email, password) => {
@@ -12,8 +11,22 @@ export const login = async (email, password) => {
         },
       }
     );
-    console.log(res.data);
-    return res.status === 200 ? res.data : null;
+
+    return res.data;
+    // api
+    //   .post(
+    //     "users/login",
+    //     { email, password },
+    //     {
+    //       headers: {
+    //         "Content-type": "application/json",
+    //       },
+    //     }
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     return res.data;
+    //   });
   } catch (err) {
     console.log(err);
     return null;

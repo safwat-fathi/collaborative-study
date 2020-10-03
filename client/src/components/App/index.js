@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -13,6 +13,7 @@ import PrivateRoute from "../HOCs/PrivateRoute";
 // components
 import Home from "../Home";
 import Rooms from "../Rooms";
+import NotFound from "../NotFound";
 // import { login } from "../../services/user.services";
 // import { getUserToken } from "../../helpers/get-user-token";
 // resources
@@ -20,16 +21,16 @@ import Rooms from "../Rooms";
 import "./App.css";
 
 const App = (props) => {
-  console.log(props);
-  // const { setIsLoggedIn, setIsUserTokenExpired } = useUserContext();
+  // console.log(props);
   // login("doby@test.com", "123");
   // console.log(getUserToken());
+
   return (
     <Router>
       <Switch>
         <Route exact path="/" component={Home} />
         <PrivateRoute path="/rooms" component={Rooms} />
-        <Route>Error 404, did not found that path</Route>
+        <Route component={NotFound} />
       </Switch>
     </Router>
   );

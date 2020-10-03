@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 // validate fields helper
 import { validateField } from "../../helpers";
 import { api } from "../../helpers/api";
@@ -141,6 +142,10 @@ const Register = () => {
         </div>
       </form>
       {feedBackMsg && <div>{feedBackMsg}</div>}
+      <p>
+        Do you have an account?
+        <Link to="/login">Register</Link>
+      </p>
     </div>
   );
 };
