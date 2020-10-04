@@ -9,8 +9,7 @@ import Logout from "../Logout";
 
 // import { RoomContext } from "../../context";
 
-const Rooms = (props) => {
-  console.log(props);
+const Rooms = () => {
   // // join room state
   // const [rooms, setRooms] = useState([]);
   // const [currentRoom, setCurrentRoom] = useState("");

@@ -1,12 +1,16 @@
 import { userConstants } from "../constants/user.constants";
-import { api } from "../helpers/api";
+import jwt_decode from "jwt-decode";
+import { getUserToken } from "../helpers/get-user-token";
 
+const userToken = getUserToken();
 // user initial state
 const userInitialState = {
   loading: false,
-  isLoggedIn: false,
-  isUserTokenExpired: true,
-  user: {},
+  isLoggedIn: !!localStorage.getItem("userToken") && !!userToken,
+  isUserTokenExpired: !userToken,
+  user: userToken
+    ? jwt_decode(JSON.parse(localStorage.getItem("userToken")))
+    : {},
   error: null,
 };
 

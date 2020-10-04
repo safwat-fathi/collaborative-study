@@ -144,7 +144,7 @@ const Register = () => {
       {feedBackMsg && <div>{feedBackMsg}</div>}
       <p>
         Do you have an account?
-        <Link to="/login">Register</Link>
+        <Link to="/login">Sign in</Link>
       </p>
     </div>
   );

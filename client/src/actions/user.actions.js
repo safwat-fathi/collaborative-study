@@ -7,6 +7,7 @@ import { createBrowserHistory } from "history";
 export const userLoginRequest = (email, password, from) => {
   const history = createBrowserHistory();
 
+  console.log("from (action): ", from);
   return async (dispatch) => {
     // return response from post request given (email & password) to the server
     const data = await login(email, password);
@@ -21,7 +22,7 @@ export const userLoginRequest = (email, password, from) => {
       dispatch(userLoginSuccess(decodedToken));
 
       // return user back to URL that redirected him to login
-      history.push(from);
+      history.push("/rooms");
     } else {
       // login failed
       dispatch(userLoginFail("Authentication failed"));

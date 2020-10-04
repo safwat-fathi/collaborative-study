@@ -1,24 +1,23 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-// components
-// import WithAuth from "../HOCs/WithAuth";
-import Login from "../Login";
-import Register from "../Register";
+const Home = (props) => {
+  const { isLoggedIn, user } = props;
 
-const index = () => {
-  console.log("adwdawd");
   return (
     <>
-      <h1>Please login or register to proceed</h1>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Login} />
-          <Route path="/register" component={Register} />
-        </Switch>
-      </Router>
+      <h1>Collaborative Study Platform</h1>
+      <p>
+        Collaborative Study Platform is Lorem ipsum dolor sit amet consectetur
+        adipisicing elit. Libero nam reiciendis voluptatem sed dolor
+        praesentium.
+      </p>
+      {isLoggedIn && <p>Welcome user!</p>}
     </>
   );
 };
 
-export default index;
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps)(Home);

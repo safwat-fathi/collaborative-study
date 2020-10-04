@@ -41,8 +41,8 @@ const Login = (props) => {
 
     if (email && password) {
       // get return url from location state or default to home page
-      const { from } = location.state || { from: { path: "/rooms" } };
-      console.log("from: ", from);
+      const { from } = location.state || { from: { pathname: "/" } };
+      console.log("from (login): ", from);
       userLoginRequest(email, password, from);
     } else {
       setFeedBackMsg("Login failed, Please Check your Email or password");
@@ -95,7 +95,7 @@ const Login = (props) => {
       </div>
       <p>
         Don't have an account?
-        <Link to="/login">Login</Link>
+        <Link to="/register">Sign up</Link>
       </p>
     </>
   );
