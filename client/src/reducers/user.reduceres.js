@@ -8,9 +8,7 @@ const userInitialState = {
   loading: false,
   isLoggedIn: !!localStorage.getItem("userToken") && !!userToken,
   isUserTokenExpired: !userToken,
-  user: userToken
-    ? jwt_decode(JSON.parse(localStorage.getItem("userToken")))
-    : {},
+  user: userToken ? jwt_decode(localStorage.getItem("userToken")) : {},
   error: null,
 };
 

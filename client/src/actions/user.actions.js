@@ -2,12 +2,10 @@ import jwt_decode from "jwt-decode";
 import { userConstants } from "../constants/user.constants";
 import { login } from "../services/user.services";
 
-import { createBrowserHistory } from "history";
-
-export const userLoginRequest = (email, password, from) => {
-  const history = createBrowserHistory();
-
-  console.log("from (action): ", from);
+// -----------------------
+// user loging in actions
+// -----------------------
+export const userLoginRequest = (email, password) => {
   return async (dispatch) => {
     // return response from post request given (email & password) to the server
     const data = await login(email, password);
@@ -20,9 +18,6 @@ export const userLoginRequest = (email, password, from) => {
       let decodedToken = jwt_decode(data.token);
       // dispatch userLoginSuccess function
       dispatch(userLoginSuccess(decodedToken));
-
-      // return user back to URL that redirected him to login
-      history.push("/rooms");
     } else {
       // login failed
       dispatch(userLoginFail("Authentication failed"));
@@ -43,3 +38,8 @@ export const userLoginFail = (err) => {
     payload: err,
   };
 };
+
+// -----------------------
+// user register actions
+// -----------------------
+export const userRegisterRequest = () => {};

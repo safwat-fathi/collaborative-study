@@ -1,15 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import PrivateRoute from "../HOCs/PrivateRoute";
 import Join from "./Join";
 import Room from "./Room";
-import Profile from "../Profile";
-import Logout from "../Logout";
 
 // import { RoomContext } from "../../context";
 
-const Rooms = () => {
+const Rooms = (props) => {
+  console.log(props);
   // // join room state
   // const [rooms, setRooms] = useState([]);
   // const [currentRoom, setCurrentRoom] = useState("");
@@ -72,10 +70,8 @@ const Rooms = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" component={Join} />
+        <Route exact path="/rooms" component={Join} />
         <Route path="/rooms/:id" component={Room} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/logout" component={Logout} />
       </Switch>
     </Router>
   );

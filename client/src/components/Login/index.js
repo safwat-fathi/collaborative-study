@@ -1,49 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useHistory } from "react-router-dom";
 // redux actions
 import { userLoginRequest } from "../../actions/user.actions";
-// import { api } from "../../helpers/api";
-// import { useFetch } from "../../hooks";
 
 const Login = (props) => {
+  const history = useHistory();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedBackMsg, setFeedBackMsg] = useState("");
   const { user, userLoginRequest, error } = props;
   const location = useLocation();
 
-  // custom hook to post login form data
-  // const [response, callAPI] = useFetch({
-  //   api,
-  //   url: "users/login",
-  //   method: "post",
-  //   paylaod: { email, password },
-  //   headers: {
-  //     "Content-type": "application/json",
-  //   },
-  // });
-  // const { data, error } = response;
-
-  // useEffect(() => {
-  //   if (error) {
-  //     setFeedBackMsg("Sorry, error occurred!");
-  //   }
-
-  //   if (data !== null) {
-  //     let token = data.token;
-  //     localStorage.setItem("userToken", token);
-  //   }
-  // }, [data, error]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (email && password) {
+      userLoginRequest(email, password);
       // get return url from location state or default to home page
       const { from } = location.state || { from: { pathname: "/" } };
-      console.log("from (login): ", from);
-      userLoginRequest(email, password, from);
+      history.push(from);
     } else {
       setFeedBackMsg("Login failed, Please Check your Email or password");
       return;

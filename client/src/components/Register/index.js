@@ -82,14 +82,13 @@ const Register = () => {
   };
 
   return (
-    <div className="register-profile">
-      <h3 className="text-center register-title">Register</h3>
-      <form className="form-group" onSubmit={handleSubmit}>
-        <div className="form-group">
+    <div>
+      <h3>Register</h3>
+      <form onSubmit={handleSubmit}>
+        <div>
           <label htmlFor="nameInput">name</label>
           <input
             autoComplete="on"
-            className="form-control"
             onChange={handleChange}
             name="name"
             type="text"
@@ -97,11 +96,10 @@ const Register = () => {
             value={inputValues.name}
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="emailInput">email</label>
           <input
             autoComplete="on"
-            className="form-control"
             onChange={handleChange}
             name="email"
             type="email"
@@ -109,10 +107,9 @@ const Register = () => {
             value={inputValues.email}
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="passwordInput">Password</label>
           <input
-            className="form-control"
             onChange={handleChange}
             name="password"
             type="password"
@@ -121,10 +118,9 @@ const Register = () => {
             value={inputValues.password}
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="ConfirmPasswordInput">Confirm Password</label>
           <input
-            className="form-control"
             onChange={handleChange}
             name="confirmPassword"
             type="password"
@@ -133,12 +129,8 @@ const Register = () => {
             value={inputValues.confirmPassword}
           />
         </div>
-        <div className="form-group">
-          <input
-            className="btn btn-primary btn-lg btn-block"
-            type="submit"
-            value="Regitser"
-          />
+        <div>
+          <input type="submit" value="Regitser" />
         </div>
       </form>
       {feedBackMsg && <div>{feedBackMsg}</div>}

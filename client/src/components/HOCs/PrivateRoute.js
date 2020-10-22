@@ -1,30 +1,18 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-// components
-import Home from "../Home";
+import { connect } from "react-redux";
+
 // helpers
 import { getUserToken } from "../../helpers/get-user-token";
 
-const PrivateRoute = ({ component: Component, roles, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        // get user token stored in localStorage
-        let userToken = getUserToken();
+const PrivateRoute = (props) => {
+  let userToken = getUserToken();
 
-        if (userToken === null) {
-          return (
-            <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-          );
-        }
+  if (userToken === null) {
+    return <Redirect to={{ pathname: "/", state: { from: props.location } }} />;
+  }
 
-        return <Component {...props} />;
-      }}
-    />
-  );
+  return <Route {...props} />;
 };
-
-// };
 
 export default PrivateRoute;
