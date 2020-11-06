@@ -7,14 +7,14 @@ const getRooms = async (req, res, next) => {
   let rooms = await Room.find({});
 
   if (rooms.length < 1) {
-    return res.status(400).json({
-      message: "no rooms",
+    return res.status(200).json({
+      message: "no rooms found",
     });
   }
 
   res.status(200).json({
     message: `success`,
-    rooms,
+    data: rooms,
   });
 
   next();
@@ -36,7 +36,7 @@ const createRoom = async (req, res, next) => {
     await room.save();
     res.status(200).json({
       message: "room created successfully",
-      room,
+      data: room,
     });
   } catch (err) {
     res.status(500).json({
@@ -65,7 +65,7 @@ const editRoom = async (req, res, next) => {
 
   res.status(200).json({
     message: "room edited successfully",
-    room,
+    data: room,
   });
 
   next();
@@ -88,7 +88,7 @@ const changeAdmin = async (req, res, next) => {
 
   res.status(200).json({
     message: "room edited successfully",
-    room,
+    data: room,
   });
 
   next();

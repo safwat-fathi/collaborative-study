@@ -1,7 +1,7 @@
 import { api } from "../helpers/api";
 
 // login user
-export const login = async (email, password) => {
+export const userLogin = async (email, password) => {
   try {
     let res = await api.post(
       "users/login",
@@ -21,7 +21,7 @@ export const login = async (email, password) => {
 };
 
 // register user
-export const register = async (name, email, password, confirmPassword) => {
+export const userRegister = async (name, email, password, confirmPassword) => {
   try {
     let res = await api.post(
       "users/regitser",

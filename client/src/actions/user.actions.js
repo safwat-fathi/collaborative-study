@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 import { userConstants } from "../constants/user.constants";
-import { login } from "../services/user.services";
+import { userLogin } from "../services/user.services";
 
 // -----------------------
 // user loging in actions
@@ -8,7 +8,7 @@ import { login } from "../services/user.services";
 export const userLoginRequest = (email, password) => {
   return async (dispatch) => {
     // return response from post request given (email & password) to the server
-    const data = await login(email, password);
+    const data = await userLogin(email, password);
 
     // login succeeded
     if (data) {
