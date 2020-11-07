@@ -15,11 +15,17 @@ import { connect } from "react-redux";
 
 const Navbar = (props) => {
   console.log(props);
-  const { isLoggedIn } = props;
+  const { loginReducer } = props;
+  const { isLoggedIn, user } = loginReducer;
 
   return (
     <nav>
       <ul>
+        {isLoggedIn && (
+          <li>
+            <p>Welcome {user.userName}</p>
+          </li>
+        )}
         <li>
           <Link to="/">Home</Link>
         </li>

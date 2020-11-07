@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./join.css";
-
+import { getRoomsRequest } from "../../actions/room.actions";
 // function Modal({ isVisible = false, title, onClose }) {
 //   const [name, setName] = useState("");
 //   const [adminID, setAdminID] = useState("");
@@ -111,8 +111,14 @@ import "./join.css";
 // }
 
 const Join = (props) => {
-  console.log(props);
-  const { user } = props;
+  const { loginReducer, roomReducer, getRoomsRequest } = props;
+  const { user } = loginReducer;
+  const { loading, adminID, currentRoom, error, rooms } = roomReducer;
+
+  useEffect(() => {
+    console.log(roomReducer);
+    getRoomsRequest();
+  }, []);
   // const {
   //   userName,
   //   userID,
@@ -186,20 +192,34 @@ const Join = (props) => {
 
 			*/}
       <div>
+        <h3>You profile:</h3>
         <p>logged in as: {user.userName}</p>
         <p>your email: {user.userEmail}</p>
       </div>
-      <div></div>
+      <div>
+        <h3>Available rooms:</h3>
+        <ul>
+          {rooms.length > 1 ? (
+            rooms.map((room) => {
+              return <li>{room}</li>;
+            })
+          ) : (
+            <li>
+              <p>no rooms</p>
+            </li>
+          )}
+        </ul>
+      </div>
     </>
   );
 };
 
 const mapStateToProps = (state) => state;
 
-// const mapDispatchToProps = (dispatch) => {
-// 	return {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getRoomsRequest: () => dispatch(getRoomsRequest()),
+  };
+};
 
-// 	}
-// }
-
-export default connect(mapStateToProps)(Join);
+export default connect(mapStateToProps, mapDispatchToProps)(Join);

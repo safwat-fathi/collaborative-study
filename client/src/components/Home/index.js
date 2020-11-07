@@ -2,11 +2,8 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 const Home = (props) => {
-  const { isLoggedIn, user } = props;
-
-  useEffect(() => {
-    // console.log(user);
-  }, [user]);
+  const { loginReducer } = props;
+  const { isLoggedIn } = loginReducer;
 
   return (
     <>
@@ -16,7 +13,6 @@ const Home = (props) => {
         adipisicing elit. Libero nam reiciendis voluptatem sed dolor
         praesentium.
       </p>
-      {isLoggedIn && <p>Welcome user!</p>}
     </>
   );
 };
