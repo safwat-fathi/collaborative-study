@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  rooms: [
+  rooms_created: [
     {
       name: String,
       desc: String,

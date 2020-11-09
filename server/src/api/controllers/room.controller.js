@@ -1,21 +1,22 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+// const validator = require("validator");
 
 const Room = require("../models/room.model");
+const User = require("../models/user.model");
 
 const getRooms = async (req, res, next) => {
   let rooms = await Room.find({});
 
   if (rooms.length < 1) {
-    return res.status(200).json({
+    res.status(200).json({
       message: "no rooms found",
     });
+  } else {
+    res.status(200).json({
+      message: `success`,
+      data: rooms,
+    });
   }
-
-  res.status(200).json({
-    message: `success`,
-    data: rooms,
-  });
 
   next();
 };
@@ -23,22 +24,44 @@ const getRooms = async (req, res, next) => {
 const createRoom = async (req, res, next) => {
   // - add validation for adminID does exist in users DB.
   // - add password for room.
-  const { name, adminID, desc } = req.body;
-
-  const room = new Room({
-    _id: new mongoose.Types.ObjectId(),
-    name,
-    adminID,
-    desc,
-  });
-
   try {
-    await room.save();
-    res.status(200).json({
-      message: "room created successfully",
-      data: room,
-    });
+    const { name, admin_id, desc, is_private, password } = req.body;
+
+    // check is room already created
+    let roomFromDB = await Room.findOne({ name });
+    // check is owner exist
+    let roomOwner = await User.findOne({ _id: admin_id });
+
+    // room not created and user exist
+    if (!roomFromDB && roomOwner) {
+      const newRoom = new Room({
+        _id: new mongoose.Types.ObjectId(),
+        name,
+        admin_id,
+        desc,
+        is_private,
+        password,
+      });
+
+      await newRoom.save();
+
+      // update roomOwner document and push newRoom to rooms_created
+      roomOwner.rooms_created.push(newRoom);
+
+      await roomOwner.save();
+
+      res.status(201).json({
+        message: "room created successfully",
+        data: { newRoom, roomOwner },
+      });
+    } else {
+      res.status(400).json({
+        message: "room does exist or username is not correct",
+        data: roomFromDB,
+      });
+    }
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       message: "room not created",
       error: err,

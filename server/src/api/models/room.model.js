@@ -8,10 +8,16 @@ const roomSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     minlength: 3,
+    maxlength: 20,
   },
-  adminID: {
+  admin_id: {
     type: String,
     required: true,
+  },
+  is_private: {
+    type: Boolean,
+    default: false,
+    required: false,
   },
   password: {
     type: String,
