@@ -28,8 +28,8 @@ const userSchema = new mongoose.Schema({
   },
   rooms_created: [
     {
-      name: String,
-      desc: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
     },
   ],
   timestamps: {

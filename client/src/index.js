@@ -8,6 +8,7 @@ import { combineReducers, createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import { loginReducer } from "./reducers/user.reduceres";
 import { roomReducer } from "./reducers/room.reduceres";
+import { wsReducer } from "./reducers/ws.reduceres";
 import thunk from "redux-thunk";
 
 // components
@@ -16,6 +17,7 @@ import App from "./components/App";
 const rootReducer = combineReducers({
   loginReducer,
   roomReducer,
+  wsReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

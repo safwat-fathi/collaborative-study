@@ -13,7 +13,7 @@ export const getRoomsRequest = () => {
     // get rooms succeeded
     if (data) {
       // dispatch getRoomsSuccess function
-      dispatch(getRoomsSuccess(data));
+      dispatch(getRoomsSuccess(data.data));
     } else {
       // get rooms failed
       dispatch(

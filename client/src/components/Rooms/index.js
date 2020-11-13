@@ -7,7 +7,7 @@ import Room from "./Room";
 // import { RoomContext } from "../../context";
 
 const Rooms = (props) => {
-  console.log(props);
+  // console.log(props);
   // // join room state
   // const [rooms, setRooms] = useState([]);
   // const [currentRoom, setCurrentRoom] = useState("");

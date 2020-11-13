@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import "./join.css";
 import { getRoomsRequest } from "../../actions/room.actions";
+
+import Room from "./Room";
+
 // function Modal({ isVisible = false, title, onClose }) {
 //   const [name, setName] = useState("");
 //   const [adminID, setAdminID] = useState("");
@@ -116,9 +120,10 @@ const Join = (props) => {
   const { loading, adminID, currentRoom, error, rooms } = roomReducer;
 
   useEffect(() => {
-    console.log(roomReducer);
     getRoomsRequest();
   }, []);
+  console.log(props);
+
   // const {
   //   userName,
   //   userID,
@@ -199,9 +204,16 @@ const Join = (props) => {
       <div>
         <h3>Available rooms:</h3>
         <ul>
-          {rooms.length > 1 ? (
+          {rooms.length >= 1 ? (
             rooms.map((room) => {
-              return <li>{room}</li>;
+              return (
+                <li key={room._id}>
+                  {room.name}{" "}
+                  <Link to={`rooms/:${room._id}`} component={Room}>
+                    Go to room
+                  </Link>
+                </li>
+              );
             })
           ) : (
             <li>

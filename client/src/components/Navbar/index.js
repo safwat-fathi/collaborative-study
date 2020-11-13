@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 // };
 
 const Navbar = (props) => {
-  console.log(props);
+  // console.log(props);
   const { loginReducer } = props;
   const { isLoggedIn, user } = loginReducer;
 

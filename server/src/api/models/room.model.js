@@ -11,8 +11,8 @@ const roomSchema = new mongoose.Schema({
     maxlength: 20,
   },
   admin_id: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
   is_private: {
     type: Boolean,
