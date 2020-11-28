@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import "./join.css";
 import { getRoomsRequest } from "../../actions/room.actions";
+import { setCurrentRoom } from "../../actions/room.actions";
 
 import Room from "./Room";
 
@@ -115,57 +116,16 @@ import Room from "./Room";
 // }
 
 const Join = (props) => {
-  const { loginReducer, roomReducer, getRoomsRequest } = props;
+  const { loginReducer, roomReducer, getRoomsRequest, setCurrentRoom } = props;
   const { user } = loginReducer;
   const { loading, adminID, currentRoom, error, rooms } = roomReducer;
 
   useEffect(() => {
     getRoomsRequest();
   }, []);
-  console.log(props);
-
-  // const {
-  //   userName,
-  //   userID,
-  //   userEmail,
-  //   setUserID,
-  //   setUserName,
-  //   setUserEmail,
-  //   webSocketClient,
-  //   rooms,
-  //   setRooms,
-  //   setCurrentRoom,
-  // } = useContext(RoomContext);
 
   // const [filterRoom, setFilterRoom] = useState([]);
   // const [inputChar, setInputChar] = useState("");
-
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:4000/rooms")
-  //     .then((res) => {
-  //       let data = res.data;
-
-  //       setRooms(data.rooms);
-  //       setFilterRoom(data.rooms);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-
-  //   let localToken = localStorage.getItem("userToken");
-  //   if (localToken !== null) {
-  //     let decodedToken = jwt_decode(localToken);
-  //     setUserID(decodedToken.userID);
-  //     if (userName == "") {
-  //       setUserName(decodedToken.userName);
-  //     } else if (decodedToken.userName !== userName) {
-  //       setUserName(userName);
-  //     }
-  //     setUserEmail(decodedToken.userEmail);
-  //   }
-  // }, []);
-
   // useEffect(() => {
   // webSocketClient.onopen = () => {
   //   webSocketClient.send(
@@ -188,6 +148,11 @@ const Join = (props) => {
   // const onChangeHandlerfilter = (e) => {
   //   setInputChar(e.target.value);
   // };
+  console.log(roomReducer);
+
+  const handleSetCurrentRoom = (roomId) => {
+    setCurrentRoom(rooms, roomId);
+  };
 
   return (
     <>
@@ -208,9 +173,11 @@ const Join = (props) => {
             rooms.map((room) => {
               return (
                 <li key={room._id}>
-                  {room.name}{" "}
-                  <Link to={`rooms/:${room._id}`} component={Room}>
-                    Go to room
+                  <Link
+                    to={`rooms/${room._id}`}
+                    onClick={() => handleSetCurrentRoom(room._id)}
+                  >
+                    {room.name}
                   </Link>
                 </li>
               );
@@ -231,6 +198,7 @@ const mapStateToProps = (state) => state;
 const mapDispatchToProps = (dispatch) => {
   return {
     getRoomsRequest: () => dispatch(getRoomsRequest()),
+    setCurrentRoom: (rooms, roomId) => dispatch(setCurrentRoom(rooms, roomId)),
   };
 };
 

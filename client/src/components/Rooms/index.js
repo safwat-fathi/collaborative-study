@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Join from "./Join";
 import Room from "./Room";
+// import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 // import { RoomContext } from "../../context";
 
 const Rooms = (props) => {
   // console.log(props);
+  // console.log(new W3CWebSocket("ws://127.0.0.1:8080"));
   // // join room state
   // const [rooms, setRooms] = useState([]);
   // const [currentRoom, setCurrentRoom] = useState("");

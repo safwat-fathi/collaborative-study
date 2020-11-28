@@ -1,9 +1,8 @@
-import jwt_decode from "jwt-decode";
 import { roomConstants } from "../constants/room.constants";
 import { getRooms } from "../services/room.services";
 
 // -----------------------
-// user loging in actions
+// GET ROOMS
 // -----------------------
 export const getRoomsRequest = () => {
   return async (dispatch) => {
@@ -34,5 +33,43 @@ const getRoomsFail = (err) => {
   return {
     type: roomConstants.GET_FAILURE,
     payload: err,
+  };
+};
+
+// -----------------------
+// SET CURRNET ROOM
+// -----------------------
+const setCurrentRoomRequest = () => {
+  return {
+    type: roomConstants.SET_CURRENT_ROOM_REQUEST,
+  };
+};
+
+const setCurrentRoomSuccess = (room) => {
+  return {
+    type: roomConstants.SET_CURRENT_ROOM_SUCCESS,
+    payload: room,
+  };
+};
+
+const setCurrentRoomFail = (err) => {
+  return {
+    type: roomConstants.SET_CURRENT_ROOM_FAILURE,
+    payload: err,
+  };
+};
+
+export const setCurrentRoom = (rooms = [], roomId = "") => {
+  let currentRoom = rooms.find((room) => room._id === roomId);
+
+  return (dispatch) => {
+    // set room succeeded
+    if (currentRoom) {
+      // dispatch setCurrentRoomSuccess function
+      dispatch(setCurrentRoomSuccess(currentRoom));
+    } else {
+      // get rooms failed
+      dispatch(setCurrentRoomFail("This room does not exist"));
+    }
   };
 };

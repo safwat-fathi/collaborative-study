@@ -9,11 +9,13 @@ const userInitialState = {
   isLoggedIn: !!localStorage.getItem("userToken") && !!userToken,
   isUserTokenExpired: !userToken,
   user: userToken ? jwt_decode(localStorage.getItem("userToken")) : {},
+  feedBackMsg: "",
   error: null,
 };
 
-export const loginReducer = (state = userInitialState, action) => {
+export const userReducer = (state = userInitialState, action) => {
   switch (action.type) {
+    // login
     case userConstants.LOGIN_REQUEST:
       return {
         ...state,
@@ -26,6 +28,23 @@ export const loginReducer = (state = userInitialState, action) => {
         user: action.payload,
       };
     case userConstants.LOGIN_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    // logout
+    case userConstants.LOGOUT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case userConstants.LOGOUT_SUCCESS:
+      return {
+        ...state,
+        isLoggedIn: false,
+        user: action.payload,
+      };
+    case userConstants.LOGOUT_FAILURE:
       return {
         ...state,
         error: action.payload,

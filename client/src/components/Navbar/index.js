@@ -3,20 +3,12 @@ import { Link, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 
-// const RoomName = () => {
-//   let { name } = useParams();
-//   return (
-//     <h3 className="heading col-7 text-center text-capitalize">
-//       {" "}
-//       Room : {name}{" "}
-//     </h3>
-//   );
-// };
-
 const Navbar = (props) => {
   // console.log(props);
   const { loginReducer } = props;
   const { isLoggedIn, user } = loginReducer;
+
+  console.log(isLoggedIn);
 
   return (
     <nav>

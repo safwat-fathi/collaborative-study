@@ -3,10 +3,8 @@ import { roomConstants } from "../constants/room.constants";
 // user initial state
 const roomInitialState = {
   loading: false,
-  adminID: "",
-  currentRoom: "",
-  // isUserTokenExpired: !userToken,
-  // user: userToken ? jwt_decode(localStorage.getItem("userToken")) : {},
+  isAdmin: false,
+  currentRoom: null,
   error: null,
   rooms: [],
 };
@@ -25,6 +23,38 @@ export const roomReducer = (state = roomInitialState, action) => {
         rooms: action.payload,
       };
     case roomConstants.GET_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    // set current room admin
+    case roomConstants.SET_ADMIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case roomConstants.SET_ADMIN_SUCCESS:
+      return {
+        ...state,
+        isAdmin: action.payload,
+      };
+    case roomConstants.SET_ADMIN_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    // set current room
+    case roomConstants.SET_CURRENT_ROOM_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case roomConstants.SET_CURRENT_ROOM_SUCCESS:
+      return {
+        ...state,
+        currentRoom: action.payload,
+      };
+    case roomConstants.SET_CURRENT_ROOM_FAILURE:
       return {
         ...state,
         error: action.payload,

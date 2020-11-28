@@ -10,6 +10,7 @@ import Rooms from "../Rooms";
 import NotFound from "../NotFound";
 import Login from "../Login";
 import Logout from "../Logout";
+import Guest from "../Guest";
 import Register from "../Register";
 // resources
 // import splashimage from "./splash.jpeg";
@@ -19,11 +20,12 @@ const App = () => {
     <Router>
       <Navbar />
       <Switch>
-        <Route exact path="/" component={Home} />
+        <PrivateRoute exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <PrivateRoute path="/rooms" component={Rooms} />
         <PrivateRoute path="/logout" component={Logout} />
+        <Route path="/guest" component={Guest} />
         <Route component={NotFound} />
       </Switch>
     </Router>

@@ -7,9 +7,12 @@ import { getUserToken } from "../../helpers/get-user-token";
 
 const PrivateRoute = (props) => {
   let userToken = getUserToken();
+  console.log(userToken);
 
-  if (userToken === null) {
-    return <Redirect to={{ pathname: "/", state: { from: props.location } }} />;
+  if (!userToken) {
+    return (
+      <Redirect to={{ pathname: "/guest", state: { from: props.location } }} />
+    );
   }
 
   return <Route {...props} />;

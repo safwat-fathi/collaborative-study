@@ -3,16 +3,16 @@ import { connect } from "react-redux";
 
 const Home = (props) => {
   const { loginReducer } = props;
-  const { isLoggedIn } = loginReducer;
+  const { isLoggedIn, user } = loginReducer;
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <>
       <h1>Collaborative Study Platform</h1>
-      <p>
-        Collaborative Study Platform is Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Libero nam reiciendis voluptatem sed dolor
-        praesentium.
-      </p>
+      <p>Wlecome {user.userName}</p>
     </>
   );
 };

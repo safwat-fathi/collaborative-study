@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 // redux
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import { loginReducer } from "./reducers/user.reduceres";
+import { userReducer } from "./reducers/user.reduceres";
 import { roomReducer } from "./reducers/room.reduceres";
 import { wsReducer } from "./reducers/ws.reduceres";
 import thunk from "redux-thunk";
@@ -15,7 +15,7 @@ import thunk from "redux-thunk";
 import App from "./components/App";
 
 const rootReducer = combineReducers({
-  loginReducer,
+  userReducer,
   roomReducer,
   wsReducer,
 });

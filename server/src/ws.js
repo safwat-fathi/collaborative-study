@@ -17,6 +17,7 @@ let clients = [];
 
 wss.on("connection", function connection(ws, req) {
   // const clientIP = req.socket.remoteAddress;
+  console.log("ws connected");
 
   // handling messages
   ws.on("message", function incoming(message) {

@@ -20,7 +20,7 @@ export const wsReducer = (state = websocketInitialState, action) => {
     case websocketConstants.CONNECT_SUCCESS:
       return {
         ...state,
-        feedBackMsg: "Connecting to WS successfully",
+        feedBackMsg: "Connected to WS successfully",
         websocketClient: action.payload,
       };
     case websocketConstants.CONNECT_FAILURE:

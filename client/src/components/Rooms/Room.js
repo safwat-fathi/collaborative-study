@@ -1,23 +1,25 @@
 import React, { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+// redux
 import { connect } from "react-redux";
 import { initWebSocketRequest } from "../../actions/ws.actions";
-
-// import { w3cwebsocket as W3CWebSocket } from "websocket";
-// ---------------------
+// components
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
 import FilesList from "../FilesList";
 import FileUpload from "../FileUpload";
-// ---------------------
-// import { RoomContext } from "../../context";
-// ---------------------
+// helpers
 // import draw from "../../helpers/draw";
 // import erase from "../../helpers/erase";
 
 import "./Room.css";
 const Room = (props) => {
-  // console.log(props);
+  console.log(props);
 
+  const { loginReducer, roomReducer, initWebSocketRequest } = props;
+  const { user } = loginReducer;
+  const { loading, adminID, currentRoom, error, rooms } = roomReducer;
+  const { id } = useParams();
   // const {
   //   // join room state
   //   currentRoom,
@@ -36,16 +38,8 @@ const Room = (props) => {
   // } = useContext(RoomContext);
 
   useEffect(() => {
-    // const ws = new W3CWebSocket("ws://127.0.0.1:8080");
-    // setWebSocketClient(ws);
-
-    // let localToken = localStorage.getItem("userToken");
-
-    // if (localToken === null) {
-    //   console.log("not authorized");
-    //   return;
-    // }
     initWebSocketRequest();
+    // clean up
     return () => {
       // ws.send(
       //   JSON.stringify({
@@ -106,7 +100,8 @@ const Room = (props) => {
   return (
     <>
       <div className="Room">
-        <h1>Welcome to Room</h1>
+        <h1>Welcome to {currentRoom.name}</h1>
+        <Link to="/rooms">Back to Rooms</Link>
         {/* <Whiteboard /> */}
         {/* <Chat /> */}
       </div>

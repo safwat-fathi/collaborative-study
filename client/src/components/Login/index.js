@@ -9,10 +9,12 @@ const Login = (props) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [feedBackMsg, setFeedBackMsg] = useState("");
-  const { user, userLoginRequest, error } = props;
+  const { userLoginRequest, loginReducer } = props;
+  const { user, error, feedBackMsg } = loginReducer;
+
   const location = useLocation();
 
+  console.log(loginReducer);
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -20,18 +22,12 @@ const Login = (props) => {
       userLoginRequest(email, password);
       // get return url from location state or default to home page
       const { from } = location.state || { from: { pathname: "/" } };
+      console.log(from);
       history.push(from);
     } else {
-      setFeedBackMsg("Login failed, Please Check your Email or password");
       return;
     }
   };
-
-  useEffect(() => {
-    if (error) {
-      setFeedBackMsg(error);
-    }
-  }, [user, error]);
 
   return (
     <>
