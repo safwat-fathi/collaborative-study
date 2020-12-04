@@ -4,6 +4,7 @@ import { getCurrentRoom } from "../helpers/get-current-room";
 const roomInitialState = {
   loading: false,
   isAdmin: false,
+  // get current room from local storage as default
   currentRoom: getCurrentRoom(),
   error: null,
   rooms: [],

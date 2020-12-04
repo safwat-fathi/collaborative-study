@@ -1,5 +1,5 @@
 import { websocketConstants } from "../constants/ws.constants";
-import { initWS } from "../services/ws.services";
+import { initWS, closeWS } from "../services/ws.services";
 
 /*
  * @todo Create websocket actions
@@ -9,6 +9,20 @@ import { initWS } from "../services/ws.services";
 // -----------------------
 // initiate websocket client
 // -----------------------
+const initWebSocketSuccess = (wsClient) => {
+  return {
+    type: websocketConstants.CONNECT_SUCCESS,
+    payload: wsClient,
+  };
+};
+
+const initWebSocketFail = (err) => {
+  return {
+    type: websocketConstants.CONNECT_FAILURE,
+    payload: err,
+  };
+};
+
 export const initWebSocketRequest = () => {
   return (dispatch) => {
     // return response from get request to available rooms in DB
@@ -24,17 +38,33 @@ export const initWebSocketRequest = () => {
     }
   };
 };
+// -----------------------
+// close websocket client
+// -----------------------
 
-const initWebSocketSuccess = (wsClient) => {
+const closeWebSocketSuccess = () => {
   return {
-    type: websocketConstants.CONNECT_SUCCESS,
-    payload: wsClient,
+    type: websocketConstants.DISCONNECT_SUCCESS,
+    payload: "websocket client closed successfully",
   };
 };
 
-const initWebSocketFail = (err) => {
+const closeWebSocketFail = (err) => {
   return {
-    type: websocketConstants.CONNECT_FAILURE,
+    type: websocketConstants.DISCONNECT_FAILURE,
     payload: err,
+  };
+};
+
+export const closeWebSocket = () => {
+  console.log("from close ws actions");
+  return (dispatch) => {
+    try {
+      closeWS();
+      // ws closed successfully
+      dispatch(closeWebSocketSuccess());
+    } catch (err) {
+      dispatch(closeWebSocketFail(err));
+    }
   };
 };

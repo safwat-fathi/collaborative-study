@@ -17,7 +17,7 @@ let clients = [];
 
 wss.on("connection", function connection(ws, req) {
   // const clientIP = req.socket.remoteAddress;
-  console.log("ws connected");
+  console.log(`ws connected ${Date.now()}`);
 
   // handling messages
   ws.on("message", function incoming(message) {
@@ -55,6 +55,7 @@ wss.on("connection", function connection(ws, req) {
   });
 
   ws.on("error", (e) => console.log(e));
+
   ws.on("close", (e) => {
     console.log("websocket closed " + e);
   });

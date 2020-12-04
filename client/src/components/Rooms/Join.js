@@ -116,6 +116,8 @@ import Room from "./Room";
 // }
 
 const Join = (props) => {
+  // console.log(props);
+
   const { userReducer, roomReducer, getRoomsRequest, setCurrentRoom } = props;
   const { user } = userReducer;
   const { loading, adminID, currentRoom, error, rooms } = roomReducer;
@@ -148,8 +150,6 @@ const Join = (props) => {
   // const onChangeHandlerfilter = (e) => {
   //   setInputChar(e.target.value);
   // };
-
-  console.log(props);
 
   const handleSetCurrentRoom = (roomId) => {
     setCurrentRoom(rooms, roomId);

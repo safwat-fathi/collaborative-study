@@ -65,6 +65,8 @@ export const setCurrentRoom = (rooms = [], roomId = "") => {
   return (dispatch) => {
     // set room succeeded
     if (currentRoom) {
+      // storing current room to local storage
+      localStorage.setItem("currentRoom", JSON.stringify(currentRoom));
       // dispatch setCurrentRoomSuccess function
       dispatch(setCurrentRoomSuccess(currentRoom));
     } else {

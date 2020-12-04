@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 // redux
 import { connect } from "react-redux";
-import { initWebSocketRequest } from "../../actions/ws.actions";
+import { initWebSocketRequest, closeWebSocket } from "../../actions/ws.actions";
 // components
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
@@ -14,7 +14,7 @@ import FileUpload from "../FileUpload";
 
 import "./Room.css";
 const Room = (props) => {
-  console.log(props);
+  // console.log(props);
 
   const { userReducer, roomReducer, wsReducer, initWebSocketRequest } = props;
   // user state
@@ -60,11 +60,10 @@ const Room = (props) => {
   // } = useContext(RoomContext);
 
   useEffect(() => {
-    // storing current room to local storage
-    localStorage.setItem("currentRoom", JSON.stringify(currentRoom));
     // intiate websocket client
     initWebSocketRequest();
-    // clean up to close websocket connection
+
+    // clean up to close websocket connection & send closing event to ws
     return () => {
       // websocketClient.send(
       //   JSON.stringify({
@@ -76,12 +75,14 @@ const Room = (props) => {
       //     },
       //   })
       // );
-      // websocketClient.close();
+      websocketClient.close();
+      // closeWebSocket();
     };
   }, []);
+  console.log(websocketClient);
 
-  // webSocketClient.onopen = () => {
-  //   webSocketClient.send(
+  // websocketClient.onopen = () => {
+  //   websocketClient.send(
   //     JSON.stringify({
   //       type: "join",
   //       room: currentRoom,
@@ -140,6 +141,7 @@ const mapStateToProps = (state) => state;
 const mapDispatchToProps = (dispatch) => {
   return {
     initWebSocketRequest: () => dispatch(initWebSocketRequest()),
+    closeWebSocket: () => dispatch(closeWebSocket()),
   };
 };
 
