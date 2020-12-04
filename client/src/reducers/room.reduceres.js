@@ -1,10 +1,10 @@
 import { roomConstants } from "../constants/room.constants";
-
+import { getCurrentRoom } from "../helpers/get-current-room";
 // user initial state
 const roomInitialState = {
   loading: false,
   isAdmin: false,
-  currentRoom: null,
+  currentRoom: getCurrentRoom(),
   error: null,
   rooms: [],
 };

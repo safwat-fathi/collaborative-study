@@ -18,7 +18,8 @@ const Room = (props) => {
 
   const { userReducer, roomReducer, initWebSocketRequest } = props;
   const { user } = userReducer;
-  const { loading, adminID, currentRoom, error, rooms } = roomReducer;
+  const { loading, currentRoom, error, rooms } = roomReducer;
+  const { admin_id } = currentRoom;
   const { id } = useParams();
 
   /*
@@ -44,6 +45,9 @@ const Room = (props) => {
   // } = useContext(RoomContext);
 
   useEffect(() => {
+    // storing current room to local storage
+    localStorage.setItem("currentRoom", JSON.stringify(currentRoom));
+    // intiate websocket client
     initWebSocketRequest();
     // clean up
     return () => {
