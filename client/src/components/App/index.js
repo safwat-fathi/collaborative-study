@@ -16,6 +16,11 @@ import Register from "../Register";
 // resources
 // import splashimage from "./splash.jpeg";
 
+/*
+ * @todo after log in still redirects to guest
+ * @body after a successful log in user can still see a guest message on home
+ */
+
 const App = () => {
   return (
     <Router>

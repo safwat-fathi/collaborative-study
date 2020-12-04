@@ -1,6 +1,11 @@
 import { websocketConstants } from "../constants/ws.constants";
 import { initWS } from "../services/ws.services";
 
+/*
+ * @todo Create websocket actions
+ * @body create actions to interact with websocket connection (send, close, onopen, onmessage)
+ */
+
 // -----------------------
 // initiate websocket client
 // -----------------------

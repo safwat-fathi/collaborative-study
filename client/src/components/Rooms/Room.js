@@ -16,15 +16,30 @@ import "./Room.css";
 const Room = (props) => {
   console.log(props);
 
-  const { userReducer, roomReducer, initWebSocketRequest } = props;
+  const { userReducer, roomReducer, wsReducer, initWebSocketRequest } = props;
+  // user state
   const { user } = userReducer;
+  const { userEmail, userID, userName } = user;
+  // room state
   const { loading, currentRoom, error, rooms } = roomReducer;
+  // websocket state
+  const { websocketClient } = wsReducer;
   const { admin_id } = currentRoom;
   const { id } = useParams();
 
   /*
-   * @todo refreshing room page results an error
-   * @body the state of room component is cleared when refreshing room page which is results an error.
+   * @todo Check if user is admin
+   * @body check if the current user is the room admin and based on that can be given som privileges
+   */
+
+  /*
+   * @todo Close websocket when leaving room
+   * @body websocket connection must be closed when user leaves the room
+   */
+
+  /*
+   * @todo Monitor user connection to websocket
+   * @body set a flag for user connection to the websocket client in app state
    */
 
   // const {
@@ -49,9 +64,9 @@ const Room = (props) => {
     localStorage.setItem("currentRoom", JSON.stringify(currentRoom));
     // intiate websocket client
     initWebSocketRequest();
-    // clean up
+    // clean up to close websocket connection
     return () => {
-      // ws.send(
+      // websocketClient.send(
       //   JSON.stringify({
       //     type: "closing",
       //     room: currentRoom,
@@ -61,7 +76,7 @@ const Room = (props) => {
       //     },
       //   })
       // );
-      // ws.close();
+      // websocketClient.close();
     };
   }, []);
 

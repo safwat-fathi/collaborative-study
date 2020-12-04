@@ -148,7 +148,8 @@ const Join = (props) => {
   // const onChangeHandlerfilter = (e) => {
   //   setInputChar(e.target.value);
   // };
-  console.log(roomReducer);
+
+  console.log(props);
 
   const handleSetCurrentRoom = (roomId) => {
     setCurrentRoom(rooms, roomId);
