@@ -116,8 +116,8 @@ import Room from "./Room";
 // }
 
 const Join = (props) => {
-  const { loginReducer, roomReducer, getRoomsRequest, setCurrentRoom } = props;
-  const { user } = loginReducer;
+  const { userReducer, roomReducer, getRoomsRequest, setCurrentRoom } = props;
+  const { user } = userReducer;
   const { loading, adminID, currentRoom, error, rooms } = roomReducer;
 
   useEffect(() => {

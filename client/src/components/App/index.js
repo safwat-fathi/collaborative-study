@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-
+// redux
+import { connect } from "react-redux";
 // utils
 import PrivateRoute from "../HOCs/PrivateRoute";
 // components
@@ -32,4 +33,6 @@ const App = () => {
   );
 };
 
-export default App;
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps)(App);

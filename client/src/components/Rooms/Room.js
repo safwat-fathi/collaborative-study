@@ -16,10 +16,16 @@ import "./Room.css";
 const Room = (props) => {
   console.log(props);
 
-  const { loginReducer, roomReducer, initWebSocketRequest } = props;
-  const { user } = loginReducer;
+  const { userReducer, roomReducer, initWebSocketRequest } = props;
+  const { user } = userReducer;
   const { loading, adminID, currentRoom, error, rooms } = roomReducer;
   const { id } = useParams();
+
+  /*
+   * @todo refreshing room page results an error
+   * @body the state of room component is cleared when refreshing room page which is results an error.
+   */
+
   // const {
   //   // join room state
   //   currentRoom,

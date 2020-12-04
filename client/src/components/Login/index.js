@@ -9,12 +9,12 @@ const Login = (props) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { userLoginRequest, loginReducer } = props;
-  const { user, error, feedBackMsg } = loginReducer;
+  const { userLoginRequest, userReducer } = props;
+  const { user, error, feedBackMsg } = userReducer;
 
   const location = useLocation();
 
-  console.log(loginReducer);
+  console.log(userReducer);
   const handleSubmit = (e) => {
     e.preventDefault();
 

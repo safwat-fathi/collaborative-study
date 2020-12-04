@@ -2,12 +2,8 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 const Home = (props) => {
-  const { loginReducer } = props;
-  const { isLoggedIn, user } = loginReducer;
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  const { userReducer } = props;
+  const { isLoggedIn, user } = userReducer;
 
   return (
     <>

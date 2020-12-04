@@ -7,7 +7,6 @@ import { getUserToken } from "../../helpers/get-user-token";
 
 const PrivateRoute = (props) => {
   let userToken = getUserToken();
-  console.log(userToken);
 
   if (!userToken) {
     return (
@@ -18,4 +17,10 @@ const PrivateRoute = (props) => {
   return <Route {...props} />;
 };
 
-export default PrivateRoute;
+const mapStateToProps = (state) => state;
+
+const mapDispatchToProps = () => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PrivateRoute);
