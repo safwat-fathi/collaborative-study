@@ -38,10 +38,10 @@ export const initWebSocketRequest = () => {
     }
   };
 };
+
 // -----------------------
 // close websocket client
 // -----------------------
-
 const closeWebSocketSuccess = () => {
   return {
     type: websocketConstants.DISCONNECT_SUCCESS,
@@ -56,15 +56,54 @@ const closeWebSocketFail = (err) => {
   };
 };
 
-export const closeWebSocket = () => {
-  console.log("from close ws actions");
+export const closeWebSocket = (wsClient) => {
   return (dispatch) => {
+    console.log("from close ws actions");
     try {
-      closeWS();
+      console.log(wsClient);
+      closeWS(wsClient);
       // ws closed successfully
       dispatch(closeWebSocketSuccess());
     } catch (err) {
       dispatch(closeWebSocketFail(err));
+    }
+  };
+};
+
+// -----------------------
+// send a message
+// -----------------------
+const sendMsgRequest = () => {
+  return {
+    type: websocketConstants.SEND_REQUEST,
+  };
+};
+
+const sendMsgSuccess = () => {
+  return {
+    type: websocketConstants.SEND_SUCCESS,
+  };
+};
+
+const sendMsgFail = (err) => {
+  return {
+    type: websocketConstants.SEND_FAILURE,
+    payload: err,
+  };
+};
+
+export const sendMsg = (type, room, payload) => {
+  console.log("from ws send message");
+
+  return (dispatch) => {
+    dispatch(sendMsgRequest());
+    try {
+      // send(type, room, payload);
+      // ws message sent successfully
+      dispatch(sendMsgSuccess());
+    } catch (err) {
+      // ws send message failed
+      dispatch(sendMsgFail(err));
     }
   };
 };

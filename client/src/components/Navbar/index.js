@@ -3,6 +3,11 @@ import { Link, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 
+/*
+ * @todo On token expire change navbar content
+ * @body when user token expire navbar deos not change to let user login only when refresh
+ */
+
 const Navbar = (props) => {
   // console.log(props);
   const { userReducer } = props;

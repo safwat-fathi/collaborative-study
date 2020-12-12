@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 // redux
 import { connect } from "react-redux";
-import { initWebSocketRequest, closeWebSocket } from "../../actions/ws.actions";
+import {
+  initWebSocketRequest,
+  closeWebSocket,
+  sendMsg,
+} from "../../actions/ws.actions";
 // components
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
@@ -23,7 +27,7 @@ const Room = (props) => {
   // room state
   const { loading, currentRoom, error, rooms } = roomReducer;
   // websocket state
-  const { websocketClient } = wsReducer;
+  const { websocketClient, feedBackMsg } = wsReducer;
   const { admin_id } = currentRoom;
   const { id } = useParams();
 
@@ -75,23 +79,30 @@ const Room = (props) => {
       //     },
       //   })
       // );
-      websocketClient.close();
-      // closeWebSocket();
+      // sendMsg("closing", currentRoom, {
+      //   userID,
+      //   userName,
+      // });
+      closeWebSocket(websocketClient);
+      // websocketClient.close();
+      console.log("closing room...");
     };
   }, []);
-  console.log(websocketClient);
+
+  console.log(feedBackMsg);
 
   // websocketClient.onopen = () => {
-  //   websocketClient.send(
-  //     JSON.stringify({
-  //       type: "join",
-  //       room: currentRoom,
-  //       payload: {
-  //         userID: userID,
-  //         userName: userName,
-  //       },
-  //     })
-  //   );
+  // websocketClient.send(
+  //   JSON.stringify({
+  //     type: "join",
+  //     room: currentRoom,
+  //     payload: {
+  //       userID: userID,
+  //       userName: userName,
+  //     },
+  //   })
+  // );
+  //   sendMsg("join", currentRoom, { userID, userName });
   // };
 
   // webSocketClient.onmessage = async (e) => {
@@ -141,7 +152,9 @@ const mapStateToProps = (state) => state;
 const mapDispatchToProps = (dispatch) => {
   return {
     initWebSocketRequest: () => dispatch(initWebSocketRequest()),
-    closeWebSocket: () => dispatch(closeWebSocket()),
+    closeWebSocket: (websocketClient) =>
+      dispatch(closeWebSocket(websocketClient)),
+    sendMsg: (type, room, payload) => dispatch(sendMsg(type, room, payload)),
   };
 };
 

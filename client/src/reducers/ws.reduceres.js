@@ -42,6 +42,23 @@ export const wsReducer = (state = websocketInitialState, action) => {
         feedBackMsg: action.payload,
         err: action.payload,
       };
+    // send message action types
+    case websocketConstants.SEND_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case websocketConstants.SEND_FAILURE:
+      return {
+        ...state,
+        feedBackMsg: action.payload,
+        err: action.payload,
+      };
+    case websocketConstants.SEND_SUCCESS:
+      return {
+        ...state,
+        feedBackMsg: "Message sent successfully",
+      };
 
     default:
       return state;
