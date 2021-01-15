@@ -1,31 +1,32 @@
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
-import { compose } from "redux";
-import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+// redux
+import { useSelector } from "react-redux";
+// user slice
+import { login, loginSuccess, loginFailure, selectUser } from "../../userSlice";
 
 /*
  * @todo On token expire change navbar content
  * @body when user token expire navbar deos not change to let user login only when refresh
  */
 
-const Navbar = (props) => {
-  // console.log(props);
-  const { userReducer } = props;
-  const { isLoggedIn, user } = userReducer;
+const Navbar = () => {
+  const user = useSelector(selectUser);
+  console.log(user);
 
   return (
     <nav>
       <ul>
-        {isLoggedIn && (
+        {user.isLoggedIn && (
           <li>
-            <p>Welcome {user.userName}</p>
+            <p>Welcome {user.token.userName}</p>
           </li>
         )}
         <li>
           <Link to="/">Home</Link>
         </li>
         {/* when user logged in these links are available */}
-        {isLoggedIn && (
+        {user.isLoggedIn && (
           <>
             <li>
               <Link to="/rooms">Rooms</Link>
@@ -36,7 +37,7 @@ const Navbar = (props) => {
           </>
         )}
         {/* when user is not logged in these links are available */}
-        {!isLoggedIn && (
+        {!user.isLoggedIn && (
           <>
             <li>
               <Link to="/login">Sign in</Link>
@@ -51,6 +52,4 @@ const Navbar = (props) => {
   );
 };
 
-const mapStateToProps = (state) => state;
-
-export default compose(withRouter, connect(mapStateToProps))(Navbar);
+export default Navbar;

@@ -1,12 +1,12 @@
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 // declare ws client
-// const wsClient = new W3CWebSocket("ws://127.0.0.1:8080");
+const wsClient = new W3CWebSocket("ws://127.0.0.1:8080");
 
 // initiate websocket client
 export const initWS = () => {
   try {
-    return new W3CWebSocket("ws://127.0.0.1:8080");
+    return wsClient;
   } catch (err) {
     console.log(err);
     return null;
@@ -19,11 +19,10 @@ export const initWS = () => {
  */
 
 // close websocket client
-export const closeWS = (wsClient) => {
+export const closeWS = () => {
   try {
-    console.log("from closing  ws");
-    // console.log(wsClient);
-    // wsClient.close();
+    console.log(wsClient);
+    wsClient.close();
 
     return;
   } catch (err) {
@@ -33,21 +32,21 @@ export const closeWS = (wsClient) => {
 };
 
 // send a message by a websocket client
-// export const send = (type = "", room = "", payload = {}) => {
-//   // message types = ["closing", ]
-//   try {
-//     wsClient.send(
-//       JSON.stringify({
-//         type,
-//         room,
-//         payload,
-//       })
-//     );
+export const send = (type = "", room = "", payload = {}) => {
+  // message types = ["closing", ]
+  try {
+    wsClient.send(
+      JSON.stringify({
+        type,
+        room,
+        payload,
+      })
+    );
 
-//     console.log("ws message sent");
-//     return;
-//   } catch (err) {
-//     console.log(err);
-//     return err;
-//   }
-// };
+    console.log("ws message sent");
+    return;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};

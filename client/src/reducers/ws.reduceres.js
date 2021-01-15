@@ -10,51 +10,63 @@ const websocketInitialState = {
 };
 
 export const wsReducer = (state = websocketInitialState, action) => {
+  const {
+    CONNECT_REQUEST,
+    CONNECT_SUCCESS,
+    CONNECT_FAILURE,
+    DISCONNECT_REQUEST,
+    DISCONNECT_SUCCESS,
+    DISCONNECT_FAILURE,
+    SEND_REQUEST,
+    SEND_SUCCESS,
+    SEND_FAILURE,
+  } = websocketConstants;
+
   switch (action.type) {
     // connect action types
-    case websocketConstants.CONNECT_REQUEST:
+    case CONNECT_REQUEST:
       return {
         ...state,
         feedBackMsg: "Connecting to WS...",
         loading: true,
       };
-    case websocketConstants.CONNECT_SUCCESS:
+    case CONNECT_SUCCESS:
       return {
         ...state,
         feedBackMsg: "Connected to WS successfully",
         websocketClient: action.payload,
       };
-    case websocketConstants.CONNECT_FAILURE:
+    case CONNECT_FAILURE:
       return {
         ...state,
         feedBackMsg: "Connecting to WS failed",
         error: action.payload,
       };
     // close action types
-    case websocketConstants.DISCONNECT_SUCCESS:
+    case DISCONNECT_SUCCESS:
       return {
         ...state,
         feedBackMsg: action.payload,
       };
-    case websocketConstants.DISCONNECT_FAILURE:
+    case DISCONNECT_FAILURE:
       return {
         ...state,
         feedBackMsg: action.payload,
         err: action.payload,
       };
     // send message action types
-    case websocketConstants.SEND_REQUEST:
+    case SEND_REQUEST:
       return {
         ...state,
         loading: true,
       };
-    case websocketConstants.SEND_FAILURE:
+    case SEND_FAILURE:
       return {
         ...state,
         feedBackMsg: action.payload,
         err: action.payload,
       };
-    case websocketConstants.SEND_SUCCESS:
+    case SEND_SUCCESS:
       return {
         ...state,
         feedBackMsg: "Message sent successfully",

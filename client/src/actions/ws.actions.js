@@ -1,6 +1,18 @@
 import { websocketConstants } from "../constants/ws.constants";
 import { initWS, closeWS } from "../services/ws.services";
 
+const {
+  CONNECT_REQUEST,
+  CONNECT_SUCCESS,
+  CONNECT_FAILURE,
+  DISCONNECT_REQUEST,
+  DISCONNECT_SUCCESS,
+  DISCONNECT_FAILURE,
+  SEND_REQUEST,
+  SEND_SUCCESS,
+  SEND_FAILURE,
+} = websocketConstants;
+
 /*
  * @todo Create websocket actions
  * @body create actions to interact with websocket connection (send, close, onopen, onmessage)
@@ -11,14 +23,14 @@ import { initWS, closeWS } from "../services/ws.services";
 // -----------------------
 const initWebSocketSuccess = (wsClient) => {
   return {
-    type: websocketConstants.CONNECT_SUCCESS,
+    type: CONNECT_SUCCESS,
     payload: wsClient,
   };
 };
 
 const initWebSocketFail = (err) => {
   return {
-    type: websocketConstants.CONNECT_FAILURE,
+    type: CONNECT_FAILURE,
     payload: err,
   };
 };
@@ -44,24 +56,23 @@ export const initWebSocketRequest = () => {
 // -----------------------
 const closeWebSocketSuccess = () => {
   return {
-    type: websocketConstants.DISCONNECT_SUCCESS,
+    type: DISCONNECT_SUCCESS,
     payload: "websocket client closed successfully",
   };
 };
 
 const closeWebSocketFail = (err) => {
   return {
-    type: websocketConstants.DISCONNECT_FAILURE,
+    type: DISCONNECT_FAILURE,
     payload: err,
   };
 };
 
-export const closeWebSocket = (wsClient) => {
+export const closeWebSocket = () => {
   return (dispatch) => {
     console.log("from close ws actions");
     try {
-      console.log(wsClient);
-      closeWS(wsClient);
+      closeWS();
       // ws closed successfully
       dispatch(closeWebSocketSuccess());
     } catch (err) {
@@ -75,19 +86,19 @@ export const closeWebSocket = (wsClient) => {
 // -----------------------
 const sendMsgRequest = () => {
   return {
-    type: websocketConstants.SEND_REQUEST,
+    type: SEND_REQUEST,
   };
 };
 
 const sendMsgSuccess = () => {
   return {
-    type: websocketConstants.SEND_SUCCESS,
+    type: SEND_SUCCESS,
   };
 };
 
 const sendMsgFail = (err) => {
   return {
-    type: websocketConstants.SEND_FAILURE,
+    type: SEND_FAILURE,
     payload: err,
   };
 };

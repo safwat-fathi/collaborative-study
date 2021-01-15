@@ -18,7 +18,7 @@ import FileUpload from "../FileUpload";
 
 import "./Room.css";
 const Room = (props) => {
-  // console.log(props);
+  console.log(props);
 
   const { userReducer, roomReducer, wsReducer, initWebSocketRequest } = props;
   // user state
@@ -29,6 +29,7 @@ const Room = (props) => {
   // websocket state
   const { websocketClient, feedBackMsg } = wsReducer;
   const { admin_id } = currentRoom;
+  // @ts-ignore
   const { id } = useParams();
 
   /*
@@ -79,17 +80,15 @@ const Room = (props) => {
       //     },
       //   })
       // );
-      // sendMsg("closing", currentRoom, {
-      //   userID,
-      //   userName,
-      // });
-      closeWebSocket(websocketClient);
+      sendMsg("closing", currentRoom, {
+        userID,
+        userName,
+      });
+      closeWebSocket();
       // websocketClient.close();
       console.log("closing room...");
     };
   }, []);
-
-  console.log(feedBackMsg);
 
   // websocketClient.onopen = () => {
   // websocketClient.send(
@@ -152,8 +151,7 @@ const mapStateToProps = (state) => state;
 const mapDispatchToProps = (dispatch) => {
   return {
     initWebSocketRequest: () => dispatch(initWebSocketRequest()),
-    closeWebSocket: (websocketClient) =>
-      dispatch(closeWebSocket(websocketClient)),
+    closeWebSocket: () => dispatch(closeWebSocket()),
     sendMsg: (type, room, payload) => dispatch(sendMsg(type, room, payload)),
   };
 };

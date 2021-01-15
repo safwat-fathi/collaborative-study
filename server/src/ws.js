@@ -17,6 +17,7 @@ const wss = new WebSocket.Server({ server });
 let clients = [];
 
 wss.on("connection", function connection(ws, req) {
+  console.log(clients);
   // const clientIP = req.socket.remoteAddress;
   console.log(`ws connected at: ${new Date().toLocaleString()}`);
   console.log("===============");
@@ -26,21 +27,23 @@ wss.on("connection", function connection(ws, req) {
     try {
       // parse data sent from client
       let data = JSON.parse(message);
+      console.log(data);
       const { type, room, payload } = data;
 
       switch (type) {
         case "closing":
-          console.log("type: closing");
-
+          console.log("closing");
           const { userID } = payload;
           removeClient(clients, userID);
           break;
         case "join":
+          console.log("join");
           // handling duplicated connections
           addClient(clients, ws, payload.userID, payload.userName, room);
           break;
         // chatting on room
         case "chatting":
+          console.log("chatting");
           broadcast(WebSocket, clients, ws, room, data);
           break;
         // drawing on whiteboard
