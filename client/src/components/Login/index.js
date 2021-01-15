@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
 import { useLocation, Link, useHistory } from "react-router-dom";
-// redux actions
-import { userLoginRequest } from "../../actions/user.actions";
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { login, selectUser } from "../../userSlice";
 
 /*
  * @todo Feed back message on login
  * @body notify user with a feed back message on login either it's success or failed
  */
 
-const Login = (props) => {
+const Login = () => {
+  // app state
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
   const history = useHistory();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { userLoginRequest, userReducer } = props;
-  const { user, error, feedBackMsg } = userReducer;
 
   const location = useLocation();
 
-  console.log(userReducer);
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (email && password) {
-      userLoginRequest(email, password);
+      dispatch(login(email, password));
       // get return url from location state or default to home page
       const { from } = location.state || { from: { pathname: "/" } };
       console.log(from);
@@ -33,6 +34,8 @@ const Login = (props) => {
       return;
     }
   };
+
+  console.log(user);
 
   return (
     <>
@@ -69,7 +72,7 @@ const Login = (props) => {
             />
           </div>
         </form>
-        {feedBackMsg && <div>{feedBackMsg}</div>}
+        {/* {feedBackMsg && <div>{feedBackMsg}</div>} */}
       </div>
       <p>
         Don't have an account?
@@ -79,13 +82,4 @@ const Login = (props) => {
   );
 };
 
-const mapStateToProps = (state) => state;
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    userLoginRequest: (email, password) =>
-      dispatch(userLoginRequest(email, password)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

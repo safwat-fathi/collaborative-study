@@ -31,3 +31,14 @@ export const createRoom = async (name, adminID, desc) => {
     return null;
   }
 };
+
+// get current room from localStorage
+export const getCurrentRoom = () => {
+  let currentRoom = localStorage.getItem("currentRoom");
+
+  if (!currentRoom) {
+    return null;
+  }
+
+  return JSON.parse(currentRoom);
+};

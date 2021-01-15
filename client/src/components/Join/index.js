@@ -1,21 +1,22 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../../userSlice";
+
 import "./join.css";
-import { getRoomsRequest } from "../../actions/room.actions";
-import { setCurrentRoom } from "../../actions/room.actions";
 
-import Room from "./Room";
+import Room from "../Rooms/Room";
 
-const Join = (props) => {
-  // console.log(props);
+const Join = () => {
+  // app state
+  const user = useSelector(selectUser);
+  // rooms state call
 
-  const { userReducer, roomReducer, getRoomsRequest, setCurrentRoom } = props;
-  const { user } = userReducer;
-  const { loading, adminID, currentRoom, error, rooms } = roomReducer;
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getRoomsRequest();
+    // getRoomsRequest();
   }, []);
 
   // const [filterRoom, setFilterRoom] = useState([]);
@@ -44,19 +45,19 @@ const Join = (props) => {
   // };
 
   const handleSetCurrentRoom = (roomId) => {
-    setCurrentRoom(rooms, roomId);
+    // setCurrentRoom(rooms, roomId);
   };
 
   return (
     <>
       <div>
         <h3>You profile:</h3>
-        <p>logged in as: {user.userName}</p>
-        <p>your email: {user.userEmail}</p>
+        <p>logged in as: {user.token.userName}</p>
+        <p>your email: {user.token.userEmail}</p>
       </div>
       <div>
         <h3>Available rooms:</h3>
-        <ul>
+        {/* <ul>
           {rooms.length >= 1 ? (
             rooms.map((room) => {
               return (
@@ -75,19 +76,10 @@ const Join = (props) => {
               <p>no rooms</p>
             </li>
           )}
-        </ul>
+        </ul> */}
       </div>
     </>
   );
 };
 
-const mapStateToProps = (state) => state;
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getRoomsRequest: () => dispatch(getRoomsRequest()),
-    setCurrentRoom: (rooms, roomId) => dispatch(setCurrentRoom(rooms, roomId)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Join);
+export default Join;

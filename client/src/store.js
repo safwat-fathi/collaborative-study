@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import webSocketMiddleware from "./wsMiddleware";
 export default configureStore({

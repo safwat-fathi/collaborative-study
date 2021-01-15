@@ -27,12 +27,18 @@ export const userSlice = createSlice({
     },
     // logged in successfully
     loginSuccess: (state, action) => {
+      const { payload } = action;
+
       state.isLoggedIn = true;
-      state.token = action.payload;
+      state.token = payload;
+      state.loading = false;
     },
     // login failed
     loginFailure: (state, action) => {
-      state.error = action.payload;
+      const { payload } = action;
+
+      state.error = payload;
+      state.loading = false;
     },
     // // logout request
     // logoutRequest: (state) => {
@@ -73,11 +79,9 @@ export const login = (email, password) => async (dispatch) => {
     // login failed
     dispatch(loginFailure("Authentication failed"));
   }
-  // set loading to false
-  dispatch(loginRequest(false));
 };
 
 // select user state
-export const selectUser = (state) => state.user.token;
+export const selectUser = (state) => state.user;
 
 export default userSlice.reducer;

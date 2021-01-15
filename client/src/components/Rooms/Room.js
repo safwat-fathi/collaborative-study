@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 // redux
-import { connect } from "react-redux";
-import {
-  initWebSocketRequest,
-  closeWebSocket,
-  sendMsg,
-} from "../../actions/ws.actions";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../../userSlice";
+
 // components
 import Whiteboard from "../Whiteboard";
 import Chat from "../Chat";
@@ -17,18 +14,8 @@ import FileUpload from "../FileUpload";
 // import erase from "../../helpers/erase";
 
 import "./Room.css";
-const Room = (props) => {
-  console.log(props);
-
-  const { userReducer, roomReducer, wsReducer, initWebSocketRequest } = props;
-  // user state
-  const { user } = userReducer;
-  const { userEmail, userID, userName } = user;
-  // room state
-  const { loading, currentRoom, error, rooms } = roomReducer;
-  // websocket state
-  const { websocketClient, feedBackMsg } = wsReducer;
-  const { admin_id } = currentRoom;
+const Room = () => {
+  const user = useSelector(selectUser);
   // @ts-ignore
   const { id } = useParams();
 
@@ -66,7 +53,6 @@ const Room = (props) => {
 
   useEffect(() => {
     // intiate websocket client
-    initWebSocketRequest();
 
     // clean up to close websocket connection & send closing event to ws
     return () => {
@@ -80,12 +66,6 @@ const Room = (props) => {
       //     },
       //   })
       // );
-      sendMsg("closing", currentRoom, {
-        userID,
-        userName,
-      });
-      closeWebSocket();
-      // websocketClient.close();
       console.log("closing room...");
     };
   }, []);
@@ -136,7 +116,7 @@ const Room = (props) => {
   return (
     <>
       <div className="Room">
-        <h1>Welcome to {currentRoom.name}</h1>
+        {/* <h1>Welcome to {currentRoom.name}</h1> */}
         <Link to="/rooms">Back to Rooms</Link>
         {/* <Whiteboard /> */}
         {/* <Chat /> */}
@@ -146,14 +126,5 @@ const Room = (props) => {
     </>
   );
 };
-const mapStateToProps = (state) => state;
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    initWebSocketRequest: () => dispatch(initWebSocketRequest()),
-    closeWebSocket: () => dispatch(closeWebSocket()),
-    sendMsg: (type, room, payload) => dispatch(sendMsg(type, room, payload)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Room);
+export default Room;

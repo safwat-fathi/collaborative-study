@@ -1,18 +1,17 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
+// redux
+import { useSelector } from "react-redux";
+import { selectUser } from "../../userSlice";
 
-const Home = (props) => {
-  const { userReducer } = props;
-  const { isLoggedIn, user } = userReducer;
+const Home = () => {
+  const user = useSelector(selectUser);
 
   return (
     <>
       <h1>Collaborative Study Platform</h1>
-      <p>Wlecome {user.userName}</p>
+      <p>Wlecome {user.token.userName}</p>
     </>
   );
 };
 
-const mapStateToProps = (state) => state;
-
-export default connect(mapStateToProps)(Home);
+export default Home;
