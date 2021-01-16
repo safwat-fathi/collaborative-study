@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../userSlice";
+import { selectRoom } from "../../roomSlice";
+import { connect, disconnect, selectWebSocket } from "../../wsSlice";
 
 // components
 import Whiteboard from "../Whiteboard";
@@ -15,9 +17,13 @@ import FileUpload from "../FileUpload";
 
 import "./Room.css";
 const Room = () => {
-  const user = useSelector(selectUser);
-  // @ts-ignore
-  const { id } = useParams();
+  const dispatch = useDispatch();
+  // app state
+  const userState = useSelector(selectUser);
+  const roomState = useSelector(selectRoom);
+  const wsState = useSelector(selectWebSocket);
+  // room id from url parameter
+  const { roomID } = useParams();
 
   /*
    * @todo Check if user is admin
@@ -53,6 +59,15 @@ const Room = () => {
 
   useEffect(() => {
     // intiate websocket client
+    dispatch(
+      connect({
+        host: "ws://127.0.0.1:8080",
+        data: {
+          userID: userState.token.userID,
+          userName: userState.token.userName,
+        },
+      })
+    );
 
     // clean up to close websocket connection & send closing event to ws
     return () => {
@@ -67,6 +82,7 @@ const Room = () => {
       //   })
       // );
       console.log("closing room...");
+      dispatch(disconnect());
     };
   }, []);
 

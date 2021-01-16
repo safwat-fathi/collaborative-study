@@ -3,20 +3,20 @@ import { Link } from "react-router-dom";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../userSlice";
+import { setCurrentRoom, getRoomsRequest, selectRoom } from "../../roomSlice";
 
 import "./join.css";
 
-import Room from "../Rooms/Room";
-
 const Join = () => {
-  // app state
-  const user = useSelector(selectUser);
-  // rooms state call
-
   const dispatch = useDispatch();
+
+  // app state
+  const userState = useSelector(selectUser);
+  const roomState = useSelector(selectRoom);
 
   useEffect(() => {
     // getRoomsRequest();
+    dispatch(getRoomsRequest());
   }, []);
 
   // const [filterRoom, setFilterRoom] = useState([]);
@@ -44,22 +44,23 @@ const Join = () => {
   //   setInputChar(e.target.value);
   // };
 
-  const handleSetCurrentRoom = (roomId) => {
-    // setCurrentRoom(rooms, roomId);
+  const handleSetCurrentRoom = (roomID) => {
+    // set current room in room state
+    dispatch(setCurrentRoom(roomState.rooms, roomID));
   };
 
   return (
     <>
       <div>
         <h3>You profile:</h3>
-        <p>logged in as: {user.token.userName}</p>
-        <p>your email: {user.token.userEmail}</p>
+        <p>logged in as: {userState.token.userName}</p>
+        <p>your email: {userState.token.userEmail}</p>
       </div>
       <div>
         <h3>Available rooms:</h3>
-        {/* <ul>
-          {rooms.length >= 1 ? (
-            rooms.map((room) => {
+        <ul>
+          {roomState.rooms.length >= 1 ? (
+            roomState.rooms.map((room) => {
               return (
                 <li key={room._id}>
                   <Link
@@ -76,7 +77,7 @@ const Join = () => {
               <p>no rooms</p>
             </li>
           )}
-        </ul> */}
+        </ul>
       </div>
     </>
   );

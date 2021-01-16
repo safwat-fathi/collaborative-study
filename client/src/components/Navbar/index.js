@@ -12,7 +12,6 @@ import { login, loginSuccess, loginFailure, selectUser } from "../../userSlice";
 
 const Navbar = () => {
   const user = useSelector(selectUser);
-  console.log(user);
 
   return (
     <nav>

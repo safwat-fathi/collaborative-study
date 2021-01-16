@@ -14,21 +14,29 @@ export const wsSlice = createSlice({
       state.loading = true;
     },
     connected: (state, action) => {
+      const { payload } = action;
+
       state.loading = false;
-      state.connected = action.payload;
+      state.connected = payload;
     },
     disconnect: (state, action) => {
       state.loading = true;
     },
     disconnected: (state, action) => {
+      const { payload } = action;
+
       state.loading = false;
-      state.connected = action.payload;
+      state.connected = payload;
     },
     send: (state, action) => {
-      state.messageSent = action.payload;
+      const { payload } = action;
+
+      state.messageSent = payload;
     },
     newMessage: (state, action) => {
-      state.messageReceived = action.payload;
+      const { payload } = action;
+
+      state.messageReceived = payload;
     },
   },
 });
@@ -43,10 +51,6 @@ export const {
   newMessage,
 } = wsSlice.actions;
 
-export const selectWebSocketState = (state) => state.websocket.connected;
-export const selectWebSocketMessageSent = (state) =>
-  state.websocket.messageSent;
-export const selectWebSocketMessageReceived = (state) =>
-  state.websocket.messageReceived;
+export const selectWebSocket = (state) => state.websocket;
 
 export default wsSlice.reducer;

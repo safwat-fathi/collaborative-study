@@ -1,7 +1,7 @@
 // create slice helper from redux toolkit
 import { createSlice } from "@reduxjs/toolkit";
 // get rooms helper
-import { getRooms, getCurrentRoom } from "../services/room.services";
+import { getRooms, getCurrentRoom } from "./services/room.services";
 
 export const roomSlice = createSlice({
   name: "room",
@@ -14,53 +14,67 @@ export const roomSlice = createSlice({
     error: null,
   },
   reducers: {
-    // get rooms request
-    getRoomsRequest: (state, action) => {
+    // getting rooms
+    gettingRooms: (state, action) => {
       const { payload } = action;
 
       state.loading = payload;
     },
-    // logged in successfully
+    // get rooms successfully
     getRoomsSuccess: (state, action) => {
       const { payload } = action;
 
       state.rooms = payload;
       state.loading = false;
     },
-    // login failed
+    // get rooms failed
     getRoomsFailure: (state, action) => {
       const { payload } = action;
 
       state.error = payload;
       state.loading = false;
     },
-    // // logout request
-    // logoutRequest: (state) => {
-    //   state.loading = true;
-    // },
-    // // logged out successfully
-    // logoutSuccess: (state, action) => {
-    //   state.isLoggedIn = false;
-    //   state.user = action.payload;
-    // },
-    // // logout failed
-    // logoutFailure: (state, action) => {
-    //   state.error = action.payload;
-    // },
+    // set current room
+    settingCurrentRoom: (state, action) => {
+      const { payload } = action;
+
+      state.loading = true;
+    },
+    // setting current room successfully
+    setCurrentRoomSuccess: (state, action) => {
+      const { payload } = action;
+
+      state.currentRoom = payload;
+      state.loading = false;
+    },
+    // set current room failed
+    setCurrentRoomFailure: (state, action) => {
+      const { payload } = action;
+
+      state.error = payload;
+      state.loading = false;
+    },
   },
 });
 
 // synchronous actions
+// --------------------
 export const {
-  getRoomsRequest,
+  gettingRooms,
   getRoomsSuccess,
   getRoomsFailure,
+  settingCurrentRoom,
+  setCurrentRoomSuccess,
+  setCurrentRoomFailure,
 } = roomSlice.actions;
 
 // asynchronous actions
-export const getRooms = async (dispatch) => {
+// --------------------
+
+//get rooms request
+export const getRoomsRequest = () => async (dispatch) => {
   // set loading to true
-  dispatch(getRoomsRequest(true));
+  dispatch(gettingRooms(true));
 
   // return response from get request to available rooms in DB
   const data = await getRooms();
@@ -77,7 +91,24 @@ export const getRooms = async (dispatch) => {
   }
 };
 
-// select user state
-export const selectUser = (state) => state.user;
+export const setCurrentRoom = (rooms = [], roomID = "") => {
+  let currentRoom = rooms.find((room) => room._id === roomID);
 
-export default userSlice.reducer;
+  return (dispatch) => {
+    // set room succeeded
+    if (currentRoom) {
+      // storing current room to local storage
+      localStorage.setItem("currentRoom", JSON.stringify(currentRoom));
+      // dispatch setCurrentRoomSuccess action
+      dispatch(setCurrentRoomSuccess(currentRoom));
+    } else {
+      // get rooms failed
+      dispatch(setCurrentRoomFailure("This room does not exist"));
+    }
+  };
+};
+
+// select user state
+export const selectRoom = (state) => state.room;
+
+export default roomSlice.reducer;
