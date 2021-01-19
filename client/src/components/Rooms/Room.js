@@ -82,7 +82,17 @@ const Room = () => {
       //   })
       // );
       console.log("closing room...");
-      dispatch(disconnect());
+      dispatch(
+        disconnect(
+          JSON.stringify({
+            type: "closing",
+            room: "CS500",
+            payload: {
+              userID: userState.token.userID,
+            },
+          })
+        )
+      );
     };
   }, []);
 

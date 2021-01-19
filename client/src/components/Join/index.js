@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../userSlice";
 import { setCurrentRoom, getRoomsRequest, selectRoom } from "../../roomSlice";
+import { selectWebSocket } from "../../wsSlice";
 
 import "./join.css";
 
@@ -13,11 +14,16 @@ const Join = () => {
   // app state
   const userState = useSelector(selectUser);
   const roomState = useSelector(selectRoom);
+  const wsState = useSelector(selectWebSocket);
 
   useEffect(() => {
     // getRoomsRequest();
     dispatch(getRoomsRequest());
   }, []);
+
+  useEffect(() => {
+    console.log(wsState);
+  }, [wsState]);
 
   // const [filterRoom, setFilterRoom] = useState([]);
   // const [inputChar, setInputChar] = useState("");
