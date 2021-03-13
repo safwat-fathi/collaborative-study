@@ -1,6 +1,6 @@
 # Co-Study Platform
 
-Co-Study is web application for helping students from deiffrent levels to study online by providing them with (real-time whiteboard collabration, writing and calculatin math equations, chatting and sharing files).
+Co-Study is web application for helping students from different levels to study online by providing them with (real-time whiteboard collaboration, writing and calculation math equations, chatting and sharing files).
 
 ## Prerequisites
 
